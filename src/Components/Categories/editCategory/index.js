@@ -5,15 +5,21 @@ import useEditCategory from './useEditCategory';
 import { Button, Spinner, Icon } from "@blueprintjs/core";
 
 const EditCategory = () => {
-	const { onSubmit, category, register, handleSubmit, errors, error, setModule, _module } = useEditCategory();
+	const { list, onSubmit, category, error, name, code, type } = useEditCategory();
 
 	if (Object.entries(category).length === 0 && category.constructor === Object) return <Spinner />;
 
 	if (error) return <h2>Ha ocurrido un error</h2>;
 
+	const _list = (list !== null)?([].concat(list)
+		.map((item,i) =>
+			(
+				<option value={item.id}>{item.name}</option>
+			)
+		)):(<option></option>)
+
 	return (
 		<div align="center" style={{marginTop: 5}}>
-			<form onSubmit={handleSubmit(onSubmit)}>
 				<p className="h4 text-center py-4">Editar Categoria</p>
 
 				<label htmlFor="name" className="grey-text font-weight-light">
@@ -24,43 +30,39 @@ const EditCategory = () => {
 					autoComplete="off"
 					defaultValue={category.name}
 					className="form-control"
-					ref={register({ required: { message: 'Este campo es requerido', value: true } })}
+					ref={name}
 				/>
-				{errors.name && <span className="text-danger mb-2">{errors.name.message}</span>}
 
 				<br />
 
-				<label htmlFor="description" className="grey-text font-weight-light">
-					Descripcion de la Categoria:
+				<label htmlFor="code" className="grey-text font-weight-light">
+					Codigo de la Categoria:
 				</label>
 				<input
-					name="description"
+					name="code"
 					autoComplete="off"
 					className="form-control"
-					defaultValue={category.description}
-					ref={register({ required: { message: 'Este campo es requerido', value: true } })}
+					defaultValue={category.code}
+					ref={code}
 				/>
-				{errors.description && <span className="text-danger mb-2">{errors.description.message}</span>}
 
 				<br />
-				<label htmlFor="name" className="grey-text font-weight-light">
-					Modulo:
+				<label htmlFor="type" className="grey-text font-weight-light">
+					Tipo:
 				</label>
 				<div>
-					<select id="module" value={_module} required className="browser-default custom-select" onChange={ c => setModule(c.target.value)}>
+					<select id="type" defaultValue={list.filter(_ => _.name === category.typeName)[0] === undefined ? "0" : list.filter(_ => _.name === category.typeName)[0].id} required className="browser-default custom-select" ref={type}>
 						<option value="0">Seleccione una opcion</option>
-						<option value="location">Ubicacion</option>
-						<option value="event">Evento</option>
+						{_list}
 					</select>
 				</div>
 				<br />
 
 				<div className="text-center py-4 mt-3">
-					<Button className="btn btn-outline-blue" type="submit">
+					<Button onClick={onSubmit} className="btn btn-outline-blue" type="submit">
 						Guardar
 					</Button>
 				</div>
-			</form>
 		</div>
 	);
 };

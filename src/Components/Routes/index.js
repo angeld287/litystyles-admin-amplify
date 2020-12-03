@@ -27,25 +27,12 @@ export const Routes = ({ childProps }) => (
 	</Switch>
 );
 
-export const ProtectedRouteClients = ({ render: C, props: childProps, ...rest }) => (
-	<Route
-		{...rest}
-		render={(rProps) =>
-			childProps.isLoggedIn ? childProps.state.user_roll === 'client' ? (
-				<C {...rProps} {...childProps} />
-			) : (
-				<Redirect to="/modules" />
-			) : (
-				<Redirect to={`/signin?redirect=${rProps.location.pathname}${rProps.location.search}`} />
-			)}
-	/>
-);
 
 export const ProtectedRouteAdmin = ({ render: C, props: childProps, ...rest }) => (
 	<Route
 		{...rest}
 		render={(rProps) =>
-			childProps.isLoggedIn ? childProps.state.user_roll === 'admin' ? (
+			childProps.isLoggedIn ? childProps.state.user_roll.indexOf('admin') !== -1 ? (
 				<C {...rProps} {...childProps} />
 			) : (
 				<Redirect to="/" />
@@ -55,31 +42,6 @@ export const ProtectedRouteAdmin = ({ render: C, props: childProps, ...rest }) =
 	/>
 );
 
-export const ProtectedRoutePriest = ({ render: C, props: childProps, ...rest }) => (
-	<Route
-		{...rest}
-		render={(rProps) =>
-			childProps.isLoggedIn ? childProps.state.user_roll === 'priest' ? (
-				<C {...rProps} {...childProps} />
-			) : (
-				<Redirect to="/" />
-			) : (
-				<Redirect to={`/signin?redirect=${rProps.location.pathname}${rProps.location.search}`} />
-			)}
-	/>
-);
-
-export const ProtectedRoute = ({ render: C, props: childProps, ...rest }) => (
-	<Route
-		{...rest}
-		render={(rProps) =>
-			childProps.isLoggedIn ? (
-				<C {...rProps} {...childProps} />
-			) : (
-				<Redirect to={`/signin?redirect=${rProps.location.pathname}${rProps.location.search}`} />
-			)}
-	/>
-);
 
 export const ProppedRoute = ({ render: C, props: childProps, ...rest }) => (
 	<Route {...rest} render={(rProps) => <C {...rProps} {...childProps} />} />

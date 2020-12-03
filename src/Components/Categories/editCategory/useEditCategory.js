@@ -1,8 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef} from 'react';
 import useForm from 'react-hook-form';
 import { useHistory, useParams } from 'react-router-dom';
 import { API, graphqlOperation } from 'aws-amplify';
-import { getCategory } from '../../../graphql/queries';
+import { getCategory, listTypes } from '../../../graphql/queries';
 import { updateCategory } from '../../../graphql/mutations';
 import Swal from 'sweetalert2';
 
@@ -12,23 +12,29 @@ const useEditCategory = () => {
 	const [ category, setCategory ] = useState({});
 	const [ error, setError ] = useState(false);
 	const { register, handleSubmit, errors } = useForm();
-	const [ _module, setModule ] = useState("");
+	const [ list, setList ] = useState([]);
+
+	const name = useRef(null);
+	const code = useRef(null);
+	const type = useRef(null);
 
 	useEffect(
 		() => {
 			let didCancel = false;
 			const fetchCategory = async () => {
 				let categoryApi = {};
+				var api = null;
 
 				try {
 					categoryApi = await API.graphql(graphqlOperation(getCategory, { id }));
+					api = await API.graphql(graphqlOperation(listTypes));
 				} catch (e) {
 					setError(true);
 				}
 
 				if (!didCancel) {
+					setList(api.data.listTypes.items);
 					setCategory(categoryApi.data.getCategory);
-					setModule(categoryApi.data.getCategory.module);
 				}
 
 				return () => {
@@ -42,9 +48,26 @@ const useEditCategory = () => {
 	);
 
 	const onSubmit = async (input) => {
-		input.id = id;
 		try {
-			await API.graphql(graphqlOperation(updateCategory, { input: {id: id, name: input.name, description: input.description, module: _module} }));
+
+			if(name.current.value == ""){
+				Swal.fire('Campo Obligatorio', 'Favor completar el campo Nombre', 'error');
+				return;
+			}
+
+			if(code.current.value == ""){
+				Swal.fire('Campo Obligatorio', 'Favor completar el campo Codigo', 'error');
+				return;
+			}
+			
+			if(type.current.value == ""){
+				Swal.fire('Campo Obligatorio', 'Favor completar el campo tipo', 'error');
+				return;
+			}
+
+			var _name = list.filter(_ => _.id === type.current.value)[0].name;
+
+			await API.graphql(graphqlOperation(updateCategory, { input: {id: id, name: name.current.value, typeCategoriesId: type.current.value, typeName: _name, code: code.current.value} }));
 			await Swal.fire('Correcto', 'La categoria se ha actualizado correctamente', 'success');
 			history.push('/categories');
 		} catch (e) {
@@ -52,7 +75,7 @@ const useEditCategory = () => {
 		}
 	};
 
-	return { onSubmit, category, register, handleSubmit, errors, error, _module, setModule };
+	return { onSubmit, category, register, handleSubmit, errors, error, name, code, type, list };
 };
 
 export default useEditCategory;

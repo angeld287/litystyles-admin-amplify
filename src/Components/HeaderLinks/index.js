@@ -44,11 +44,10 @@ export default class HeaderLinks extends Component {
 					<Navbar.Heading>Litty Style</Navbar.Heading>
 					<Navbar.Divider />
 					{/* this.redirect('/') */}
-					<Button className="bp3-minimal" onClick={(e) => {e.preventDefault(); this.props.cp.setPage('')}} icon="home"/>
-					{this.props.childProps.state.user_roll.indexOf('admin') !== -1 && <Button className="bp3-minimal" onClick={(e) => {e.preventDefault(); this.redirect('/services')}} icon="wrench"/>}
-					{this.props.childProps.state.user_roll.indexOf('admin') !== -1 && <Button className="bp3-minimal" onClick={(e) => {e.preventDefault(); this.redirect('/services')}} icon="cut"/>}
-					{this.props.childProps.state.user_roll.indexOf('admin') !== -1 && <Button className="bp3-minimal" onClick={(e) => {e.preventDefault(); this.redirect('/services')}} icon="people"/>}
-					{this.props.childProps.state.user_roll.indexOf('admin') !== -1 && <Button className="bp3-minimal" onClick={(e) => {e.preventDefault(); this.redirect('/services')}} icon="chart"/>}
+					{this.props.childProps.state.user_roll.indexOf('admin') !== -1 && <Button className="bp3-minimal" onClick={(e) => {e.preventDefault(); this.redirect('/categories')}} icon="wrench"/>}
+					{this.props.childProps.state.user_roll.indexOf('admin') !== -1 && <Button className="bp3-minimal" onClick={(e) => {e.preventDefault(); this.redirect('/categories')}} icon="cut"/>}
+					{this.props.childProps.state.user_roll.indexOf('admin') !== -1 && <Button className="bp3-minimal" onClick={(e) => {e.preventDefault(); this.redirect('/categories')}} icon="people"/>}
+					{this.props.childProps.state.user_roll.indexOf('admin') !== -1 && <Button className="bp3-minimal" onClick={(e) => {e.preventDefault(); this.redirect('/categories')}} icon="chart"/>}
 				</Navbar.Group>
 				<Navbar.Group align={Alignment.RIGHT}>
 					<Navbar.Divider />
