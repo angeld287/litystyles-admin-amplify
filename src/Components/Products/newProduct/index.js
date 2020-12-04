@@ -3,7 +3,7 @@ import { Button, Spinner, Callout, Alert, Icon } from "@blueprintjs/core";
 import useNewProduct from './useNewProduct';
 
 const NewProduct = () => {
-	const { name, cost, onSubmit, category, subcategory, categories, subcategories } = useNewProduct();
+	const { name, packagingformat, cost, filterSubcategories, onSubmit, category, subcategory, categories, subcategories } = useNewProduct();
 
 	const _categories = (categories !== null)?([].concat(categories).map((item,i) => ( <option value={item.id}>{item.name}</option> ) )):(<option></option>)
 	const _subcategories = (subcategories !== null)?([].concat(subcategories).map((item,i) => ( <option value={item.id}>{item.name}</option> ) )):(<option></option>)
@@ -35,12 +35,22 @@ const NewProduct = () => {
 					ref={cost}
 				/>
 
+				<label htmlFor="pack" className="grey-text font-weight-light">
+					Envace del Producto:
+				</label>
+				<input
+					name="pack"
+					autoComplete="off"
+					className="form-control"
+					ref={packagingformat}
+				/>
+
 				<br />
 				<label htmlFor="category" className="grey-text font-weight-light">
 					Categoria:
 				</label>
 				<div>
-					<select id="category" required className="browser-default custom-select" ref={category}>
+					<select id="category" onChange={filterSubcategories} required className="browser-default custom-select" ref={category}>
 						<option value="" title="none">Seleccione una opcion</option>
 						{_categories}
 					</select>

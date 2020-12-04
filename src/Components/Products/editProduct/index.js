@@ -4,7 +4,7 @@ import useEditProduct from './useEditProduct';
 import { Button, Spinner } from "@blueprintjs/core";
 
 const EditProduct = () => {
-	const { onSubmit, subcategory, category, categories, subcategories, error, name, cost, product } = useEditProduct();
+	const { onSubmit, packagingformat, subcategory, category, categories, filterSubcategories, subcategories, error, name, cost, product } = useEditProduct();
 
 	if (Object.entries(product).length === 0 && product.constructor === Object) return <Spinner />;
 
@@ -41,12 +41,23 @@ const EditProduct = () => {
 					ref={cost}
 				/>
 
+				<label htmlFor="pack" className="grey-text font-weight-light">
+					Envace del Producto:
+				</label>
+				<input
+					name="pack"
+					autoComplete="off"
+					className="form-control"
+					defaultValue={product.packagingformat}
+					ref={packagingformat}
+				/>
+
 				<br />
 				<label htmlFor="category" className="grey-text font-weight-light">
 					Categoria:
 				</label>
 				<div>
-					<select id="category" defaultValue={product.category.items.length > 0 ? product.category.items[0].category.id : "0"} required className="browser-default custom-select" ref={category}>
+					<select id="category" onChange={filterSubcategories} defaultValue={product.category.items.length > 0 ? product.category.items[0].category.id : "0"} required className="browser-default custom-select" ref={category}>
 						<option value="0">Seleccione una opcion</option>
 						{_categories}
 					</select>
@@ -58,7 +69,7 @@ const EditProduct = () => {
 					SubCategoria:
 				</label>
 				<div>
-					<select id="subcategory" defaultValue={product.subcategory.items.length > 0 ? product.subcategory.items[0].subcategory.id : "0"} required className="browser-default custom-select" ref={subcategory}>
+					<select id="subcategory" defaultValue={(product.subcategory.items.length > 0 && product.subcategory.items[0].subcategory !== null) ? product.subcategory.items[0].subcategory.id : "0"} required className="browser-default custom-select" ref={subcategory}>
 						<option value="0">Seleccione una opcion</option>
 						{_subcategories}
 					</select>

@@ -1,9 +1,8 @@
 import { useEffect, useState, useRef} from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { API, graphqlOperation } from 'aws-amplify';
-import { listCategorys, listSubCategorys } from '../../../graphql/queries';
-import { getProduct } from '../../../graphql/customQueries';
-import { updateProduct, updateProductCategory, updateProductSubCategory } from '../../../graphql/mutations';
+import { getProduct, listCategorys } from '../../../graphql/customQueries';
+import { updateProduct, updateProductCategory, updateProductSubCategory, createProductCategory, createProductSubCategory } from '../../../graphql/mutations';
 import Swal from 'sweetalert2';
 
 const useEditProduct = () => {
@@ -26,11 +25,9 @@ const useEditProduct = () => {
 			const _fetch = async () => {
 				let _api = {};
 				var _categories = [];
-				var _subcategories = [];
 
 				try {
-					_categories = await API.graphql(graphqlOperation(listCategorys));
-					_subcategories = await API.graphql(graphqlOperation(listSubCategorys));
+					_categories = await API.graphql(graphqlOperation(listCategorys, {filter: { typeName: { eq: "Product"}}}));
 					_api = await API.graphql(graphqlOperation(getProduct, { id }));
 				} catch (e) {
 					setError(true);
@@ -38,7 +35,6 @@ const useEditProduct = () => {
 
 				if (!didCancel) {
 					setCategories(_categories.data.listCategorys.items);
-					setSubCategories(_subcategories.data.listSubCategorys.items);
 					setProduct(_api.data.getProduct);
 				}
 
@@ -51,6 +47,10 @@ const useEditProduct = () => {
 		},
 		[ id ]
 	);
+
+	const filterSubcategories = () => {
+		setSubCategories(categories.filter(_ => _.id === category.current.value)[0].subcategories.items)
+	}
 
 	const onSubmit = async () => {
 		try {
@@ -75,23 +75,30 @@ const useEditProduct = () => {
 				return;
 			}
 
-			if(subcategory.current.value == ""){
-				Swal.fire('Campo Obligatorio', 'Favor completar el campo Subcategoria', 'error');
-				return;
+			const p = await API.graphql(graphqlOperation(updateProduct, { input: {id: product.id, packagingformat: packagingformat.current.value, name: name.current.value, cost: cost.current.value} }));
+			if(product.category.items.length > 0){
+				await API.graphql(graphqlOperation(updateProductCategory, { input: {id: product.category.items[0].id, productCategoryProductId: p.data.updateProduct.id, productCategoryCategoryId: category.current.value} }));
+			}else{
+				await API.graphql(graphqlOperation(createProductCategory, { input: { productCategoryProductId: p.data.updateProduct.id, productCategoryCategoryId: category.current.value} }));
 			}
 
-			const p = await API.graphql(graphqlOperation(updateProduct, { input: {id: product.id, packagingformat: packagingformat.current.value, name: name.current.value, cost: cost.current.value} }));
-			await API.graphql(graphqlOperation(updateProductCategory, { input: {id: product.category.items[0].id, productCategoryProductId: p.data.updateProduct.id, productCategoryCategoryId: category.current.value} }));
-			await API.graphql(graphqlOperation(updateProductSubCategory, { input: {id: product.subcategory.items[0].id, productSubCategoryProductId: p.data.updateProduct.id, productSubCategorySubcategoryId: subcategory.current.value} }));
+			if(subcategory.current.value !== "" ){
+				if(product.subcategory.items > 0){
+					await API.graphql(graphqlOperation(updateProductSubCategory, { input: {id: product.subcategory.items[0].id, productSubCategoryProductId: p.data.updateProduct.id, productSubCategorySubcategoryId: subcategory.current.value} }));
+				}else{
+					await API.graphql(graphqlOperation(createProductSubCategory, { input: { productSubCategoryProductId: p.data.updateProduct.id, productSubCategorySubcategoryId: subcategory.current.value} }));
+				}
+			}
 
 			await Swal.fire('Correcto', 'La categoria se ha actualizado correctamente', 'success');
-			history.push('/categories');
+			history.push('/products');
 		} catch (e) {
+			console.log(e);
 			Swal.fire('Ha ocurrido un error', 'Intentelo nuevamente', 'error');
 		}
 	};
 
-	return { onSubmit, category, subcategory, categories, subcategories, error, name, cost, product };
+	return { onSubmit, category, filterSubcategories, packagingformat, subcategory, categories, subcategories, error, name, cost, product };
 };
 
 export default useEditProduct;

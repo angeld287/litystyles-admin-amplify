@@ -378,6 +378,43 @@ export const getProduct = /* GraphQL */ `
   }
 `;
 
+export const listCategorys = /* GraphQL */ `
+  query ListCategorys(
+    $filter: ModelCategoryFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listCategorys(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        name
+        offices {
+          nextToken
+        }
+        subcategories {
+          items {
+            id
+            name
+          }
+        }
+        products {
+          nextToken
+        }
+        services {
+          nextToken
+        }
+        typeName
+        code
+        deleted
+        deletedAt
+        createdAt
+        owner
+      }
+      nextToken
+    }
+  }
+`;
+
 export const getService = /* GraphQL */ `
   query GetService($id: ID!) {
     getService(id: $id) {

@@ -5,7 +5,7 @@ import useEditService from './useEditService';
 import { Button, Spinner, Icon } from "@blueprintjs/core";
 
 const EditService = () => {
-	const { onSubmit, subcategory, category, error, name, cost, categories, subcategories, service } = useEditService();
+	const { onSubmit, filterSubcategories, subcategory, category, error, name, cost, categories, subcategories, service } = useEditService();
 
 	if (Object.entries(service).length === 0 && service.constructor === Object) return <Spinner />;
 
@@ -47,7 +47,7 @@ const EditService = () => {
 					Categoria:
 				</label>
 				<div>
-					<select id="category" defaultValue={service.category.items.length > 0 ? service.category.items[0].category.id : "0"} required className="browser-default custom-select" ref={category}>
+					<select id="category" onChange={filterSubcategories} defaultValue={service.category.items.length > 0 ? service.category.items[0].category.id : "0"} required className="browser-default custom-select" ref={category}>
 						<option value="0">Seleccione una opcion</option>
 						{_categories}
 					</select>
@@ -59,7 +59,7 @@ const EditService = () => {
 					SubCategoria:
 				</label>
 				<div>
-					<select id="subcategory" defaultValue={service.subcategory.items.length > 0 ? service.subcategory.items[0].subcategory.id : "0"} required className="browser-default custom-select" ref={subcategory}>
+					<select id="subcategory" defaultValue={service.subcategory.items.length > 0 && service.subcategory.items[0].subcategory !== null ? service.subcategory.items[0].subcategory.id : "0"} required className="browser-default custom-select" ref={subcategory}>
 						<option value="0">Seleccione una opcion</option>
 						{_subcategories}
 					</select>
