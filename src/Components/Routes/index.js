@@ -12,6 +12,14 @@ import SubCategories from '../SubCategories';
 import NewSubCategory from '../SubCategories/newSubCategory';
 import EditSubCategory from '../SubCategories/editSubCategory';
 
+import Products from '../Products';
+import NewProduct from '../Products/newProduct';
+import EditProduct from '../Products/editProduct';
+
+import Services from '../Services';
+import NewService from '../Services/newService';
+import EditService from '../Services/editService';
+
 import Types from '../Types';
 import NewType from '../Types/newType';
 import EditType from '../Types/editType';
@@ -19,12 +27,12 @@ import EditType from '../Types/editType';
 export const Routes = ({ childProps }) => (
 	<Switch>
 		<Route exact path="/" render={() => <Home />} />
-		<ProtectedRouteAdmin exact path="/events/new" render={NewCategory} props={childProps} />
-		<ProtectedRouteAdmin exact path="/events/:id/edit" render={EditCategory} props={childProps} />
-		<ProtectedRouteAdmin exact path="/events" render={Categories} props={childProps} />
-		<ProtectedRouteAdmin exact path="/contacts/new" render={NewCategory} props={childProps} />
-		<ProtectedRouteAdmin exact path="/contacts/:id/edit" render={EditCategory} props={childProps} />
-		<ProtectedRouteAdmin exact path="/contacts" render={Categories} props={childProps} />
+		<ProtectedRouteAdmin exact path="/products/new" render={NewProduct} props={childProps} />
+		<ProtectedRouteAdmin exact path="/products/:id/edit" render={EditProduct} props={childProps} />
+		<ProtectedRouteAdmin exact path="/products" render={Products} props={childProps} />
+		<ProtectedRouteAdmin exact path="/services/new" render={NewService} props={childProps} />
+		<ProtectedRouteAdmin exact path="/services/:id/edit" render={EditService} props={childProps} />
+		<ProtectedRouteAdmin exact path="/services" render={Services} props={childProps} />
 		<ProtectedRouteAdmin exact path="/categories/new" render={NewCategory} props={childProps} />
 		<ProtectedRouteAdmin exact path="/categories/:id/edit" render={EditCategory} props={childProps} />
 		<ProtectedRouteAdmin exact path="/categories" render={Categories} props={childProps} />

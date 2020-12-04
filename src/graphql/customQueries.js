@@ -323,3 +323,115 @@ export const getRequest = /* GraphQL */ `
     }
   }
 `;
+
+export const getProduct = /* GraphQL */ `
+  query GetProduct($id: ID!) {
+    getProduct(id: $id) {
+      id
+      name
+      cost
+      companies {
+        items {
+          id
+          quantity
+          cost
+          createdAt
+        }
+        nextToken
+      }
+      request {
+        items {
+          id
+          cost
+          quantity
+          createdAt
+        }
+        nextToken
+      }
+      category {
+        items {
+          id
+          createdAt
+          category {
+            id
+          }
+        }
+        nextToken
+      }
+      subcategory {
+        items {
+          id
+          createdAt
+          subcategory {
+            id
+          }
+        }
+        nextToken
+      }
+      deleted
+      image
+      packagingformat
+      deletedAt
+      createdAt
+      owner
+    }
+  }
+`;
+
+export const getService = /* GraphQL */ `
+  query GetService($id: ID!) {
+    getService(id: $id) {
+      id
+      name
+      cost
+      employees {
+        items {
+          id
+          createdAt
+        }
+        nextToken
+      }
+      companies {
+        items {
+          id
+          cost
+          createdAt
+        }
+        nextToken
+      }
+      request {
+        items {
+          id
+          resposibleName
+          cost
+          createdAt
+        }
+        nextToken
+      }
+      category {
+        items {
+          id
+          createdAt
+          category {
+            id
+          }
+        }
+        nextToken
+      }
+      subcategory {
+        items {
+          id
+          createdAt
+          subcategory {
+            id
+          }
+        }
+        nextToken
+      }
+      deleted
+      deletedAt
+      createdAt
+      owner
+    }
+  }
+`;
