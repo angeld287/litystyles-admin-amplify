@@ -1,5 +1,4 @@
 import { useEffect, useState, useRef} from 'react';
-import useForm from 'react-hook-form';
 import { useHistory, useParams } from 'react-router-dom';
 import { API, graphqlOperation } from 'aws-amplify';
 import { getCategory, listTypes } from '../../../graphql/queries';
@@ -11,7 +10,6 @@ const useEditCategory = () => {
 	let { id } = useParams();
 	const [ category, setCategory ] = useState({});
 	const [ error, setError ] = useState(false);
-	const { register, handleSubmit, errors } = useForm();
 	const [ list, setList ] = useState([]);
 
 	const name = useRef(null);
@@ -50,17 +48,17 @@ const useEditCategory = () => {
 	const onSubmit = async (input) => {
 		try {
 
-			if(name.current.value == ""){
+			if(name.current.value === ""){
 				Swal.fire('Campo Obligatorio', 'Favor completar el campo Nombre', 'error');
 				return;
 			}
 
-			if(code.current.value == ""){
+			if(code.current.value === ""){
 				Swal.fire('Campo Obligatorio', 'Favor completar el campo Codigo', 'error');
 				return;
 			}
 			
-			if(type.current.value == ""){
+			if(type.current.value === ""){
 				Swal.fire('Campo Obligatorio', 'Favor completar el campo tipo', 'error');
 				return;
 			}
@@ -75,7 +73,7 @@ const useEditCategory = () => {
 		}
 	};
 
-	return { onSubmit, category, register, handleSubmit, errors, error, name, code, type, list };
+	return { onSubmit, category, error, name, code, type, list };
 };
 
 export default useEditCategory;

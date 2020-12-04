@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Table, Container, Row, Col, ButtonGroup, Modal, Form } from 'react-bootstrap';
+import { Container } from 'react-bootstrap';
 
 class Home extends Component {
 

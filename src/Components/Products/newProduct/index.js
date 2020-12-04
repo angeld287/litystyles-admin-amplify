@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Spinner, Callout, Alert, Icon } from "@blueprintjs/core";
+import { Button } from "@blueprintjs/core";
 import useNewProduct from './useNewProduct';
 
 const NewProduct = () => {

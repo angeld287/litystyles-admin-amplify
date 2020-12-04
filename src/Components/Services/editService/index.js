@@ -1,8 +1,7 @@
 //import { Button } from 'aws-amplify-react';
 import React from 'react';
-import { Table, Container, Row, Col, ButtonGroup, Modal, Form } from 'react-bootstrap';
 import useEditService from './useEditService';
-import { Button, Spinner, Icon } from "@blueprintjs/core";
+import { Button, Spinner } from "@blueprintjs/core";
 
 const EditService = () => {
 	const { onSubmit, filterSubcategories, subcategory, category, error, name, cost, categories, subcategories, service } = useEditService();
@@ -47,7 +46,7 @@ const EditService = () => {
 					Categoria:
 				</label>
 				<div>
-					<select id="category" onChange={filterSubcategories} defaultValue={service.category.items.length > 0 ? service.category.items[0].category.id : "0"} required className="browser-default custom-select" ref={category}>
+					<select id="category" onChange={filterSubcategories} defaultValue={(service.category.items.length > 0 && service.category.items[0].category !== null) ? service.category.items[0].category.id : "0"} required className="browser-default custom-select" ref={category}>
 						<option value="0">Seleccione una opcion</option>
 						{_categories}
 					</select>

@@ -52,22 +52,22 @@ const useNewProduct = () => {
 	const onSubmit = async (input) => {
 		try {
 			
-			if(name.current.value == ""){
+			if(name.current.value === ""){
 				Swal.fire('Campo Obligatorio', 'Favor completar el campo Nombre', 'error');
 				return;
 			}
 
-			if(cost.current.value == ""){
+			if(cost.current.value === ""){
 				Swal.fire('Campo Obligatorio', 'Favor completar el campo Costo', 'error');
 				return;
 			}
 			
-			if(packagingformat.current.value == ""){
+			if(packagingformat.current.value === ""){
 				Swal.fire('Campo Obligatorio', 'Favor completar el campo Formato de Envace', 'error');
 				return;
 			}
 
-			if(category.current.value == ""){
+			if(category.current.value === ""){
 				Swal.fire('Campo Obligatorio', 'Favor completar el campo Categoria', 'error');
 				return;
 			}
@@ -86,7 +86,7 @@ const useNewProduct = () => {
 		}
 	};
 
-	return { name, cost, filterSubcategories, onSubmit, categories, subcategories, category, subcategory, loading, packagingformat };
+	return { name, cost, filterSubcategories, onSubmit, categories, subcategories, category, subcategory, loading, error, packagingformat };
 };
 
 export default useNewProduct;

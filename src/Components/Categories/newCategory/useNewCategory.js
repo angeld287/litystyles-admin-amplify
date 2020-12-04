@@ -6,7 +6,6 @@ import { listTypes } from '../../../graphql/queries';
 import Swal from 'sweetalert2';
 
 const useNewCategory = () => {
-	//const [ type, setType ] = useState("");
 	const [ list, setList ] = useState([]);
 	const [ loading, setLoading ] = useState(true);
 	const [ error, setError ] = useState(false);
@@ -46,17 +45,17 @@ const useNewCategory = () => {
 	const onSubmit = async (input) => {
 		try {
 			
-			if(name.current.value == ""){
+			if(name.current.value === ""){
 				Swal.fire('Campo Obligatorio', 'Favor completar el campo Nombre', 'error');
 				return;
 			}
 
-			if(code.current.value == ""){
+			if(code.current.value === ""){
 				Swal.fire('Campo Obligatorio', 'Favor completar el campo Codigo', 'error');
 				return;
 			}
 			
-			if(type.current.value == ""){
+			if(type.current.value === ""){
 				Swal.fire('Campo Obligatorio', 'Favor completar el campo tipo', 'error');
 				return;
 			}
@@ -71,7 +70,7 @@ const useNewCategory = () => {
 		}
 	};
 
-	return { name, code, onSubmit, type, list };
+	return { name, code, onSubmit, type, list, loading, error };
 };
 
 export default useNewCategory;

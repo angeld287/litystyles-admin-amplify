@@ -77,7 +77,7 @@ const useNewService = () => {
 		}
 	};
 
-	return { name, cost, category, filterSubcategories, subcategory, onSubmit, categories, subcategories };
+	return { name, cost, category, filterSubcategories, subcategory, onSubmit, categories, subcategories, loading, error };
 };
 
 export default useNewService;

@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+import { useRef } from 'react';
 import { useHistory } from 'react-router-dom';
 import { API, graphqlOperation } from 'aws-amplify';
 import { createType } from '../../../graphql/mutations';
@@ -14,12 +14,12 @@ const useNewType = () => {
 	const onSubmit = async () => {
 		try {
 			
-			if(name.current.value == ""){
+			if(name.current.value === ""){
 				Swal.fire('Campo Obligatorio', 'Favor completar el campo Nombre', 'error');
 				return;
 			}
 
-			if(code.current.value == ""){
+			if(code.current.value === ""){
 				Swal.fire('Campo Obligatorio', 'Favor completar el campo Codigo', 'error');
 				return;
 			}

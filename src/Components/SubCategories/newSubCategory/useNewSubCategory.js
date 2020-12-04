@@ -46,17 +46,17 @@ const useNewSubCategory = () => {
 	const onSubmit = async () => {
 		try {
 			
-			if(name.current.value == ""){
+			if(name.current.value === ""){
 				Swal.fire('Campo Obligatorio', 'Favor completar el campo Nombre', 'error');
 				return;
 			}
 
-			if(code.current.value == ""){
+			if(code.current.value === ""){
 				Swal.fire('Campo Obligatorio', 'Favor completar el campo Codigo', 'error');
 				return;
 			}
 			
-			if(category.current.value == ""){
+			if(category.current.value === ""){
 				Swal.fire('Campo Obligatorio', 'Favor completar el campo categoria', 'error');
 				return;
 			}
@@ -71,7 +71,7 @@ const useNewSubCategory = () => {
 		}
 	};
 
-	return { name, code, onSubmit, category, list };
+	return { name, code, onSubmit, category, list, loading, error};
 };
 
 export default useNewSubCategory;

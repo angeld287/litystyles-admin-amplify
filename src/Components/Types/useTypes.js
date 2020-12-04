@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Fragment } from 'react';
+import { useState, useEffect } from 'react';
 import { API, graphqlOperation } from 'aws-amplify';
 import { listTypes } from '../../graphql/queries';
 import Swal from 'sweetalert2';

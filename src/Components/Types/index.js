@@ -1,8 +1,8 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import useTypes from './useTypes';
 import { useHistory } from 'react-router-dom';
-import { Table, Container, Row, Col, ButtonGroup, Modal, Form } from 'react-bootstrap';
-import { Button, Spinner, Icon } from "@blueprintjs/core";
+import { Table, Container, Row, Col } from 'react-bootstrap';
+import { Button, Spinner } from "@blueprintjs/core";
 
 import './index.css';
 

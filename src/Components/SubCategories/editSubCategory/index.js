@@ -1,7 +1,7 @@
 //import { Button } from 'aws-amplify-react';
 import React from 'react';
 import useEditSubCategory from './useEditSubCategory';
-import { Button, Spinner, Icon } from "@blueprintjs/core";
+import { Button, Spinner } from "@blueprintjs/core";
 
 const EditCategory = () => {
 	const { list, onSubmit, subcategory, error, name, code, category } = useEditSubCategory();

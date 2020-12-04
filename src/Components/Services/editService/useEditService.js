@@ -54,29 +54,27 @@ const useEditService = () => {
 	const onSubmit = async () => {
 		try {
 
-			if(name.current.value == ""){
+			if(name.current.value === ""){
 				Swal.fire('Campo Obligatorio', 'Favor completar el campo Nombre', 'error');
 				return;
 			}
 
-			if(cost.current.value == ""){
+			if(cost.current.value === ""){
 				Swal.fire('Campo Obligatorio', 'Favor completar el campo Costo', 'error');
 				return;
 			}
 			
-			if(category.current.value == ""){
+			if(category.current.value === ""){
 				Swal.fire('Campo Obligatorio', 'Favor completar el campo Categoria', 'error');
 				return;
 			}
 
 			const s = await API.graphql(graphqlOperation(updateService, { input: {id: service.id, name: name.current.value, cost: cost.current.value} }));
-			await API.graphql(graphqlOperation(updateServiceCategory, { input: {id: service.category.items[0].id, serviceCategoryCategoryId: category.current.value, serviceCategoryServiceId: s.data.updateService.id} }));
-			await API.graphql(graphqlOperation(updateServiceSubCategory, { input: {id: service.subcategory.items[0].id, serviceSubCategorySubcategoryId: subcategory.current.value, serviceSubCategoryServiceId: s.data.updateService.id} }));
 
 			if(service.category.items.length > 0){
-				await API.graphql(graphqlOperation(updateServiceCategory, { input: {id: service.category.items[0].id, serviceSubCategorySubcategoryId: subcategory.current.value, serviceSubCategoryServiceId: s.data.updateService.id} }));
+				await API.graphql(graphqlOperation(updateServiceCategory, { input: {id: service.category.items[0].id, serviceCategoryCategoryId: subcategory.current.value, serviceCategoryServiceId: s.data.updateService.id} }));
 			}else{
-				await API.graphql(graphqlOperation(createServiceCategory, { input: { serviceSubCategorySubcategoryId: subcategory.current.value, serviceSubCategoryServiceId: s.data.updateService.id} }));
+				await API.graphql(graphqlOperation(createServiceCategory, { input: { serviceCategoryCategoryId: subcategory.current.value, serviceCategoryServiceId: s.data.updateService.id } }));
 			}
 
 			if(subcategory.current.value !== "" ){
@@ -90,6 +88,7 @@ const useEditService = () => {
 			await Swal.fire('Correcto', 'El servicio se ha actualizado correctamente', 'success');
 			history.push('/services');
 		} catch (e) {
+			console.log(e);
 			Swal.fire('Ha ocurrido un error', 'Intentelo nuevamente', 'error');
 		}
 	};

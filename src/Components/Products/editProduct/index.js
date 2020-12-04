@@ -57,7 +57,7 @@ const EditProduct = () => {
 					Categoria:
 				</label>
 				<div>
-					<select id="category" onChange={filterSubcategories} defaultValue={product.category.items.length > 0 ? product.category.items[0].category.id : "0"} required className="browser-default custom-select" ref={category}>
+					<select id="category" onChange={filterSubcategories} defaultValue={(product.category.items.length > 0 && product.category.items[0].category !== null) ? product.category.items[0].category.id : "0"} required className="browser-default custom-select" ref={category}>
 						<option value="0">Seleccione una opcion</option>
 						{_categories}
 					</select>

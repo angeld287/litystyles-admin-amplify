@@ -55,22 +55,22 @@ const useEditProduct = () => {
 	const onSubmit = async () => {
 		try {
 
-			if(name.current.value == ""){
+			if(name.current.value === ""){
 				Swal.fire('Campo Obligatorio', 'Favor completar el campo Nombre', 'error');
 				return;
 			}
 
-			if(cost.current.value == ""){
+			if(cost.current.value === ""){
 				Swal.fire('Campo Obligatorio', 'Favor completar el campo Codigo', 'error');
 				return;
 			}
 			
-			if(packagingformat.current.value == ""){
+			if(packagingformat.current.value === ""){
 				Swal.fire('Campo Obligatorio', 'Favor completar el campo Formato de Envace', 'error');
 				return;
 			}
 
-			if(category.current.value == ""){
+			if(category.current.value === ""){
 				Swal.fire('Campo Obligatorio', 'Favor completar el campo Categoria', 'error');
 				return;
 			}

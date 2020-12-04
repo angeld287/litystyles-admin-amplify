@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 
 
-import { Authenticator, SignIn} from 'aws-amplify-react';
-import aws_exports from '../../../aws-exports'; 
+import { Authenticator} from 'aws-amplify-react';
 
 import queryString from 'query-string';
 

@@ -1,13 +1,11 @@
 import React from 'react';
-import { Button, Spinner, Callout, Alert, Icon } from "@blueprintjs/core";
-import { Tabs, Tab, Table } from 'react-bootstrap';
+import { Button } from "@blueprintjs/core";
 import useNewCategory from './useNewCategory';
 
 const NewCategory = () => {
 	const { name, code, onSubmit, type, list } = useNewCategory();
 
 	const _list = (list !== null)?([].concat(list)
-		//.sort((a, b) => a.name.localeCompare(b.name))
 		.map((item,i) =>
 			(
 				<option value={item.id}>{item.name}</option>
