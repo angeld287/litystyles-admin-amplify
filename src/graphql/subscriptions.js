@@ -849,6 +849,7 @@ export const onCreateCategory = /* GraphQL */ `
           id
           name
           code
+          categoryName
           deleted
           deletedAt
           createdAt
@@ -891,6 +892,7 @@ export const onUpdateCategory = /* GraphQL */ `
           id
           name
           code
+          categoryName
           deleted
           deletedAt
           createdAt
@@ -933,6 +935,7 @@ export const onDeleteCategory = /* GraphQL */ `
           id
           name
           code
+          categoryName
           deleted
           deletedAt
           createdAt
@@ -1033,6 +1036,7 @@ export const onCreateSubCategory = /* GraphQL */ `
       id
       name
       code
+      categoryName
       deleted
       deletedAt
       createdAt
@@ -1046,6 +1050,7 @@ export const onUpdateSubCategory = /* GraphQL */ `
       id
       name
       code
+      categoryName
       deleted
       deletedAt
       createdAt
@@ -1059,6 +1064,7 @@ export const onDeleteSubCategory = /* GraphQL */ `
       id
       name
       code
+      categoryName
       deleted
       deletedAt
       createdAt

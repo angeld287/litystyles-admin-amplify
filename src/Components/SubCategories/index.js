@@ -1,13 +1,13 @@
-import React, { Fragment } from 'react';
-import useCategories from './useCategories';
+import React from 'react';
+import useSubCategories from './useSubCategories';
 import { useHistory } from 'react-router-dom';
 import { Table, Container, Row, Col, ButtonGroup, Modal, Form } from 'react-bootstrap';
 import { Button, Spinner, Icon } from "@blueprintjs/core";
 
 import './index.css';
 
-const Categories = (props) => {
-	const { loading, error, list, _handleDelete } = useCategories();
+const SubCategories = (props) => {
+	const { loading, error, list, _handleDelete } = useSubCategories();
 	let history = useHistory();
 
 	if(loading) return(<Spinner/>)
@@ -19,23 +19,23 @@ const Categories = (props) => {
 	};
 
 	const _list = (list !== null)?([].concat(list)
-		//.sort((a, b) => a.name.localeCompare(b.name))
 		.map((item,i) =>
 			(
 				<tr key={i}>
 					<td>{i+1}</td>
-					<td >{item.name}</td>
-					<td>{item.typeName}</td>
-					<td><Button style={{marginRight: 1}} intent="primary" icon="edit" onClick={e => { e.preventDefault(); history.push('/categories/'+item.id+'/edit')}}></Button><Button style={{marginRight: 1}} intent="Danger" icon="delete" onClick={e => { e.preventDefault(); _handleDelete(item.id)}}></Button></td>
+					<td>{item.name}</td>
+					<td>{item.code}</td>
+					<td>{item.categoryName}</td>
+					<td><Button style={{marginRight: 1}} intent="primary" icon="edit" onClick={e => { e.preventDefault(); history.push('/subcategories/'+item.id+'/edit')}}></Button><Button style={{marginRight: 1}} intent="Danger" icon="delete" onClick={e => { e.preventDefault(); _handleDelete(item.id)}}></Button></td>
 				</tr>
 			)
 		)):(<td></td>)
 
 	return (
 		<Container fluid>
-			<h3 className="mt-5">categorias</h3>
+			<h3 className="mt-5">Subcategorias</h3>
 			<Row>
-				<Col sm={2}><Button loading={false} intent="Primary" onClick={(e) => {e.preventDefault(); redirect('categories/new');}} icon="add"></Button></Col>
+				<Col sm={2}><Button loading={false} intent="Primary" onClick={(e) => {e.preventDefault(); redirect('subcategories/new');}} icon="add"></Button></Col>
 			</Row>
 			<div style={{marginTop:20}}>
 				<Table striped bordered hover>
@@ -43,7 +43,8 @@ const Categories = (props) => {
 						<tr>
 							<th>No.</th>
 							<th>Nombre</th>
-							<th>Tipo</th>
+							<th>Codigo</th>
+							<th>Categoria</th>
 							<th>Acciones</th>
 						</tr>
 					</thead>
@@ -56,4 +57,4 @@ const Categories = (props) => {
 	);
 };
 
-export default Categories;
+export default SubCategories;

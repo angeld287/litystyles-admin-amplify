@@ -23,7 +23,7 @@ const Types = (props) => {
 			(
 				<tr key={i}>
 					<td>{i+1}</td>
-					<td style={{width: 200}}>{item.name}</td>
+					<td>{item.name}</td>
 					<td>{item.code}</td>
 					<td><Button style={{marginRight: 1}} intent="primary" icon="edit" onClick={e => { e.preventDefault(); history.push('/types/'+item.id+'/edit')}}></Button><Button style={{marginRight: 1}} intent="Danger" icon="delete" onClick={e => { e.preventDefault(); _handleDelete(item.id)}}></Button></td>
 				</tr>

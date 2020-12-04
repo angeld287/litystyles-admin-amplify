@@ -40,7 +40,7 @@ const EditType = () => {
 				<br />
 
 				<div className="text-center py-4 mt-3">
-					<Button onClick={onSubmit} className="btn btn-outline-blue" type="submit">
+					<Button onClick={onSubmit} className="btn btn-outline-blue" >
 						Guardar
 					</Button>
 				</div>

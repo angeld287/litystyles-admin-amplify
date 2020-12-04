@@ -1,13 +1,12 @@
 //import { Button } from 'aws-amplify-react';
 import React from 'react';
-import { Table, Container, Row, Col, ButtonGroup, Modal, Form } from 'react-bootstrap';
-import useEditCategory from './useEditCategory';
+import useEditSubCategory from './useEditSubCategory';
 import { Button, Spinner, Icon } from "@blueprintjs/core";
 
 const EditCategory = () => {
-	const { list, onSubmit, category, error, name, code, type } = useEditCategory();
+	const { list, onSubmit, subcategory, error, name, code, category } = useEditSubCategory();
 
-	if (Object.entries(category).length === 0 && category.constructor === Object) return <Spinner />;
+	if (Object.entries(subcategory).length === 0 && subcategory.constructor === Object) return <Spinner />;
 
 	if (error) return <h2>Ha ocurrido un error</h2>;
 
@@ -20,15 +19,15 @@ const EditCategory = () => {
 
 	return (
 		<div align="center" style={{marginTop: 5}}>
-				<p className="h4 text-center py-4">Editar Categoria</p>
+				<p className="h4 text-center py-4">Editar SubCategoria</p>
 
 				<label htmlFor="name" className="grey-text font-weight-light">
-					Nombre de la Categoria:
+					Nombre de la SubCategoria:
 				</label>
 				<input
 					name="name"
 					autoComplete="off"
-					defaultValue={category.name}
+					defaultValue={subcategory.name}
 					className="form-control"
 					ref={name}
 				/>
@@ -36,22 +35,22 @@ const EditCategory = () => {
 				<br />
 
 				<label htmlFor="code" className="grey-text font-weight-light">
-					Codigo de la Categoria:
+					Codigo de la SubCategoria:
 				</label>
 				<input
 					name="code"
 					autoComplete="off"
 					className="form-control"
-					defaultValue={category.code}
+					defaultValue={subcategory.code}
 					ref={code}
 				/>
 
 				<br />
-				<label htmlFor="type" className="grey-text font-weight-light">
-					Tipo:
+				<label htmlFor="category" className="grey-text font-weight-light">
+					Categoria:
 				</label>
 				<div>
-					<select id="type" defaultValue={list.filter(_ => _.name === category.typeName)[0] === undefined ? "0" : list.filter(_ => _.name === category.typeName)[0].id} required className="browser-default custom-select" ref={type}>
+					<select id="category" defaultValue={list.filter(_ => _.name === subcategory.categoryName)[0] === undefined ? "0" : list.filter(_ => _.name === subcategory.categoryName)[0].id} required className="browser-default custom-select" ref={category}>
 						<option value="0">Seleccione una opcion</option>
 						{_list}
 					</select>

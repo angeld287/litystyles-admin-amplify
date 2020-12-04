@@ -160,6 +160,7 @@ export const getCategory = /* GraphQL */ `
           id
           name
           code
+          categoryName
           deleted
           deletedAt
           createdAt
@@ -258,6 +259,7 @@ export const getSubCategory = /* GraphQL */ `
       id
       name
       code
+      categoryName
       deleted
       deletedAt
       createdAt
@@ -276,6 +278,7 @@ export const listSubCategorys = /* GraphQL */ `
         id
         name
         code
+        categoryName
         deleted
         deletedAt
         createdAt

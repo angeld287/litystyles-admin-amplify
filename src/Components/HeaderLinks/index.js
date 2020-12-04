@@ -45,9 +45,10 @@ export default class HeaderLinks extends Component {
 					<Navbar.Divider />
 					{/* this.redirect('/') */}
 					{this.props.childProps.state.user_roll.indexOf('admin') !== -1 && <Button className="bp3-minimal" onClick={(e) => {e.preventDefault(); this.redirect('/categories')}} text="Categorias"/>}
+					{this.props.childProps.state.user_roll.indexOf('admin') !== -1 && <Button className="bp3-minimal" onClick={(e) => {e.preventDefault(); this.redirect('/subcategories')}} text="SubCategorias"/>}
 					{this.props.childProps.state.user_roll.indexOf('admin') !== -1 && <Button className="bp3-minimal" onClick={(e) => {e.preventDefault(); this.redirect('/types')}} text="Tipos"/>}
-					{this.props.childProps.state.user_roll.indexOf('admin') !== -1 && <Button className="bp3-minimal" onClick={(e) => {e.preventDefault(); this.redirect('/categories')}} text="people"/>}
-					{this.props.childProps.state.user_roll.indexOf('admin') !== -1 && <Button className="bp3-minimal" onClick={(e) => {e.preventDefault(); this.redirect('/categories')}} text="chart"/>}
+					{this.props.childProps.state.user_roll.indexOf('admin') !== -1 && <Button className="bp3-minimal" onClick={(e) => {e.preventDefault(); this.redirect('/products')}} text="Productos"/>}
+					{this.props.childProps.state.user_roll.indexOf('admin') !== -1 && <Button className="bp3-minimal" onClick={(e) => {e.preventDefault(); this.redirect('/services')}} text="Servicios"/>}
 				</Navbar.Group>
 				<Navbar.Group align={Alignment.RIGHT}>
 					<Navbar.Divider />
