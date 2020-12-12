@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef} from 'react';
 import { useHistory, useParams } from 'react-router-dom';
-import { API, graphqlOperation } from 'aws-amplify';
+import { API, graphqlOperation, Storage } from 'aws-amplify';
 import { getProduct, listCategorys } from '../../../graphql/customQueries';
 import { updateProduct, updateProductCategory, updateProductSubCategory, createProductCategory, createProductSubCategory } from '../../../graphql/mutations';
 import Swal from 'sweetalert2';
@@ -18,6 +18,7 @@ const useEditProduct = () => {
 	const packagingformat = useRef(null);
 	const category = useRef(null);
 	const subcategory = useRef(null);
+	const image = useRef(null);
 
 	useEffect(
 		() => {
@@ -75,7 +76,19 @@ const useEditProduct = () => {
 				return;
 			}
 
-			const p = await API.graphql(graphqlOperation(updateProduct, { input: {id: product.id, packagingformat: packagingformat.current.value, name: name.current.value, cost: cost.current.value} }));
+			const _input = {id: product.id, packagingformat: packagingformat.current.value, name: name.current.value, cost: cost.current.value};
+
+			if(image.current.value !== ""){
+				const _image = await putImageOnStorage(name.current.value, image.current.files[0]);
+
+				if (_image === null) {
+					Swal.fire('Error', 'Hubo un error al cargar la imagen', 'error');
+					return;
+				}
+				_input.image = _image.key
+			}
+
+			const p = await API.graphql(graphqlOperation(updateProduct, { input: _input }));
 			if(product.category.items.length > 0){
 				await API.graphql(graphqlOperation(updateProductCategory, { input: {id: product.category.items[0].id, productCategoryProductId: p.data.updateProduct.id, productCategoryCategoryId: category.current.value} }));
 			}else{
@@ -98,7 +111,32 @@ const useEditProduct = () => {
 		}
 	};
 
-	return { onSubmit, category, filterSubcategories, packagingformat, subcategory, categories, subcategories, error, name, cost, product };
+
+	const putImageOnStorage = async (name, file) => {
+        try {
+            if(file !== []){
+
+                if(file.type.includes("image/")){
+                    const filename = "PRODUCTS_IMAGES/" + new Date().getTime() + "_" + name.replace(/ /g, '_') + ".jpeg";
+                    const putr = await Storage.put(filename, file, { contentType: file.type });
+                    return putr;
+                }else{
+					console.log('Solo se puede agregar un archivo tipo imagen.');
+                    return null;
+				}
+				
+            }else{
+				console.log('No hay imagen seleccionada.');
+                return null
+            }
+            
+        } catch (e) {
+            console.log(e);
+			return null
+        }
+    }
+
+	return { onSubmit, category, filterSubcategories, packagingformat, subcategory, categories, subcategories, error, name, cost, product, image };
 };
 
 export default useEditProduct;

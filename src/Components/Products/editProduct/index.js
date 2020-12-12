@@ -4,7 +4,7 @@ import useEditProduct from './useEditProduct';
 import { Button, Spinner } from "@blueprintjs/core";
 
 const EditProduct = () => {
-	const { onSubmit, packagingformat, subcategory, category, categories, filterSubcategories, subcategories, error, name, cost, product } = useEditProduct();
+	const { onSubmit, packagingformat, subcategory, category, categories, filterSubcategories, subcategories, error, name, cost, product, image } = useEditProduct();
 
 	if (Object.entries(product).length === 0 && product.constructor === Object) return <Spinner />;
 
@@ -40,7 +40,7 @@ const EditProduct = () => {
 					defaultValue={product.cost}
 					ref={cost}
 				/>
-
+				<br />
 				<label htmlFor="pack" className="grey-text font-weight-light">
 					Envace del Producto:
 				</label>
@@ -50,6 +50,20 @@ const EditProduct = () => {
 					className="form-control"
 					defaultValue={product.packagingformat}
 					ref={packagingformat}
+				/>
+
+				<br />
+				<label htmlFor="image" className="grey-text font-weight-light">
+					Imagen:
+				</label>
+				<input
+					name="image"
+					type="file"
+					autoComplete="off"
+					className="form-control"
+					ref={image}
+					onClick={(e)=> { e.target.value = null; }}
+					accept="image/*"
 				/>
 
 				<br />

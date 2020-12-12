@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from 'react';
 import { useHistory } from 'react-router-dom';
-import { API, graphqlOperation } from 'aws-amplify';
+import { API, graphqlOperation, Storage } from 'aws-amplify';
 import { createProduct, createProductCategory, createProductSubCategory } from '../../../graphql/mutations';
 import { listCategorys } from '../../../graphql/customQueries';
 import Swal from 'sweetalert2';
@@ -16,6 +16,7 @@ const useNewProduct = () => {
 	const packagingformat = useRef(null);
 	const category = useRef(null);
 	const subcategory = useRef(null);
+	const image = useRef(null);
 
 	useEffect(() => { 
 		let didCancel = false;
@@ -51,7 +52,7 @@ const useNewProduct = () => {
 
 	const onSubmit = async (input) => {
 		try {
-			
+
 			if(name.current.value === ""){
 				Swal.fire('Campo Obligatorio', 'Favor completar el campo Nombre', 'error');
 				return;
@@ -72,8 +73,20 @@ const useNewProduct = () => {
 				return;
 			}
 
+			if(image.current.value === ""){
+				Swal.fire('Campo Obligatorio', 'Favor completar el campo Imagen', 'error');
+				return;
+			}
 
-			const p = await API.graphql(graphqlOperation(createProduct, { input: {packagingformat: packagingformat.current.value, name: name.current.value, cost: cost.current.value} }));
+			const _image = await putImageOnStorage(name.current.value, image.current.files[0]);
+
+			if (_image === null) {
+				Swal.fire('Error', 'Hubo un error al cargar la imagen', 'error');
+				return;
+			}
+
+
+			const p = await API.graphql(graphqlOperation(createProduct, { input: {packagingformat: packagingformat.current.value, name: name.current.value, cost: cost.current.value, image: _image.key} }));
 			await API.graphql(graphqlOperation(createProductCategory, { input: {productCategoryProductId: p.data.createProduct.id, productCategoryCategoryId: category.current.value} }));
 
 			if(subcategory.current.value !== "" ){await API.graphql(graphqlOperation(createProductSubCategory, { input: {productSubCategoryProductId: p.data.createProduct.id, productSubCategorySubcategoryId: subcategory.current.value} }));}
@@ -86,7 +99,31 @@ const useNewProduct = () => {
 		}
 	};
 
-	return { name, cost, filterSubcategories, onSubmit, categories, subcategories, category, subcategory, loading, error, packagingformat };
+	const putImageOnStorage = async (name, file) => {
+        try {
+            if(file !== []){
+
+                if(file.type.includes("image/")){
+                    const filename = "PRODUCTS_IMAGES/" + new Date().getTime() + "_" + name.replace(/ /g, '_') + ".jpeg";
+                    const putr = await Storage.put(filename, file, { contentType: file.type });
+                    return putr;
+                }else{
+					console.log('Solo se puede agregar un archivo tipo imagen.');
+                    return null;
+				}
+				
+            }else{
+				console.log('No hay imagen seleccionada.');
+                return null
+            }
+            
+        } catch (e) {
+            console.log(e);
+			return null
+        }
+    }
+
+	return { name, cost, filterSubcategories, onSubmit, categories, subcategories, category, subcategory, loading, error, packagingformat, image };
 };
 
 export default useNewProduct;
