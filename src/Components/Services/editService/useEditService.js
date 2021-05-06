@@ -26,7 +26,7 @@ const useEditService = () => {
 				var _categories = [];
 
 				try {
-					_categories = await API.graphql(graphqlOperation(listCategorys, {filter: { typeName: { eq: "Service"}}}));
+					_categories = await API.graphql(graphqlOperation(listCategorys, {filter: { typeName: { eq: "Office"}}}));
 					_api = await API.graphql(graphqlOperation(getService, { id }));
 				} catch (e) {
 					setError(true);
@@ -69,10 +69,10 @@ const useEditService = () => {
 				return;
 			}
 
-			const s = await API.graphql(graphqlOperation(updateService, { input: {id: service.id, name: name.current.value, cost: cost.current.value} }));
+			const s = await API.graphql(graphqlOperation(updateService, { input: {id: service.id, name: name.current.value, cost: cost.current.value, categoryId: category.current.value} }));
 
 			if(service.category.items.length > 0){
-				await API.graphql(graphqlOperation(updateServiceCategory, { input: {id: service.category.items[0].id, serviceCategoryCategoryId: subcategory.current.value, serviceCategoryServiceId: s.data.updateService.id} }));
+				await API.graphql(graphqlOperation(updateServiceCategory, { input: {id: service.category.items[0].id, serviceCategoryCategoryId: category.current.value, serviceCategoryServiceId: s.data.updateService.id} }));
 			}else{
 				await API.graphql(graphqlOperation(createServiceCategory, { input: { serviceCategoryCategoryId: subcategory.current.value, serviceCategoryServiceId: s.data.updateService.id } }));
 			}

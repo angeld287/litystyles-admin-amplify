@@ -89,6 +89,8 @@ export const getOffice = /* GraphQL */ `
           username
           officeId
           phoneid
+          phone_number
+          image
           deleted
           deletedAt
           createdAt
@@ -366,6 +368,8 @@ export const getProduct = /* GraphQL */ `
         }
         nextToken
       }
+      categoryId
+      subCategoryId
       deleted
       image
       packagingformat
@@ -398,6 +402,8 @@ export const listProducts = /* GraphQL */ `
         subcategory {
           nextToken
         }
+        categoryId
+        subCategoryId
         deleted
         image
         packagingformat
@@ -419,6 +425,7 @@ export const getService = /* GraphQL */ `
         items {
           id
           createdAt
+          duration
         }
         nextToken
       }
@@ -453,6 +460,8 @@ export const getService = /* GraphQL */ `
         }
         nextToken
       }
+      categoryId
+      subCategoryId
       deleted
       deletedAt
       createdAt
@@ -486,6 +495,8 @@ export const listServices = /* GraphQL */ `
         subcategory {
           nextToken
         }
+        categoryId
+        subCategoryId
         deleted
         deletedAt
         createdAt
@@ -503,10 +514,13 @@ export const getEmployee = /* GraphQL */ `
       username
       officeId
       phoneid
+      phone_number
+      image
       services {
         items {
           id
           createdAt
+          duration
         }
         nextToken
       }
@@ -538,6 +552,8 @@ export const listEmployees = /* GraphQL */ `
         username
         officeId
         phoneid
+        phone_number
+        image
         services {
           nextToken
         }
@@ -560,6 +576,8 @@ export const getCustomer = /* GraphQL */ `
       name
       username
       phoneid
+      phone_number
+      image
       request {
         items {
           id
@@ -588,6 +606,8 @@ export const listCustomers = /* GraphQL */ `
         name
         username
         phoneid
+        phone_number
+        image
         request {
           nextToken
         }

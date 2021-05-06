@@ -23,7 +23,7 @@ const useNewService = () => {
 			var _categories = [];
 
 			try {
-				_categories = await API.graphql(graphqlOperation(listCategorys, {filter: { typeName: { eq: "Service"}}}));
+				_categories = await API.graphql(graphqlOperation(listCategorys, {filter: { typeName: { eq: "Office"}}}));
 			} catch (error) {
 				setLoading(false);
 				setError(true);
@@ -66,7 +66,7 @@ const useNewService = () => {
 				return;
 			}
 
-			const s = await API.graphql(graphqlOperation(createService, { input: {name: name.current.value, cost: cost.current.value} }));
+			const s = await API.graphql(graphqlOperation(createService, { input: {name: name.current.value, cost: cost.current.value, categoryId: category.current.value} }));
 			await API.graphql(graphqlOperation(createServiceCategory, { input: {serviceCategoryCategoryId: category.current.value, serviceCategoryServiceId: s.data.createService.id} }));
 			if(subcategory.current.value !== "" ){await API.graphql(graphqlOperation(createServiceSubCategory, { input: {serviceSubCategorySubcategoryId: subcategory.current.value, serviceSubCategoryServiceId: s.data.createService.id} }));}
 
