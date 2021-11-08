@@ -6,11 +6,11 @@ import {
 
 import Amplify from 'aws-amplify';
 import aws_exports from './aws-exports'; 
-import aws_exports_prod from './aws-exports-prod'; 
+// import aws_exports_prod from './aws-exports-prod'; 
 
 import App from './Components/App';
 
-Amplify.configure(aws_exports_prod); 
+Amplify.configure(aws_exports); 
 
 const AppWithRouter = () => (<Router><App /></Router>);
 
