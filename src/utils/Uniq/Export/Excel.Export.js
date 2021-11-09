@@ -1,5 +1,3 @@
-import React from 'react'
-
 const xls = require('simple-export-excel');
 var fs = require('fs');
 

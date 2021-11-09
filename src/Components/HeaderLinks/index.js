@@ -1,62 +1,41 @@
-import React, { Component } from 'react';
-import { Auth } from 'aws-amplify';
+import React from 'react';
+import currentUserContext from '../../context/currentUser/currentUser.Context';
+// import { Auth } from 'aws-amplify';
 
 import {
     Alignment,
-    Button,
     Navbar,
-    Popover,
-    Menu,
-    MenuItem,
-    Position,
+	Button
 } from "@blueprintjs/core";
 
-export default class HeaderLinks extends Component {
-	handlesignOut = () => {
-		Auth.signOut().then((d) => {
-			window.location.reload();
-			//this.props.childProps.onUserLogOut();
-		});
-	};
+const HeaderLinks = () => {
+	const data = React.useContext(currentUserContext);
+	// const handlesignOut = () => {
+	// 	Auth.signOut().then(() => {
+	// 		window.location.reload();
+	// 		this.props.childProps.onUserLogOut();
+	// 	});
+	// };
 
-	redirectSignIn = () => {
-		window.location.href = '/signin';
-	};
+	//console.log(data)
 
-	redirect = (path) => {
-        window.location.href = path;
-	};
-
-	render() {
-		const username = this.props.childProps.state.username !== '' ? this.props.childProps.state.username : 'Ingresar';
-
-		const userMenu = (
-            <Menu>
-                <MenuItem text={username} />
-                <MenuItem icon="log-out" text="LogOut" onClick={ (e) => { e.preventDefault(); this.handlesignOut();}} />
-            </Menu>
-        );
-
-		return (
-
-			<Navbar>
-				<Navbar.Group align={Alignment.LEFT}>
-					<Navbar.Heading>Litty Style</Navbar.Heading>
-					<Navbar.Divider />
-					{/* this.redirect('/') */}
-					{this.props.childProps.state.user_roll.indexOf('admin') !== -1 && <Button className="bp3-minimal" onClick={(e) => {e.preventDefault(); this.redirect('/categories')}} text="Categorias"/>}
-					{this.props.childProps.state.user_roll.indexOf('admin') !== -1 && <Button className="bp3-minimal" onClick={(e) => {e.preventDefault(); this.redirect('/subcategories')}} text="SubCategorias"/>}
-					{this.props.childProps.state.user_roll.indexOf('admin') !== -1 && <Button className="bp3-minimal" onClick={(e) => {e.preventDefault(); this.redirect('/types')}} text="Tipos"/>}
-					{this.props.childProps.state.user_roll.indexOf('admin') !== -1 && <Button className="bp3-minimal" onClick={(e) => {e.preventDefault(); this.redirect('/products')}} text="Productos"/>}
-					{this.props.childProps.state.user_roll.indexOf('admin') !== -1 && <Button className="bp3-minimal" onClick={(e) => {e.preventDefault(); this.redirect('/services')}} text="Servicios"/>}
-				</Navbar.Group>
-				<Navbar.Group align={Alignment.RIGHT}>
-					<Navbar.Divider />
-					<Popover content={userMenu} position={Position.BOTTOM}>
-						<Button icon="user" text=""/>
-					</Popover>
-				</Navbar.Group>
-			</Navbar>
-		);
-	}
+	return (
+		<Navbar>
+			<Navbar.Group align={Alignment.LEFT}>
+				<Navbar.Heading>Litty Style</Navbar.Heading>
+				<Navbar.Divider />
+			</Navbar.Group>
+			<Navbar.Group align={Alignment.RIGHT}>
+				<Navbar.Divider />
+				{data.logged 
+				? 
+					<Button className="bp3-minimal" onClick={data.toggleLogged} text="Login"/>
+				:
+					<Button className="bp3-minimal" onClick={data.toggleLogged} text="LogOut"/>
+				}
+			</Navbar.Group>
+		</Navbar>
+	);
 }
+
+export default HeaderLinks;
