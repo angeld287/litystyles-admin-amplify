@@ -1,5 +1,5 @@
 import { createContext } from "react";
 
-const currentUserContext = createContext({logged: false, toggleLogged: () => {}});
+const currentUser = createContext({user: null, onUserLogOut: () => {}, onUserSignIn: () => {}});
 
-export default currentUserContext;
+export default currentUser;
