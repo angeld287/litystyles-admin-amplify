@@ -16,8 +16,8 @@ export const ProtectedRouteAdmin = ({ render: C, props: childProps, ...rest }) =
 	/>
 );
 
-export const ProppedRoute = ({ render: C, props: childProps, ...rest }) => (
-	<Route {...rest} render={(rProps) => <C {...rProps} {...childProps} />} />
+export const ProppedRoute = ({ render: C, ...rest }) => (
+	<Route {...rest} render={(rProps) => <C {...rProps} />} />
 );
 
 ProtectedRouteAdmin.propTypes = {

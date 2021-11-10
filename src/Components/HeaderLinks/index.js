@@ -1,7 +1,6 @@
 import React from 'react';
 import currentUserContext from '../../context/currentUser/currentUser.Context';
-// import { Auth } from 'aws-amplify';
-
+import { LogOut } from '../Authentication/AuthComponent';
 import {
     Alignment,
     Navbar,
@@ -9,16 +8,13 @@ import {
 } from "@blueprintjs/core";
 
 const HeaderLinks = () => {
-	const data = React.useContext(currentUserContext);
-	// const handlesignOut = () => {
-	// 	Auth.signOut().then(() => {
-	// 		window.location.reload();
-	// 		this.props.childProps.onUserLogOut();
-	// 	});
-	// };
+	const user = React.useContext(currentUserContext);
+	console.log(user)
 
-	//console.log(data)
-
+	const redirect = (path) => {
+		window.location.href = path;
+	};
+	
 	return (
 		<Navbar>
 			<Navbar.Group align={Alignment.LEFT}>
@@ -27,11 +23,21 @@ const HeaderLinks = () => {
 			</Navbar.Group>
 			<Navbar.Group align={Alignment.RIGHT}>
 				<Navbar.Divider />
-				{data.logged 
+				{user.user !== null 
 				? 
-					<Button className="bp3-minimal" onClick={data.toggleLogged} text="Login"/>
+					<div>
+						<span>{user.user.idToken.payload.email}</span>
+						<Button className="bp3-minimal" onClick={e => {
+							e.preventDefault();
+							LogOut();
+							user.onUserLogOut();
+						}} text="LogOut"/>
+					</div>
 				:
-					<Button className="bp3-minimal" onClick={data.toggleLogged} text="LogOut"/>
+					<Button className="bp3-minimal" onClick={(e) => {
+						e.preventDefault();
+						redirect('/signin');
+					}} text="Login"/>
 				}
 			</Navbar.Group>
 		</Navbar>
