@@ -1,12 +1,23 @@
-import React, {useContext} from 'react'
-import communContext from '../../context/communContex/commun.Context';
+import React from 'react'
+import CardsList from '../../components/cardList/cards.list';
+
+const homeOptions = [
+    {
+        id: 1,
+        title: "Negocio",
+        link: ""
+    },
+    {
+        id: 2,
+        title: "Clasificaciones",
+        link: ""
+    }
+];
 
 const Home = () => {
-    const commun = useContext(communContext);
-    console.log(commun)
-    return(
+    return (
         <div>
-                <h1>TEST</h1>
+            <CardsList items={homeOptions} />
         </div>
     );
 }
