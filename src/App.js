@@ -28,9 +28,14 @@ const AppWithRouter = () => {
     setUser(userFromStorage);
   }
 
+  const setUserToNull = () => {
+    sessionStorage.setItem('CURRENT_USER_SESSION', null);
+    setUser(null);
+  }
+
   return (
     <currentUser.Provider value={{
-      user: user, onUserLogOut: () => setUser(null), onUserSignIn: setLoggedUserInfo
+      user: user, onUserLogOut: setUserToNull, onUserSignIn: setLoggedUserInfo
     }}>
       <communContext.Provider value={{ commun: commun, setCommun: (_) => { setCommun(p => { return { ...p, _ } }) } }}>
         <Router>
