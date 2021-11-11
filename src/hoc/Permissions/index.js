@@ -2,12 +2,12 @@ import React from 'react'
 import { Route, Redirect } from 'react-router-dom'
 import PropTypes from 'prop-types'
 
-export const ProtectedRouteAdmin = ({ render: C, props: childProps, ...rest }) => (
+export const ProtectedRouteAdmin = ({ render: C, props: _props, ...rest }) => (
 	<Route
 		{...rest}
 		render={(rProps) =>
-			childProps.isLoggedIn ? childProps.state.user_roll.indexOf('admin') !== -1 ? (
-				<C {...rProps} {...childProps} />
+			_props.isLoggedIn ? _props.state.user_roll.indexOf('admin') !== -1 ? (
+				<C {...rProps} {..._props} />
 			) : (
 				<Redirect to="/" />
 			) : (

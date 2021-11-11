@@ -19,22 +19,30 @@ import AuthComponent from './components/Authentication/AuthComponent';
 Amplify.configure(aws_exports);
 
 const AppWithRouter = () => {
-  const [user, setUser] = React.useState(null);
+  const [user, setUser] = React.useState(JSON.parse(sessionStorage.getItem('CURRENT_USER_SESSION')));
   const [commun, setCommun] = React.useState({});
 
-  return  (   
-        <currentUser.Provider value={{user: user, onUserLogOut: () => setUser(null), onUserSignIn: (_currentUser) => setUser(_currentUser)}}>
-          <communContext.Provider value={{commun: commun, setCommun: (_) => {setCommun(p => {return {...p, _}})}}}>
-            <Router>
-              <HeaderLinks />
-              <Switch>
-                <Route exact path="/" render={() => <Home/>} />
-                <ProppedRoute exact path="/signin" render={AuthComponent} />
-              </Switch>
-            </Router>
-          </communContext.Provider>
-        </currentUser.Provider>
-      );
+  const setLoggedUserInfo = (_currentUser) => {
+    sessionStorage.setItem('CURRENT_USER_SESSION', JSON.stringify(_currentUser));
+    const userFromStorage = JSON.parse(sessionStorage.getItem('CURRENT_USER_SESSION'))
+    setUser(userFromStorage);
+  }
+
+  return (
+    <currentUser.Provider value={{
+      user: user, onUserLogOut: () => setUser(null), onUserSignIn: setLoggedUserInfo
+    }}>
+      <communContext.Provider value={{ commun: commun, setCommun: (_) => { setCommun(p => { return { ...p, _ } }) } }}>
+        <Router>
+          <HeaderLinks />
+          <Switch>
+            <Route exact path="/" render={() => <Home />} />
+            <ProppedRoute exact path="/signin" render={AuthComponent} />
+          </Switch>
+        </Router>
+      </communContext.Provider>
+    </currentUser.Provider>
+  );
 };
 
 export default AppWithRouter;
