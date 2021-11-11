@@ -4,7 +4,7 @@ import currentUser from './context/currentUser/currentUser.Context'
 import communContext from './context/communContex/commun.Context';
 
 import {
-  BrowserRouter as Router, Switch, Route
+  BrowserRouter as Router, Switch
 } from 'react-router-dom';
 
 import Amplify from 'aws-amplify';
@@ -13,7 +13,7 @@ import aws_exports from './aws-exports';
 // import aws_exports_prod from './aws-exports-prod';
 
 import Home from './pages/Home';
-import { ProppedRoute } from './hoc/Permissions';
+import { ProppedRoute, ProtectedRouteAdmin } from './hoc/Permissions';
 import AuthComponent from './components/Authentication/AuthComponent';
 
 Amplify.configure(aws_exports);
@@ -36,7 +36,7 @@ const AppWithRouter = () => {
         <Router>
           <HeaderLinks />
           <Switch>
-            <Route exact path="/" render={() => <Home />} />
+            <ProtectedRouteAdmin exact path="/" render={Home} user={user} />
             <ProppedRoute exact path="/signin" render={AuthComponent} />
           </Switch>
         </Router>
