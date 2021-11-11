@@ -9,7 +9,6 @@ import {
 
 const HeaderLinks = () => {
 	const user = React.useContext(currentUserContext);
-	console.log(user)
 
 	const redirect = (path) => {
 		window.location.href = path;
