@@ -1,7 +1,7 @@
 import React from 'react';
 import HeaderLinks from './components/HeaderLinks';
 import currentUser from './context/currentUser/currentUser.Context'
-import communContext from './context/communContex/commun.Context';
+import communContext from './context/communContex/commun.context';
 
 import {
   BrowserRouter as Router, Switch
@@ -15,6 +15,8 @@ import aws_exports from './aws-exports';
 import Home from './pages/Home';
 import { ProppedRoute, ProtectedRouteAdmin } from './hoc/Permissions';
 import AuthComponent from './components/Authentication/AuthComponent';
+import ProductProvider from './providers/products/products.provider';
+import Business from './pages/Business';
 
 Amplify.configure(aws_exports);
 
@@ -34,19 +36,22 @@ const AppWithRouter = () => {
   }
 
   return (
-    <currentUser.Provider value={{
-      user: user, onUserLogOut: setUserToNull, onUserSignIn: setLoggedUserInfo
-    }}>
-      <communContext.Provider value={{ commun: commun, setCommun: (_) => { setCommun(p => { return { ...p, _ } }) } }}>
-        <Router>
-          <HeaderLinks />
-          <Switch>
-            <ProtectedRouteAdmin exact path="/" render={Home} user={user} />
-            <ProppedRoute exact path="/signin" render={AuthComponent} />
-          </Switch>
-        </Router>
-      </communContext.Provider>
-    </currentUser.Provider>
+    <ProductProvider>
+      <currentUser.Provider value={{
+        user: user, onUserLogOut: setUserToNull, onUserSignIn: setLoggedUserInfo
+      }}>
+        <communContext.Provider value={{ commun: commun, setCommun: (_) => { setCommun(p => { return { ...p, _ } }) } }}>
+          <Router>
+            <HeaderLinks />
+            <Switch>
+              <ProtectedRouteAdmin exact path="/" render={Home} user={user} />
+              <ProtectedRouteAdmin exact path="/business" render={Business} user={user} />
+              <ProppedRoute exact path="/signin" render={AuthComponent} />
+            </Switch>
+          </Router>
+        </communContext.Provider>
+      </currentUser.Provider>
+    </ProductProvider>
   );
 };
 
