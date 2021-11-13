@@ -15,7 +15,7 @@ const HeaderLinks = () => {
 	return (
 		<Navbar>
 			<Navbar.Group align={Alignment.LEFT}>
-				<Navbar.Heading>Litty Style</Navbar.Heading>
+				<Navbar.Heading onClick={(e) => { e.preventDefault(); redirect("/") }}>Litty Style</Navbar.Heading>
 				<Navbar.Divider />
 				{PAGE_OPTIONS.map(_ => <Button key={_.id} className="bp3-minimal" onClick={(e) => { e.preventDefault(); redirect(_.link) }} text={_.title} />)}
 			</Navbar.Group>
