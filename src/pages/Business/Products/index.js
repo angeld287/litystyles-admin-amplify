@@ -4,9 +4,9 @@ import CustomTable from '../../../components/CustomTable/CustomTable'
 
 const PRODUCTS_ITEMS = [
     { id: 1, name: 'shampoo', cost: '200', actions: null },
-    { id: 2, name: 'shampoo', cost: '200', actions: [{ color: 'primary', icon: 'edit', onClicAction: () => { console.log('exito') } }] },
-    { id: 3, name: 'shampoo', cost: '200', actions: null },
-    { id: 4, name: 'shampoo', cost: '200', actions: null }
+    { id: 2, name: 'Tijeras', cost: '500', actions: [{ color: 'primary', icon: 'edit', onClicAction: () => { console.log('exito') } }] },
+    { id: 3, name: 'Gelatina', cost: '300', actions: null },
+    { id: 4, name: 'Pinchos', cost: '50', actions: null }
 ];
 
 const Products = () => {
@@ -14,10 +14,8 @@ const Products = () => {
         <Container fluid>
             <h3 className="mt-5">Productos</h3>
             <Row>
-            </Row>
-            <div style={{ marginTop: 20 }}>
                 <CustomTable headers={['No.', 'Nombre', 'Costo', 'Accion']} items={PRODUCTS_ITEMS} />
-            </div>
+            </Row>
         </Container>
     )
 }

@@ -23,7 +23,7 @@ const CustomTable = ({ headers, items }) => {
                                             ?
                                             <td key={_.id + _k}>{_[_k]}</td>
                                             :
-                                            _[_k] !== null
+                                            _[_k] !== null && _[_k] !== undefined
                                                 ?
                                                 <td key={_.id + _k}>{
                                                     _[_k].map(_a => (
