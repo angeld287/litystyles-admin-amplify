@@ -6,12 +6,12 @@ export const utilAddItem = (items, itemToAdd) => {
     if (existingItem) {
         return items.map(_item =>
             _item.id === itemToAdd.id
-                ? { ..._item, quantity: _item.quantity + 1 }
+                ? _item
                 : _item
         );
     }
 
-    return [...items, { ...itemToAdd, quantity: 1 }];
+    return [...items, itemToAdd];
 };
 
 export const utilRemoveItem = (items, itemToRemove) => {
@@ -19,15 +19,9 @@ export const utilRemoveItem = (items, itemToRemove) => {
         _item => _item.id === itemToRemove.id
     );
 
-    if (existingItem.quantity === 1) {
+    if (existingItem === 1) {
         return items.filter(_item => _item.id !== itemToRemove.id);
     }
-
-    return items.map(_item =>
-        _item.id === itemToRemove.id
-            ? { ..._item, quantity: _item.quantity - 1 }
-            : _item
-    );
 };
 
 export const filterItem = (items, item) =>

@@ -1,11 +1,11 @@
-import { createContext } from "react";
-
+import React, { createContext, useEffect, useState } from "react";
+import PropTypes from 'prop-types'
 import {
     getItems,
     utilAddItem, utilRemoveItem
 } from './products.utils'
 
-const ProductContext = createContext({
+export const ProductContext = createContext({
     hidden: true,
     toggleHidden: () => { },
     items: [],
@@ -19,8 +19,8 @@ const ProductProvider = ({ children }) => {
     const [items, setItems] = useState([]);
     const [itemsCount, setItemsCount] = useState(0);
 
-    const addItem = item => setItems(utilAddItem(cartItems, item));
-    const removeItem = item => setItems(utilRemoveItem(cartItems, item));
+    const addItem = item => setItems(utilAddItem(items, item));
+    const removeItem = item => setItems(utilRemoveItem(items, item));
     const toggleHidden = () => setHidden(!hidden);
 
     useEffect(() => {
@@ -35,7 +35,6 @@ const ProductProvider = ({ children }) => {
                 items,
                 addItem,
                 removeItem,
-                removeItem,
                 itemsCount
             }}
         >
@@ -43,5 +42,9 @@ const ProductProvider = ({ children }) => {
         </ProductContext.Provider>
     );
 };
+
+ProductProvider.propTypes = {
+    children: PropTypes.any
+}
 
 export default ProductProvider;
