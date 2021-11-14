@@ -12,8 +12,6 @@ import { PAGE_OPTIONS } from '../../context/communContex/commun.data';
 const HeaderLinks = () => {
 	const user = React.useContext(currentUserContext);
 
-	console.log(user);
-
 	return (
 		<Navbar>
 			<Navbar.Group align={Alignment.LEFT}>
@@ -23,10 +21,10 @@ const HeaderLinks = () => {
 			</Navbar.Group>
 			<Navbar.Group align={Alignment.RIGHT}>
 				<Navbar.Divider />
-				{user.user !== null
+				{user.user !== null && user.user.signInUserSession !== null
 					?
 					<div>
-						<span>{user.user.idToken.payload.email}</span>
+						<span>{user.user.signInUserSession.idToken.payload.email}</span>
 						<Button className="bp3-minimal" onClick={e => {
 							e.preventDefault();
 							LogOut();
