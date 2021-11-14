@@ -18,7 +18,7 @@ const CustomTable = ({ headers, items }) => {
                         return (
                             <tr key={_.id}>
                                 {
-                                    keys.map(_k => (
+                                    keys.filter(_ => _ !== 'id').map(_k => (
                                         _k !== 'actions'
                                             ?
                                             <td key={_.id + _k}>{_[_k]}</td>
