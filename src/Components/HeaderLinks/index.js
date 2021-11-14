@@ -12,6 +12,8 @@ import { PAGE_OPTIONS } from '../../context/communContex/commun.data';
 const HeaderLinks = () => {
 	const user = React.useContext(currentUserContext);
 
+	console.log(user);
+
 	return (
 		<Navbar>
 			<Navbar.Group align={Alignment.LEFT}>

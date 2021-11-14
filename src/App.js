@@ -4,7 +4,7 @@ import currentUser from './context/currentUser/currentUser.Context'
 import communContext from './context/communContex/commun.context';
 
 import {
-  BrowserRouter as Router, Switch
+  BrowserRouter as Router, Routes, Route
 } from 'react-router-dom';
 
 import Amplify from 'aws-amplify';
@@ -13,8 +13,6 @@ import aws_exports from './aws-exports';
 // import aws_exports_prod from './aws-exports-prod';
 
 import Home from './pages/Home';
-import { ProppedRoute, ProtectedRouteAdmin } from './hoc/Permissions';
-import AuthComponent from './components/Authentication/AuthComponent';
 import ProductProvider from './providers/products/products.provider';
 import Business from './pages/Business';
 
@@ -43,11 +41,10 @@ const AppWithRouter = () => {
         <communContext.Provider value={{ commun: commun, setCommun: (_) => { setCommun(p => { return { ...p, _ } }) } }}>
           <Router>
             <HeaderLinks />
-            <Switch>
-              <ProtectedRouteAdmin exact path="/" render={Home} user={user} />
-              <ProtectedRouteAdmin exact path="/business" render={Business} user={user} />
-              <ProppedRoute exact path="/signin" render={AuthComponent} />
-            </Switch>
+            <Routes>
+              <Route exact path="/" element={<Home />} />
+              <Route exact path="/business" element={<Business />} />
+            </Routes>
           </Router>
         </communContext.Provider>
       </currentUser.Provider>
