@@ -1,6 +1,6 @@
-import { Button } from "@blueprintjs/core";
 import React, { useState, useContext, useMemo } from "react";
 import { Container, Form, Modal, Row } from "react-bootstrap";
+import CustomButton from "../../../components/CustomButton";
 import CustomTable from '../../../components/CustomTable/CustomTable'
 import { ProductContext } from "../../../providers/products/products.provider";
 
@@ -40,7 +40,7 @@ const Products = () => {
     return (
         <Container fluid>
             <h3 className="mt-5">Productos</h3>
-            <Button intent="Primary" onClick={(e) => { e.preventDefault(); setAdd(true); setShow(true); }} icon="add"></Button>
+            <CustomButton intent="Primary" onClick={(e) => { e.preventDefault(); setAdd(true); setShow(true); }} icon="add"></CustomButton>
             <Row>
                 <CustomTable headers={['Nombre', 'Costo', 'Accion']} items={productItems} />
             </Row>
@@ -60,13 +60,13 @@ const Products = () => {
                     </Form.Group>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="secondary" onClick={handleClose}>
+                    <CustomButton variant="secondary" onClick={handleClose}>
                         Cerrar
-                    </Button>
+                    </CustomButton>
                     {(edit || add) &&
-                        <Button variant="primary" onClick={setProduct}>
+                        <CustomButton variant="primary" onClick={setProduct}>
                             Guardar
-                        </Button>
+                        </CustomButton>
                     }
                 </Modal.Footer>
             </Modal>
