@@ -1,51 +1,50 @@
 import React, { useContext } from 'react';
-import { Authenticator } from 'aws-amplify-react';
+
+import { AmplifyAuthenticator } from '@aws-amplify/ui-react';
+import { AuthState, onAuthUIStateChange } from '@aws-amplify/ui-components';
 import { Auth } from 'aws-amplify';
-import queryString from 'query-string';
+
 import currentUser from '../../../context/currentUser/currentUser.Context';
 import PropTypes from 'prop-types'
 
 export const LogOut = async () => {
   await Auth.signOut();
+
 }
 
 export const getCurrentUser = async () => {
   return await Auth.currentSession();
 }
 
-const AuthComponent = ({location, history}) => {
-    const user = useContext(currentUser);
-    
-    const handleStateChange = async (state) => {
-      const values = queryString.parse(location.search)
-      if (state === 'signedIn') {
-        const currentUser = await getCurrentUser();
-        user.onUserSignIn(currentUser);
-        if(location.search !== null && location.search !== ''){
-          history.push(values.redirect);
-        }else{
-          history.push('/');
-        }
-      }else if (state === 'signIn') {
-        user.onUserLogOut();
-      }
-    };
+const AuthComponent = ({ children }) => {
+  const [authState, setAuthState] = React.useState();
+  const userContext = useContext(currentUser);
 
-    return (
-      <div>
-        <Authenticator 
-          authState="signIn" 
-          hideDefault={false}
-          onStateChange={handleStateChange}
-        >
-        </Authenticator>
-      </div>
-    );
+  React.useEffect(() => {
+    return onAuthUIStateChange((nextAuthState, authData) => {
+      setAuthState(nextAuthState);
+
+      if (nextAuthState === AuthState.SignedIn) {
+        userContext.onUserSignIn(authData);
+      } else if (nextAuthState === AuthState.SignIn) {
+        userContext.onUserLogOut();
+      }
+
+    });
+  }, []);
+
+  return authState === AuthState.SignedIn && userContext.user ? (
+    <div className="App">
+      {children}
+    </div>
+  ) : (
+    <AmplifyAuthenticator />
+  );
+
 }
 
 AuthComponent.propTypes = {
-  location: PropTypes.object,
-  history: PropTypes.object
+  children: PropTypes.any
 }
 
 export default AuthComponent;

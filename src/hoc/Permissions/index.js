@@ -1,5 +1,5 @@
 import React from 'react'
-import { Route, Redirect } from 'react-router-dom'
+import { Route, Navigate } from 'react-router-dom'
 import PropTypes from 'prop-types'
 
 export const ProtectedRouteAdmin = ({ render: C, user: _user, ...rest }) => {
@@ -10,7 +10,7 @@ export const ProtectedRouteAdmin = ({ render: C, user: _user, ...rest }) => {
 				_user !== null && _user.accessToken.payload['cognito:groups'].indexOf('admin') !== -1 ? (
 					<C {...rProps} />
 				) : (
-					<Redirect to={`/signin?redirect=${rProps.location.pathname}${rProps.location.search}`} />
+					<Navigate to={`/signin?redirect=${rProps.location.pathname}${rProps.location.search}`} />
 				)}
 		/>
 	)
