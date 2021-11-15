@@ -4,8 +4,9 @@ import {
     getItems,
     utilAddItem, utilRemoveItem
 } from '../../utils/Items/Utils'
-import { getList } from "../../services/AppSync";
-import { listProducts } from "../../graphql/queries"
+import { getList, createItem } from "../../services/AppSync";
+import { listProducts } from "../../graphql/queries";
+import { createProduct, createProductCategory, createProductSubCategory } from "../../graphql/mutations";
 
 export const ProductContext = createContext({
     hidden: true,
@@ -22,6 +23,15 @@ const ProductProvider = ({ children }) => {
     const [itemsCount, setItemsCount] = useState(0);
 
     const addItem = item => {
+        const productObject = { packagingformat: packagingformat.current.value, name: name.current.value, cost: cost.current.value, image: _image.key };
+
+        const product = await createItem('createProduct', createProduct, { productSubCategoryProductId: "", productSubCategorySubcategoryId: item.subcategory })
+        await API.graphql(graphqlOperation(createProductCategory, { input: { productCategoryProductId: p.data.createProduct.id, productCategoryCategoryId: category.current.value } }));
+
+        if (item.subcategory !== undefined && item.subcategory !== "") {
+            await createItem('createProductSubCategory', createProductSubCategory, { productSubCategoryProductId: "", productSubCategorySubcategoryId: item.subcategory })
+        }
+
         setItems(utilAddItem(items, item))
     };
     const removeItem = item => setItems(utilRemoveItem(items, item));
