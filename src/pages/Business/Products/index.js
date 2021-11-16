@@ -1,7 +1,8 @@
 import React, { useState, useContext, useMemo } from "react";
-import { Container, Form, Modal, Row } from "react-bootstrap";
+import { Container, Modal, Row } from "react-bootstrap";
 import CustomButton from "../../../components/CustomButton";
 import CustomTable from '../../../components/CustomTable/CustomTable'
+import CustomTextBox from "../../../components/CustomTextBox";
 import { ProductContext } from "../../../providers/products/products.provider";
 
 const Products = () => {
@@ -50,14 +51,8 @@ const Products = () => {
                     <Modal.Title>{edit ? 'Editar Producto' : add ? 'Agregar Producto' : 'Ver Producto'}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <Form.Group controlId="name">
-                        <Form.Label>Nombre</Form.Label>
-                        <Form.Control readOnly={!edit && !add} type="text" onChange={e => setProductName(e.target.value)} value={productName} />
-                    </Form.Group>
-                    <Form.Group controlId="cost">
-                        <Form.Label>Costo</Form.Label>
-                        <Form.Control readOnly={!edit && !add} type="number" value={cost} onChange={e => setCost(e.target.value)} />
-                    </Form.Group>
+                    <CustomTextBox controlId="name" label="Nombre" type="text" readOnly={!edit && !add} onChange={e => setProductName(e.target.value)} value={productName} />
+                    <CustomTextBox controlId="cost" label="Costo" type="number" readOnly={!edit && !add} onChange={e => setCost(e.target.value)} value={cost} />
                 </Modal.Body>
                 <Modal.Footer>
                     <CustomButton variant="secondary" onClick={handleClose}>
