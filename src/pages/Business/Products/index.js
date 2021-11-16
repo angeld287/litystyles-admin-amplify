@@ -1,8 +1,8 @@
 import React, { useState, useContext, useMemo } from "react";
-import { Container, Modal, Row } from "react-bootstrap";
+import { Layout } from 'antd';
 import CustomButton from "../../../components/CustomButton";
 import CustomTable from '../../../components/CustomTable/CustomTable'
-import CustomTextBox from "../../../components/CustomTextBox";
+import CustomModal from "../../../components/CustomModal";
 import { ProductContext } from "../../../providers/products/products.provider";
 
 const Products = () => {
@@ -13,6 +13,9 @@ const Products = () => {
     const [cost, setCost] = useState('');
     const [productName, setProductName] = useState('');
     const [productItems, setProductItems] = useState([]);
+
+    const { Content } = Layout;
+
 
     const handleClose = () => setShow(false);
 
@@ -38,35 +41,21 @@ const Products = () => {
         setProductItems(product_items)
     }, [items]);
 
+    const inputs = [
+        { label: "Nombre", type: "text", readOnly: (!edit && !add), onChange: e => setProductName(e.target.value), value: productName },
+        { label: "Costo", type: "number", readOnly: (!edit && !add), onChange: e => setCost(e.target.value), value: cost }
+    ]
+
     return (
-        <Container fluid>
+        <Content>
             <h3 className="mt-5">Productos</h3>
             <CustomButton intent="Primary" onClick={(e) => { e.preventDefault(); setAdd(true); setShow(true); }} icon="add"></CustomButton>
-            <Row>
-                <CustomTable headers={['Nombre', 'Costo', 'Accion']} items={productItems} />
-            </Row>
-            {/* Modal para editar y ver detalle de productos */}
-            <Modal show={show} onHide={handleClose}>
-                <Modal.Header closeButton>
-                    <Modal.Title>{edit ? 'Editar Producto' : add ? 'Agregar Producto' : 'Ver Producto'}</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <CustomTextBox controlId="name" label="Nombre" type="text" readOnly={!edit && !add} onChange={e => setProductName(e.target.value)} value={productName} />
-                    <CustomTextBox controlId="cost" label="Costo" type="number" readOnly={!edit && !add} onChange={e => setCost(e.target.value)} value={cost} />
-                </Modal.Body>
-                <Modal.Footer>
-                    <CustomButton variant="secondary" onClick={handleClose}>
-                        Cerrar
-                    </CustomButton>
-                    {(edit || add) &&
-                        <CustomButton variant="primary" onClick={setProduct}>
-                            Guardar
-                        </CustomButton>
-                    }
-                </Modal.Footer>
-            </Modal>
 
-        </Container>
+            <CustomTable headers={['Nombre', 'Costo', 'Accion']} items={productItems} />
+            {/* Modal para editar y ver detalle de productos */}
+
+            <CustomModal title={edit ? 'Editar Producto' : add ? 'Agregar Producto' : 'Ver Producto'} visible={show} onOk={setProduct} onCancel={handleClose} inputs={inputs} />
+        </Content>
     )
 }
 

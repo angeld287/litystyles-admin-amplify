@@ -1,46 +1,29 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Table } from 'react-bootstrap';
+import { Table, Tag, Space } from 'antd';
 import CustomButton from '../CustomButton';
 
 const CustomTable = ({ headers, items }) => {
+    const _headers = headers.map(_ => {
+        if (_ !== 'actions') {
+            return ({ title: _, dataIndex: _.toLowerCase(), key: _.toLowerCase() })
+        } else {
+            return ({
+                title: _,
+                key: _.toLowerCase(),
+                dataIndex: _.toLowerCase(),
+                render: (text, record) => (
+                    <Space size="middle">
+                        <a>{text} {record.name}</a>
+                    </Space>
+                ),
+            })
+        }
+    });
+    const _items = items.map(_ => ({ ..._, key: _.id }));
     return (
         <div style={{ marginTop: 20 }}>
-            <Table striped bordered hover>
-                <thead>
-                    <tr>
-                        {headers.map(_ => <th key={_}>{_}</th>)}
-                    </tr>
-                </thead>
-                <tbody>
-                    {items.map(_ => {
-                        const keys = Object.keys(_);
-                        return (
-                            <tr key={_.id}>
-                                {
-                                    keys.filter(_ => _ !== 'id').map(_k => (
-                                        _k !== 'actions'
-                                            ?
-                                            <td key={_.id + _k}>{_[_k]}</td>
-                                            :
-                                            _[_k] !== null && _[_k] !== undefined
-                                                ?
-                                                <td key={_.id + _k}>{
-                                                    _[_k].map(_a => {
-                                                        const _sk = _.id + _k + _a.onClicAction;
-                                                        return <CustomButton key={_sk} _key={_sk} style={{ marginRight: 1 }} onClick={_a.onClicAction} intent={_a.color} icon={_a.icon} ></CustomButton>
-                                                    })
-                                                }</td>
-                                                :
-                                                <td key={_.id + _k}></td>
-                                    ))
-                                }
-                            </tr>
-                        )
-                    }
-                    )}
-                </tbody>
-            </Table>
+            <Table columns={_headers} dataSource={_items} />
         </div>
     )
 }
