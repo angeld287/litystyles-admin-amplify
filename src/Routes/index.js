@@ -3,16 +3,16 @@ import React from 'react';
 import {
 	BrowserRouter as Router, Routes, Route
 } from 'react-router-dom';
-import { Spinner } from '@blueprintjs/core';
 
 import Home from '../pages/Home'
 import Business from '../pages/Business'
 import HeaderLinks from '../components/HeaderLinks';
 import PropsTypes from 'prop-types';
+import CustomSpinner from '../components/CustomSpinner';
 
 const AppRoutes = ({ user }) => {
 
-	if (user === undefined) return (<Spinner />)
+	if (user === undefined) return (<CustomSpinner />)
 
 	return (
 		<Router>

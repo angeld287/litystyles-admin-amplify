@@ -1,16 +1,16 @@
 import React from 'react';
-import { Button } from "@blueprintjs/core";
+import { Button } from "antd";
 import PropTypes from "prop-types";
 
-const CustomButton = ({ _key, onClick, children, intent, icon }) => {
-    return <Button key={_key} onClick={onClick} intent={intent} icon={icon}>{children}</Button>;
+const CustomButton = ({ _key, onClick, children, type, loading }) => {
+    return <Button type={type} loading={loading} key={_key} onClick={onClick} >{children}</Button>;
 };
 
 
 CustomButton.propTypes = {
     children: PropTypes.any,
-    intent: PropTypes.string,
-    icon: PropTypes.string,
+    type: PropTypes.string,
+    loading: PropTypes.bool,
     onClick: PropTypes.func,
     _key: PropTypes.string
 }

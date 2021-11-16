@@ -1,5 +1,5 @@
 import React from "react";
-import { Container, Row } from "react-bootstrap";
+import { Layout } from 'antd';
 import CustomTable from '../../../components/CustomTable/CustomTable'
 
 const SERVICES_ITEMS = [
@@ -10,13 +10,13 @@ const SERVICES_ITEMS = [
 ];
 
 const Services = () => {
+    const { Content } = Layout;
+
     return (
-        <Container fluid>
+        <Content>
             <h3 className="mt-5">Servicios</h3>
-            <Row>
-                <CustomTable headers={['No.', 'Nombre', 'Costo', 'Accion']} items={SERVICES_ITEMS} />
-            </Row>
-        </Container>
+            <CustomTable headers={['No.', 'Nombre', 'Costo', 'Accion']} items={SERVICES_ITEMS} />
+        </Content>
     )
 }
 

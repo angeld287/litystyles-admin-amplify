@@ -1,7 +1,8 @@
 import React, { useState, useContext, useMemo } from "react";
-import { Container, Form, Modal, Row } from "react-bootstrap";
+import { Layout } from 'antd';
 import CustomButton from "../../../components/CustomButton";
 import CustomTable from '../../../components/CustomTable/CustomTable'
+import CustomModal from "../../../components/CustomModal";
 import { ProductContext } from "../../../providers/products/products.provider";
 
 const Products = () => {
@@ -12,6 +13,9 @@ const Products = () => {
     const [cost, setCost] = useState('');
     const [productName, setProductName] = useState('');
     const [productItems, setProductItems] = useState([]);
+
+    const { Content } = Layout;
+
 
     const handleClose = () => setShow(false);
 
@@ -27,9 +31,12 @@ const Products = () => {
         const product_items = [];
         items.forEach(e => {
             const product_item = {
-                name: e.name,
-                cost: e.cost,
-                actions: [{ color: 'primary', icon: 'edit', onClicAction: () => { console.log(e) } }],
+                nombre: e.name,
+                costo: e.cost,
+                acciones: [
+                    { id: e.id, color: 'primary', icon: 'edit', onClicAction: () => { console.log(e) } },
+                    { id: e.id, color: 'danger', icon: 'delete', onClicAction: () => { console.log(e.id) } }
+                ],
                 id: e.id
             };
             product_items.push(product_item)
@@ -37,41 +44,21 @@ const Products = () => {
         setProductItems(product_items)
     }, [items]);
 
+    const inputs = [
+        { label: "Nombre", type: "text", readOnly: (!edit && !add), onChange: e => setProductName(e.target.value), value: productName },
+        { label: "Costo", type: "number", readOnly: (!edit && !add), onChange: e => setCost(e.target.value), value: cost }
+    ]
+
     return (
-        <Container fluid>
+        <Content>
             <h3 className="mt-5">Productos</h3>
             <CustomButton intent="Primary" onClick={(e) => { e.preventDefault(); setAdd(true); setShow(true); }} icon="add"></CustomButton>
-            <Row>
-                <CustomTable headers={['Nombre', 'Costo', 'Accion']} items={productItems} />
-            </Row>
-            {/* Modal para editar y ver detalle de productos */}
-            <Modal show={show} onHide={handleClose}>
-                <Modal.Header closeButton>
-                    <Modal.Title>{edit ? 'Editar Producto' : add ? 'Agregar Producto' : 'Ver Producto'}</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <Form.Group controlId="name">
-                        <Form.Label>Nombre</Form.Label>
-                        <Form.Control readOnly={!edit && !add} type="text" onChange={e => setProductName(e.target.value)} value={productName} />
-                    </Form.Group>
-                    <Form.Group controlId="cost">
-                        <Form.Label>Costo</Form.Label>
-                        <Form.Control readOnly={!edit && !add} type="number" value={cost} onChange={e => setCost(e.target.value)} />
-                    </Form.Group>
-                </Modal.Body>
-                <Modal.Footer>
-                    <CustomButton variant="secondary" onClick={handleClose}>
-                        Cerrar
-                    </CustomButton>
-                    {(edit || add) &&
-                        <CustomButton variant="primary" onClick={setProduct}>
-                            Guardar
-                        </CustomButton>
-                    }
-                </Modal.Footer>
-            </Modal>
 
-        </Container>
+            <CustomTable headers={['Nombre', 'Costo', 'Acciones']} items={productItems} />
+            {/* Modal para editar y ver detalle de productos */}
+
+            <CustomModal title={edit ? 'Editar Producto' : add ? 'Agregar Producto' : 'Ver Producto'} visible={show} onOk={setProduct} onCancel={handleClose} inputs={inputs} />
+        </Content>
     )
 }
 
