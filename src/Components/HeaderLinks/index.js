@@ -9,9 +9,13 @@ import { PAGE_OPTIONS } from '../../context/communContex/commun.data';
 const HeaderLinks = () => {
 	const user = React.useContext(currentUserContext);
 
+	const handleClick = (e) => {
+		redirect(e.item.props.link);
+	}
+
 	return (
-		<Menu onClick={this.handleClick} selectedKeys={[current]} mode="horizontal">
-			{PAGE_OPTIONS.map(_ => <Menu.Item key={_.id} onClick={(e) => { e.preventDefault(); redirect(_.link) }}>{_.title}</Menu.Item>)}
+		<Menu selectedKeys={[1]} mode="horizontal">
+			{PAGE_OPTIONS.map(_ => <Menu.Item onClick={handleClick} link={_.link} key={_.id} >{_.title}</Menu.Item>)}
 
 
 			{user.user !== null && user.user.signInUserSession !== null

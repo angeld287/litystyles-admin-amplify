@@ -31,9 +31,12 @@ const Products = () => {
         const product_items = [];
         items.forEach(e => {
             const product_item = {
-                name: e.name,
-                cost: e.cost,
-                actions: [{ color: 'primary', icon: 'edit', onClicAction: () => { console.log(e) } }],
+                nombre: e.name,
+                costo: e.cost,
+                acciones: [
+                    { id: e.id, color: 'primary', icon: 'edit', onClicAction: () => { console.log(e) } },
+                    { id: e.id, color: 'danger', icon: 'delete', onClicAction: () => { console.log(e.id) } }
+                ],
                 id: e.id
             };
             product_items.push(product_item)
@@ -51,7 +54,7 @@ const Products = () => {
             <h3 className="mt-5">Productos</h3>
             <CustomButton intent="Primary" onClick={(e) => { e.preventDefault(); setAdd(true); setShow(true); }} icon="add"></CustomButton>
 
-            <CustomTable headers={['Nombre', 'Costo', 'Accion']} items={productItems} />
+            <CustomTable headers={['Nombre', 'Costo', 'Acciones']} items={productItems} />
             {/* Modal para editar y ver detalle de productos */}
 
             <CustomModal title={edit ? 'Editar Producto' : add ? 'Agregar Producto' : 'Ver Producto'} visible={show} onOk={setProduct} onCancel={handleClose} inputs={inputs} />

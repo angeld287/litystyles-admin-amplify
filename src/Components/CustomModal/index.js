@@ -8,7 +8,7 @@ const CustomModal = ({ title, visible, onOk, onCancel, inputs }) => {
 
         <Modal title={title} visible={visible} onOk={onOk} onCancel={onCancel}>
             {inputs.map(_ => (
-                <CustomInput label={_.label} type={_.type} readOnly={_.readOnly} onChange={_.onChange} value={_.value}></CustomInput>
+                <CustomInput key={_.label.toLowerCase().replace(" ", "_")} label={_.label} type={_.type} readOnly={_.readOnly} onChange={_.onChange} value={_.value}></CustomInput>
             ))}
         </Modal>
 

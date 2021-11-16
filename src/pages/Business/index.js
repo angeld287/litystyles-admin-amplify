@@ -5,11 +5,10 @@ import Products from "./Products";
 import Services from "./Services";
 
 const Business = () => {
-    const { Sider, Content } = Layout;
+    const { Content } = Layout;
 
     return (
         <Layout>
-            <Sider>Sider</Sider>
             <Content >
                 <Products />
                 <Services />
