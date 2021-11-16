@@ -4,6 +4,8 @@ import CustomButton from "../../../components/CustomButton";
 import CustomTable from '../../../components/CustomTable/CustomTable'
 import CustomModal from "../../../components/CustomModal";
 import { ProductContext } from "../../../providers/products/products.provider";
+import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
+
 
 const Products = () => {
     const [show, setShow] = useState(false);
@@ -28,20 +30,15 @@ const Products = () => {
     }
 
     useMemo(() => {
-        const product_items = [];
-        items.forEach(e => {
-            const product_item = {
-                nombre: e.name,
-                costo: e.cost,
-                acciones: [
-                    { id: e.id, color: 'primary', icon: 'edit', onClicAction: () => { console.log(e) } },
-                    { id: e.id, color: 'danger', icon: 'delete', onClicAction: () => { console.log(e.id) } }
-                ],
-                id: e.id
-            };
-            product_items.push(product_item)
-        });
-        setProductItems(product_items)
+        setProductItems(items.map(e => ({
+            nombre: e.name,
+            costo: e.cost,
+            acciones: [
+                { id: e.id, color: 'blue', icon: EditOutlined, onClicAction: () => { console.log(e) } },
+                { id: e.id, color: 'red', icon: DeleteOutlined, onClicAction: () => { console.log(e.id) } }
+            ],
+            id: e.id
+        })))
     }, [items]);
 
     const inputs = [

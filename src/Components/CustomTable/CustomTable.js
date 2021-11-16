@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Table, Space } from 'antd';
+
 import CustomButton from '../CustomButton';
 
 const CustomTable = ({ headers, items }) => {
@@ -15,7 +16,7 @@ const CustomTable = ({ headers, items }) => {
                 render: (btns) => (
                     <Space size="middle">
                         {
-                            btns.map(_ => <CustomButton key={_.id + _.icon} onClick={_.onClicAction}>{_.icon}</CustomButton>)
+                            btns.map(_ => <CustomButton color={_.color} Icon={_.icon} key={_.id + _.icon} onClick={_.onClicAction} />)
                         }
                     </Space>
                 ),
