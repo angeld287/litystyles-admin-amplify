@@ -1,5 +1,5 @@
 import { createContext } from "react";
 
-const communContext = createContext({commun: {}, setCommun: () => {}});
+const communContext = createContext({ error: null, setError: () => { } });
 
 export default communContext;

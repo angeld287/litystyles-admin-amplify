@@ -4,6 +4,8 @@ import CustomButton from "../../../components/CustomButton";
 import CustomTable from '../../../components/CustomTable/CustomTable'
 import CustomModal from "../../../components/CustomModal";
 import { ProductContext } from "../../../providers/products/products.provider";
+import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
+
 
 const Products = () => {
     const [show, setShow] = useState(false);
@@ -19,7 +21,7 @@ const Products = () => {
 
     const handleClose = () => setShow(false);
 
-    const { items, addItem } = useContext(ProductContext);
+    const { items, addItem, getItemsNextToken, itemsLoading } = useContext(ProductContext);
 
     const setProduct = () => {
         addItem({ id: 542, cost: cost, name: productName })
@@ -28,20 +30,15 @@ const Products = () => {
     }
 
     useMemo(() => {
-        const product_items = [];
-        items.forEach(e => {
-            const product_item = {
-                nombre: e.name,
-                costo: e.cost,
-                acciones: [
-                    { id: e.id, color: 'primary', icon: 'edit', onClicAction: () => { console.log(e) } },
-                    { id: e.id, color: 'danger', icon: 'delete', onClicAction: () => { console.log(e.id) } }
-                ],
-                id: e.id
-            };
-            product_items.push(product_item)
-        });
-        setProductItems(product_items)
+        setProductItems(items.map(e => ({
+            nombre: e.name,
+            costo: e.cost,
+            acciones: [
+                { id: e.id, color: 'blue', icon: EditOutlined, onClicAction: () => { console.log(e) } },
+                { id: e.id, color: 'red', icon: DeleteOutlined, onClicAction: () => { console.log(e.id) } }
+            ],
+            id: e.id
+        })))
     }, [items]);
 
     const inputs = [
@@ -54,7 +51,7 @@ const Products = () => {
             <h3 className="mt-5">Productos</h3>
             <CustomButton intent="Primary" onClick={(e) => { e.preventDefault(); setAdd(true); setShow(true); }} icon="add"></CustomButton>
 
-            <CustomTable headers={['Nombre', 'Costo', 'Acciones']} items={productItems} />
+            <CustomTable headers={['Nombre', 'Costo', 'Acciones']} items={productItems} itemsLoading={itemsLoading} getItemsNextToken={getItemsNextToken} />
             {/* Modal para editar y ver detalle de productos */}
 
             <CustomModal title={edit ? 'Editar Producto' : add ? 'Agregar Producto' : 'Ver Producto'} visible={show} onOk={setProduct} onCancel={handleClose} inputs={inputs} />
