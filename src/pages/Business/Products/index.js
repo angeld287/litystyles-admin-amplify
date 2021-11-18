@@ -3,6 +3,7 @@ import { Layout } from 'antd';
 import CustomButton from "../../../components/CustomButton";
 import CustomTable from '../../../components/CustomTable/CustomTable'
 import CustomModal from "../../../components/CustomModal";
+import CustomSelect from "../../../components/CustomSelect";
 import { ProductContext } from "../../../providers/products/products.provider";
 import { DeleteOutlined, EditOutlined, PlusCircleOutlined } from '@ant-design/icons';
 
@@ -48,9 +49,9 @@ const Products = () => {
     return (
         <Content>
             <h3 className="ttl-1" >Productos</h3>
+            <CustomSelect className=".slc-1" items={items} />
             <CustomButton className="btn-1" style="blue" intent="Primary" onClick={(e) => { e.preventDefault(); setAdd(true); setShow(true); }} Icon={PlusCircleOutlined}></CustomButton>
             <CustomTable headers={['Nombre', 'Costo', 'Acciones']} items={productItems} itemsLoading={itemsLoading} getItemsNextToken={getItemsNextToken} />
-
             {/* Modal para editar y ver detalle de productos */}
             <CustomModal title={edit ? 'Editar Producto' : add ? 'Agregar Producto' : 'Ver Producto'} visible={show} onOk={setProduct} onCancel={handleClose} inputs={inputs} />
         </Content>
