@@ -36,3 +36,19 @@
     transform: rotate(360deg);
   }
 }
+
+.site-layout-content {
+  margin: 10px;
+  min-height: 280px;
+  padding: 24px;
+  background: #fff;
+}
+
+.ttl-1 {
+  text-align: center;
+}
+
+.btn-1 {
+  float: left;
+  margin: 2px;
+}
