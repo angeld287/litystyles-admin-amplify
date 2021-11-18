@@ -21,7 +21,7 @@ const Products = () => {
 
     const handleClose = () => setShow(false);
 
-    const { items, addItem } = useContext(ProductContext);
+    const { items, addItem, getItemsNextToken, itemsLoading } = useContext(ProductContext);
 
     const setProduct = () => {
         addItem({ id: 542, cost: cost, name: productName })
@@ -51,7 +51,7 @@ const Products = () => {
             <h3 className="mt-5">Productos</h3>
             <CustomButton intent="Primary" onClick={(e) => { e.preventDefault(); setAdd(true); setShow(true); }} icon="add"></CustomButton>
 
-            <CustomTable headers={['Nombre', 'Costo', 'Acciones']} items={productItems} />
+            <CustomTable headers={['Nombre', 'Costo', 'Acciones']} items={productItems} itemsLoading={itemsLoading} getItemsNextToken={getItemsNextToken} />
             {/* Modal para editar y ver detalle de productos */}
 
             <CustomModal title={edit ? 'Editar Producto' : add ? 'Agregar Producto' : 'Ver Producto'} visible={show} onOk={setProduct} onCancel={handleClose} inputs={inputs} />

@@ -14,7 +14,7 @@ Amplify.configure(aws_exports);
 
 const App = () => {
   const [user, setUser] = React.useState(JSON.parse(sessionStorage.getItem('CURRENT_USER_SESSION')));
-  const [commun, setCommun] = React.useState({});
+  const [error, setError] = React.useState(null);
 
   const setLoggedUserInfo = (_currentUser) => {
     sessionStorage.setItem('CURRENT_USER_SESSION', JSON.stringify(_currentUser));
@@ -32,7 +32,7 @@ const App = () => {
       <currentUser.Provider value={{
         user: user, onUserLogOut: setUserToNull, onUserSignIn: setLoggedUserInfo
       }}>
-        <communContext.Provider value={{ commun: commun, setCommun: (_) => { setCommun(p => { return { ...p, _ } }) } }}>
+        <communContext.Provider value={{ error: error, setError: (_) => { setError(_) } }}>
           <AuthComponent>
             <AppRoutes user={user} />
           </AuthComponent>

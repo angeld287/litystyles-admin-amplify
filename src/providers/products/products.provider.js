@@ -12,15 +12,19 @@ export const ProductContext = createContext({
     hidden: true,
     toggleHidden: () => { },
     items: [],
+    itemsLoading: false,
     addItem: () => { },
     removeItem: () => { },
     itemsCount: 0,
+    getItemsNextToken: () => { },
 });
 
 const ProductProvider = ({ children }) => {
     const [hidden, setHidden] = useState(true);
     const [items, setItems] = useState([]);
     const [itemsCount, setItemsCount] = useState(0);
+    const [nextToken, setNextToken] = useState(null);
+    const [itemsLoading, setItemsLoading] = useState(false);
 
     const addItem = async item => {
         //const productObject = { packagingformat: packagingformat.current.value, name: name.current.value, cost: cost.current.value, image: _image.key };
@@ -39,7 +43,7 @@ const ProductProvider = ({ children }) => {
 
     useEffect(() => {
         let didCancel = false;
-
+        setItemsLoading(true);
         const fetch = async () => {
             var result = [];
 
@@ -50,11 +54,9 @@ const ProductProvider = ({ children }) => {
             }
 
             if (!didCancel) {
-                const _r = [];
-                result.forEach(e => {
-                    _r.push({ cost: e.cost, name: e.name, image: e.image, id: e.id, deleted: e.deleted })
-                });
-                setItems(_r)
+                setItems(result.items.map(e => ({ cost: e.cost, name: e.name, image: e.image, id: e.id, deleted: e.deleted })))
+                setNextToken(result.nextToken);
+                setItemsLoading(false);
             }
         };
 
@@ -62,12 +64,27 @@ const ProductProvider = ({ children }) => {
 
         return () => {
             didCancel = true;
+            setItemsLoading(false);
         };
     }, []);
 
     useEffect(() => {
         setItemsCount(getItems(items));
     }, [items]);
+
+    const getItemsNextToken = async () => {
+        var result = [];
+
+        if (nextToken !== null) {
+            try {
+                result = await getList('listProducts', listProducts, { nextToken: nextToken });
+                setItems([...items, ...result.items.map(e => ({ cost: e.cost, name: e.name, image: e.image, id: e.id, deleted: e.deleted }))])
+                setNextToken(result.nextToken);
+            } catch (e) {
+                console.log(e)
+            }
+        }
+    }
 
     return (
         <ProductContext.Provider
@@ -78,6 +95,8 @@ const ProductProvider = ({ children }) => {
                 addItem,
                 removeItem,
                 itemsCount,
+                getItemsNextToken,
+                itemsLoading,
             }}
         >
             {children}
