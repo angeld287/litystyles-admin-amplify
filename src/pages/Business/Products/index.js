@@ -3,7 +3,6 @@ import { Layout } from 'antd';
 import CustomButton from "../../../components/CustomButton";
 import CustomTable from '../../../components/CustomTable/CustomTable'
 import CustomModal from "../../../components/CustomModal";
-import CustomSelect from "../../../components/CustomSelect";
 import { ProductContext } from "../../../providers/products/products.provider";
 import { DeleteOutlined, EditOutlined, PlusCircleOutlined } from '@ant-design/icons';
 
@@ -45,13 +44,13 @@ const Products = () => {
 
     const inputs = [
         { label: "Nombre", type: "text", readOnly: (!edit && !add), onChange: e => setProductName(e.target.value), value: productName },
-        { label: "Costo", type: "number", readOnly: (!edit && !add), onChange: e => setCost(e.target.value), value: cost }
+        { label: "Costo", type: "number", readOnly: (!edit && !add), onChange: e => setCost(e.target.value), value: cost },
+        { label: "Categorias", items: items, type: "select", readOnly: (!edit && !add), onChange: _ => setCategory(_) }
     ];
 
     return (
         <Content>
             <h3 className="ttl-1" >Productos</h3>
-            <CustomSelect className=".slc-1" items={items} onChange={_ => setCategory(_)} />
             <CustomButton className="btn-1" style="blue" intent="Primary" onClick={(e) => { e.preventDefault(); setAdd(true); setShow(true); }} Icon={PlusCircleOutlined}></CustomButton>
             <CustomTable headers={['Nombre', 'Costo', 'Acciones']} items={productItems} itemsLoading={itemsLoading} getItemsNextToken={getItemsNextToken} />
             {/* Modal para editar y ver detalle de productos */}
