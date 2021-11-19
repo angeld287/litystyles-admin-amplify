@@ -15,6 +15,7 @@ const Products = () => {
     const [cost, setCost] = useState('');
     const [productName, setProductName] = useState('');
     const [productItems, setProductItems] = useState([]);
+    const [category, setCategory] = useState('');
 
     const { Content } = Layout;
 
@@ -27,6 +28,7 @@ const Products = () => {
         addItem({ id: 542, cost: cost, name: productName })
         setEdit(false);
         setAdd(false);
+        console.log(category)
     }
 
     useMemo(() => {
@@ -49,7 +51,7 @@ const Products = () => {
     return (
         <Content>
             <h3 className="ttl-1" >Productos</h3>
-            <CustomSelect className=".slc-1" items={items} />
+            <CustomSelect className=".slc-1" items={items} onChange={_ => setCategory(_)} />
             <CustomButton className="btn-1" style="blue" intent="Primary" onClick={(e) => { e.preventDefault(); setAdd(true); setShow(true); }} Icon={PlusCircleOutlined}></CustomButton>
             <CustomTable headers={['Nombre', 'Costo', 'Acciones']} items={productItems} itemsLoading={itemsLoading} getItemsNextToken={getItemsNextToken} />
             {/* Modal para editar y ver detalle de productos */}
