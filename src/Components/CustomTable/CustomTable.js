@@ -25,6 +25,7 @@ const CustomTable = ({ headers, items, getItemsNextToken, itemsLoading }) => {
             })
         }
     });
+
     const _items = items.map(_ => ({ ..._, key: _.id }));
 
     const onChangeTable = async (e) => {

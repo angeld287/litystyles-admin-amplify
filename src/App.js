@@ -9,6 +9,7 @@ import aws_exports from './aws-exports';
 import ProductProvider from './providers/products/products.provider';
 import AuthComponent from './components/Authentication/AuthComponent';
 import AppRoutes from './Routes';
+import "./App.css"
 
 Amplify.configure(aws_exports);
 
