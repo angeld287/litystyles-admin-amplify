@@ -45,7 +45,7 @@ const Products = () => {
     const inputs = [
         { label: "Nombre", type: "text", readOnly: (!edit && !add), onChange: e => setProductName(e.target.value), value: productName },
         { label: "Costo", type: "number", readOnly: (!edit && !add), onChange: e => setCost(e.target.value), value: cost },
-        { label: "Categorias", items: items, type: "select", readOnly: (!edit && !add), onChange: _ => setCategory(_) }
+        { label: "Categorias", items: items, type: "select", readOnly: (!edit && !add), onChange: _ => setCategory(_), getItemsNextToken: getItemsNextToken }
     ];
 
     return (
