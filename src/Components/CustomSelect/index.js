@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import PropTypes from "prop-types";
 import { Select } from "antd";
 
-const CustomSelect = ({ items, onChange, defaultValue, getItemsNextToken }) => {
+const CustomSelect = ({ items, onChange, defaultValue, getItemsNextToken, placeHolder }) => {
     const [loading, setLoading] = useState(false);
     const options = items !== undefined ? items.map(_ => { return <Select.Option key={_.id}>{_.name}</Select.Option> }) : [];
 
@@ -19,7 +19,8 @@ const CustomSelect = ({ items, onChange, defaultValue, getItemsNextToken }) => {
         loading={loading}
         showSearch
         style={{ width: '100%' }}
-        defaultValue={defaultValue}
+        placeholder={placeHolder !== undefined ? placeHolder : 'Nombre del Campo'}
+        defaultValue={defaultValue !== undefined ? defaultValue : null}
         defaultActiveFirstOption={false}
         //showArrow={false}
         onChange={onChange}
