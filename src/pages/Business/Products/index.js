@@ -4,6 +4,7 @@ import CustomButton from "../../../components/CustomButton";
 import CustomTable from '../../../components/CustomTable/CustomTable'
 import CustomModal from "../../../components/CustomModal";
 import { ProductContext } from "../../../providers/products/products.provider";
+import { CategoriesContext } from "../../../providers/categories/categories.provider";
 import { DeleteOutlined, EditOutlined, PlusCircleOutlined } from '@ant-design/icons';
 import { transformAndUploadImages } from '../../../services/S3'
 
@@ -20,10 +21,10 @@ const Products = () => {
 
     const { Content } = Layout;
 
-
     const handleClose = () => setShow(false);
 
     const { items, addItem, getItemsNextToken, itemsLoading } = useContext(ProductContext);
+    const categoryContext = useContext(CategoriesContext);
 
     const setProduct = async () => {
         addItem({ id: 542, cost: cost, name: productName })
@@ -50,7 +51,7 @@ const Products = () => {
     const inputs = [
         { label: "Nombre", type: "text", readOnly: (!edit && !add), onChange: e => setProductName(e.target.value), value: productName },
         { label: "Costo", type: "number", readOnly: (!edit && !add), onChange: e => setCost(e.target.value), value: cost },
-        { label: "Categorias", items: items, type: "select", readOnly: (!edit && !add), onChange: _ => setCategory(_), getItemsNextToken: getItemsNextToken },
+        { label: "Categorias", items: categoryContext.items, type: "select", readOnly: (!edit && !add), onChange: _ => setCategory(_), getItemsNextToken: categoryContext.getItemsNextToken },
         { label: "Imagen", type: "file", readOnly: (!edit && !add), onChange: _ => { setFile(_.target.files[0]) } }
     ];
 
