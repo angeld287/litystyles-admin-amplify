@@ -3,7 +3,7 @@ import { Layout } from 'antd';
 import CustomButton from "../../../components/CustomButton";
 import CustomTable from '../../../components/CustomTable/CustomTable'
 import CustomModal from "../../../components/CustomModal";
-import { ProductContext } from "../../../providers/products/products.provider";
+import { ProductContext, CategoriesContext, SubCategoriesContext } from "../../../providers";
 import { DeleteOutlined, EditOutlined, PlusCircleOutlined } from '@ant-design/icons';
 import { transformAndUploadImages } from '../../../services/S3'
 
@@ -16,20 +16,23 @@ const Products = () => {
     const [productName, setProductName] = useState('');
     const [productItems, setProductItems] = useState([]);
     const [category, setCategory] = useState('');
+    const [subCategory, setSubCategory] = useState('');
     const [file, setFile] = useState([]);
 
     const { Content } = Layout;
 
-
     const handleClose = () => setShow(false);
 
     const { items, addItem, getItemsNextToken, itemsLoading } = useContext(ProductContext);
+    const categoryContext = useContext(CategoriesContext);
+    const subCategoryContext = useContext(SubCategoriesContext);
 
     const setProduct = async () => {
         addItem({ id: 542, cost: cost, name: productName })
         setEdit(false);
         setAdd(false);
         console.log(category)
+        console.log(subCategory)
 
         const images = await transformAndUploadImages("PRODUCTOS", productName, file);
         console.log(images)
@@ -50,7 +53,8 @@ const Products = () => {
     const inputs = [
         { label: "Nombre", type: "text", readOnly: (!edit && !add), onChange: e => setProductName(e.target.value), value: productName },
         { label: "Costo", type: "number", readOnly: (!edit && !add), onChange: e => setCost(e.target.value), value: cost },
-        { label: "Categorias", items: items, type: "select", readOnly: (!edit && !add), onChange: _ => setCategory(_), getItemsNextToken: getItemsNextToken },
+        { label: "Categoria", items: categoryContext.items, type: "select", readOnly: (!edit && !add), onChange: _ => setCategory(_), getItemsNextToken: categoryContext.getItemsNextToken },
+        { label: "Sub Categoria", items: subCategoryContext.items, type: "select", readOnly: (!edit && !add), onChange: _ => setSubCategory(_), getItemsNextToken: subCategoryContext.getItemsNextToken },
         { label: "Imagen", type: "file", readOnly: (!edit && !add), onChange: _ => { setFile(_.target.files[0]) } }
     ];
 
