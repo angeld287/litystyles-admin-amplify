@@ -6,11 +6,10 @@ import Amplify from 'aws-amplify';
 import aws_exports from './aws-exports';
 // import aws_exports_prod from './aws-exports-prod';
 
-import ProductProvider from './providers/products/products.provider';
 import AuthComponent from './components/Authentication/AuthComponent';
 import AppRoutes from './Routes';
 import "./App.css"
-import CategorieProvider from './providers/categories/categories.provider';
+import { CategorieProvider, SubCategorieProvider, ProductProvider } from './providers/index';
 
 Amplify.configure(aws_exports);
 
@@ -32,15 +31,17 @@ const App = () => {
   return (
     <ProductProvider>
       <CategorieProvider>
-        <currentUser.Provider value={{
-          user: user, onUserLogOut: setUserToNull, onUserSignIn: setLoggedUserInfo
-        }}>
-          <communContext.Provider value={{ error: error, setError: (_) => { setError(_) } }}>
-            <AuthComponent>
-              <AppRoutes user={user} />
-            </AuthComponent>
-          </communContext.Provider>
-        </currentUser.Provider>
+        <SubCategorieProvider>
+          <currentUser.Provider value={{
+            user: user, onUserLogOut: setUserToNull, onUserSignIn: setLoggedUserInfo
+          }}>
+            <communContext.Provider value={{ error: error, setError: (_) => { setError(_) } }}>
+              <AuthComponent>
+                <AppRoutes user={user} />
+              </AuthComponent>
+            </communContext.Provider>
+          </currentUser.Provider>
+        </SubCategorieProvider>
       </CategorieProvider>
     </ProductProvider>
   );
