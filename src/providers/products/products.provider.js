@@ -6,7 +6,8 @@ import {
 } from '../../utils/Items/Utils'
 import { getList, createItem } from "../../services/AppSync";
 import { listProducts } from "../../graphql/queries";
-import { createProductCategory, createProductSubCategory } from "../../graphql/mutations";
+import { createProductCategory, createProductSubCategory, createProduct } from "../../graphql/mutations";
+import { transformAndUploadImages } from "../../services/S3";
 
 export const ProductContext = createContext({
     hidden: true,
@@ -27,12 +28,14 @@ const ProductProvider = ({ children }) => {
     const [itemsLoading, setItemsLoading] = useState(false);
 
     const addItem = async item => {
-        //const productObject = { packagingformat: packagingformat.current.value, name: name.current.value, cost: cost.current.value, image: _image.key };
-        //const product = await createItem('createProduct', createProduct, { productSubCategoryProductId: "", productSubCategorySubcategoryId: item.subcategory })
-        await createItem('createProductCategory', createProductCategory, { productCategoryProductId: 'p.data.createProduct.id', productCategoryCategoryId: 'category.current.value' });
+        const images = await transformAndUploadImages("PRODUCTOS", item.name, item.image);
+        const pobject = { packagingformat: item.packagingformat, name: item.name, cost: item.cost, image: images.key_ori.key };
+        const product = await createItem('createProduct', createProduct, pobject);
 
-        if (item.subcategory !== undefined && item.subcategory !== "") {
-            await createItem('createProductSubCategory', createProductSubCategory, { productSubCategoryProductId: "", productSubCategorySubcategoryId: item.subcategory })
+        await createItem('createProductCategory', createProductCategory, { productCategoryProductId: product.id, productCategoryCategoryId: item.category });
+
+        if (item.subcategory !== undefined && item.subcategory !== '') {
+            await createItem('createProductSubCategory', createProductSubCategory, { productSubCategoryProductId: product.id, productSubCategorySubcategoryId: item.subcategory })
         }
 
         setItems(utilAddItem(items, item))

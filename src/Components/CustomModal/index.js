@@ -1,27 +1,28 @@
 import React, { useEffect } from 'react';
 import PropTypes from "prop-types";
-import { Modal } from 'antd';
+import { Modal, Button } from 'antd';
 import CustomInput from '../CustomInput';
 import CustomSelect from '../CustomSelect';
 import CustomInputFile from '../CustomInputFile';
 
-const CustomModal = ({ title, visible, onOk, onCancel, inputs }) => {
+const CustomModal = ({ title, visible, onOk, onCancel, inputs, loading }) => {
 
     useEffect(() => {
-        let isMounted = true;
-
-        if (isMounted) {
-            console.log(isMounted)
-        }
-
-        return () => { isMounted = false }
+        return () => { }
     }, []);
 
     return (
         <>
             {
                 visible &&
-                <Modal title={title} visible={visible} onOk={onOk} onCancel={onCancel}>
+                <Modal
+                    title={title}
+                    visible={visible}
+                    footer={[
+                        <Button key="back" disabled={loading} onClick={onCancel}>Cancelar</Button>,
+                        <Button key="submit" type="primary" loading={loading} onClick={onOk}>Guardar</Button>
+                    ]}
+                >
                     <div className="modal-1">
                         {inputs.map(_ => {
                             const _k = _.label.toLowerCase().replace(" ", "_");
@@ -47,6 +48,7 @@ CustomModal.propTypes = {
     onOk: PropTypes.func,
     onCancel: PropTypes.func,
     inputs: PropTypes.array,
+    loading: PropTypes.bool
 }
 
 export default CustomModal;

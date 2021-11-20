@@ -5,7 +5,7 @@ import CustomTable from '../../../components/CustomTable/CustomTable'
 import CustomModal from "../../../components/CustomModal";
 import { ProductContext, CategoriesContext, SubCategoriesContext } from "../../../providers";
 import { DeleteOutlined, EditOutlined, PlusCircleOutlined } from '@ant-design/icons';
-import { transformAndUploadImages } from '../../../services/S3'
+import Swal from "sweetalert2";
 
 const Products = () => {
     const [show, setShow] = useState(false);
@@ -14,10 +14,12 @@ const Products = () => {
 
     const [cost, setCost] = useState('');
     const [productName, setProductName] = useState('');
+    const [packagingformat, setPackagingformat] = useState('');
     const [productItems, setProductItems] = useState([]);
     const [category, setCategory] = useState('');
     const [subCategory, setSubCategory] = useState('');
-    const [file, setFile] = useState([]);
+    const [file, setFile] = useState(null);
+    const [loading, setLoading] = useState(false);
 
     const { Content } = Layout;
 
@@ -28,14 +30,41 @@ const Products = () => {
     const subCategoryContext = useContext(SubCategoriesContext);
 
     const setProduct = async () => {
-        addItem({ id: 542, cost: cost, name: productName })
-        setEdit(false);
-        setAdd(false);
-        console.log(category)
-        console.log(subCategory)
+        if (productName === "") {
+            Swal.fire('Campo Obligatorio', 'Favor completar el campo Nombre', 'error');
+            return;
+        }
 
-        const images = await transformAndUploadImages("PRODUCTOS", productName, file);
-        console.log(images)
+        if (cost === "") {
+            Swal.fire('Campo Obligatorio', 'Favor completar el campo Costo', 'error');
+            return;
+        }
+
+        if (category === "") {
+            Swal.fire('Campo Obligatorio', 'Favor completar el campo Categoria', 'error');
+            return;
+        }
+        if (file === null) {
+            Swal.fire('Campo Obligatorio', 'Favor completar el campo Imagen', 'error');
+            return;
+        }
+
+        if (packagingformat === "") {
+            Swal.fire('Campo Obligatorio', 'Favor completar el campo Formato de Envace', 'error');
+            return;
+        }
+
+        setLoading(true);
+        try {
+            await addItem({ cost: cost, name: productName, category: category, subCategory: subCategory, image: file });
+        } catch (e) {
+            Swal.fire('Error en Creacion', 'El proceso de creacion ha fallado, intentelo mas tarde', 'error');
+        }
+
+        setEdit(false);
+        setAdd(true);
+        setLoading(false);
+        setShow(false);
     }
 
     useMemo(() => {
@@ -55,7 +84,9 @@ const Products = () => {
         { label: "Costo", type: "number", readOnly: (!edit && !add), onChange: e => setCost(e.target.value), value: cost },
         { label: "Categoria", items: categoryContext.items, type: "select", readOnly: (!edit && !add), onChange: _ => setCategory(_), getItemsNextToken: categoryContext.getItemsNextToken },
         { label: "Sub Categoria", items: subCategoryContext.items, type: "select", readOnly: (!edit && !add), onChange: _ => setSubCategory(_), getItemsNextToken: subCategoryContext.getItemsNextToken },
-        { label: "Imagen", type: "file", readOnly: (!edit && !add), onChange: _ => { setFile(_.target.files[0]) } }
+        { label: "Imagen", type: "file", readOnly: (!edit && !add), onChange: _ => { setFile(_.target.files[0]) } },
+        { label: "Formato de Envace", type: "text", readOnly: (!edit && !add), onChange: e => setPackagingformat(e.target.value), value: packagingformat },
+
     ];
 
     return (
@@ -64,7 +95,7 @@ const Products = () => {
             <CustomButton className="btn-1" style="blue" intent="Primary" onClick={(e) => { e.preventDefault(); setAdd(true); setShow(true); }} Icon={PlusCircleOutlined}></CustomButton>
             <CustomTable headers={['Nombre', 'Costo', 'Acciones']} items={productItems} itemsLoading={itemsLoading} getItemsNextToken={getItemsNextToken} />
             {/* Modal para editar y ver detalle de productos */}
-            <CustomModal title={edit ? 'Editar Producto' : add ? 'Agregar Producto' : 'Ver Producto'} visible={show} onOk={setProduct} onCancel={handleClose} inputs={inputs} />
+            <CustomModal loading={loading} title={edit ? 'Editar Producto' : add ? 'Agregar Producto' : 'Ver Producto'} visible={show} onOk={setProduct} onCancel={handleClose} inputs={inputs} />
         </Content>
     )
 }

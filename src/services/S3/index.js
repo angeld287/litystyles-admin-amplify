@@ -34,7 +34,7 @@ export const transformAndUploadImages = async (module, name, file) => {
     const key_320_240 = await putImageOnStorage(module, name + "_320_240", _320_240);
     const key_480_320 = await putImageOnStorage(module, name + "_480_320", _480_320);
     const key_1024_768 = await putImageOnStorage(module, name + "_1024_768", _1024_768);
-    const key_ori = await putImageOnStorage(module, file + "_original", _480_320);
+    const key_ori = await putImageOnStorage(module, name + "_original", _480_320);
 
     return { key_320_240, key_480_320, key_1024_768, key_ori }
 }
