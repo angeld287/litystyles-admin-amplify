@@ -5,11 +5,16 @@ import CustomInput from '../CustomInput';
 import CustomSelect from '../CustomSelect';
 import CustomInputFile from '../CustomInputFile';
 
-const CustomModal = ({ title, visible, onOk, onCancel, inputs, loading }) => {
+const CustomModal = ({ fields, title, visible, onOk, onCancel, inputs, loading }) => {
 
     useEffect(() => {
-        return () => { }
-    }, []);
+        if (!visible) {
+            const keys = Object.keys(fields);
+            keys.forEach(e => {
+                fields[e](null);
+            });
+        }
+    }, [visible]);
 
     return (
         <>
@@ -48,7 +53,8 @@ CustomModal.propTypes = {
     onOk: PropTypes.func,
     onCancel: PropTypes.func,
     inputs: PropTypes.array,
-    loading: PropTypes.bool
+    loading: PropTypes.bool,
+    fields: PropTypes.object
 }
 
 export default CustomModal;

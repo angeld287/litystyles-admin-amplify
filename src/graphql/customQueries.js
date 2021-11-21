@@ -1,4 +1,4 @@
-  export const getCompanyOfficesProductsAndServices = /* GraphQL */ `
+export const getCompanyOfficesProductsAndServices = /* GraphQL */ `
   query getCompanyProductsAndServices($id: ID!) {
     getCompany(id: $id) {
       id
@@ -374,6 +374,27 @@ export const getProduct = /* GraphQL */ `
       deletedAt
       createdAt
       owner
+    }
+  }
+`;
+
+export const listProducts = /* GraphQL */ `
+  query ListProducts(
+    $filter: ModelProductFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listProducts(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        cost
+        categoryId
+        subCategoryId
+        name
+        image
+        id
+        packagingformat
+      }
+      nextToken
     }
   }
 `;

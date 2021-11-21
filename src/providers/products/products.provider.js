@@ -5,7 +5,7 @@ import {
     utilAddItem, utilRemoveItem
 } from '../../utils/Items/Utils'
 import { getList, createItem } from "../../services/AppSync";
-import { listProducts } from "../../graphql/queries";
+import { listProducts } from "../../graphql/customQueries";
 import { createProductCategory, createProductSubCategory, createProduct } from "../../graphql/mutations";
 import { transformAndUploadImages } from "../../services/S3";
 
@@ -29,16 +29,21 @@ const ProductProvider = ({ children }) => {
 
     const addItem = async item => {
         const images = await transformAndUploadImages("PRODUCTOS", item.name, item.image);
-        const pobject = { packagingformat: item.packagingformat, name: item.name, cost: item.cost, image: images.key_ori.key };
-        const product = await createItem('createProduct', createProduct, pobject);
+        const object = { packagingformat: item.packagingformat, name: item.name, cost: item.cost, image: images.key_ori.key, categoryId: item.category, subCategoryId: item.subcategory };
+        const product = await createItem('createProduct', createProduct, object);
+        object.id = product.id;
 
-        await createItem('createProductCategory', createProductCategory, { productCategoryProductId: product.id, productCategoryCategoryId: item.category });
+        const category = await createItem('createProductCategory', createProductCategory, { productCategoryProductId: product.id, productCategoryCategoryId: item.category });
+        object.category = category.id;
 
         if (item.subcategory !== undefined && item.subcategory !== '') {
-            await createItem('createProductSubCategory', createProductSubCategory, { productSubCategoryProductId: product.id, productSubCategorySubcategoryId: item.subcategory })
+            const subcategory = await createItem('createProductSubCategory', createProductSubCategory, { productSubCategoryProductId: product.id, productSubCategorySubcategoryId: item.subcategory });
+            object.subcategory = subcategory.id;
         }
 
-        setItems(utilAddItem(items, item))
+        setItems(utilAddItem(items, object))
+
+        return object
     };
 
     const removeItem = item => setItems(utilRemoveItem(items, item));
@@ -57,7 +62,7 @@ const ProductProvider = ({ children }) => {
             }
 
             if (!didCancel) {
-                setItems(result.items.map(e => ({ cost: e.cost, name: e.name, image: e.image, id: e.id, deleted: e.deleted })))
+                setItems(result.items)
                 setNextToken(result.nextToken);
                 setItemsLoading(false);
             }
@@ -81,7 +86,7 @@ const ProductProvider = ({ children }) => {
         if (nextToken !== null) {
             try {
                 result = await getList('listProducts', listProducts, { nextToken: nextToken });
-                setItems([...items, ...result.items.map(e => ({ cost: e.cost, name: e.name, image: e.image, id: e.id, deleted: e.deleted }))])
+                setItems([...items, ...result.items])
                 setNextToken(result.nextToken);
             } catch (e) {
                 console.log(e)
