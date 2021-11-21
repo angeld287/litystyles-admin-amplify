@@ -26,7 +26,7 @@ export const getItemById = async (queryId, query, id) => {
     return list;
 }
 
-export const createItem = async (queryId, query, _input) => {
+export const createUpdateItem = async (queryId, query, _input) => {
     var createObject = {}
     try {
         const create = await API.graphql(graphqlOperation(query, { input: _input }));

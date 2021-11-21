@@ -30,14 +30,14 @@ const Products = () => {
     const categoryContext = useContext(CategoriesContext);
     const subCategoryContext = useContext(SubCategoriesContext);
 
-    const fields = {
-        setSubCategory,
-        setCategory,
-        setCost,
-        setImage,
-        setPackagingformat,
-        setName
-    }
+    const fields = [
+        { subCategory, setSubCategory },
+        { category, setCategory },
+        { cost, setCost },
+        { image, setImage },
+        { packagingformat, setPackagingformat },
+        { name, setName }
+    ]
 
     const openItem = (e) => {
         console.log(e)
@@ -101,8 +101,8 @@ const Products = () => {
     const inputs = [
         { label: "Nombre", type: "text", readOnly: (!edit && !add), onChange: e => setName(e.target.value), value: name },
         { label: "Costo", type: "number", readOnly: (!edit && !add), onChange: e => setCost(e.target.value), value: cost },
-        { label: "Categoria", items: categoryContext.items, type: "select", readOnly: (!edit && !add), onChange: _ => setCategory(_), getItemsNextToken: categoryContext.getItemsNextToken },
-        { label: "Sub Categoria", items: subCategoryContext.items, type: "select", readOnly: (!edit && !add), onChange: _ => setSubCategory(_), getItemsNextToken: subCategoryContext.getItemsNextToken },
+        { label: "Categoria", defaultValue: category, items: categoryContext.items, type: "select", readOnly: (!edit && !add), onChange: _ => setCategory(_), getItemsNextToken: categoryContext.getItemsNextToken },
+        { label: "Sub Categoria", defaultValue: subCategory, items: subCategoryContext.items, type: "select", readOnly: (!edit && !add), onChange: _ => setSubCategory(_), getItemsNextToken: subCategoryContext.getItemsNextToken },
         { label: "Imagen", type: "file", readOnly: (!edit && !add), onChange: _ => { setImage(_.target.files[0]) } },
         { label: "Formato de Envace", type: "text", readOnly: (!edit && !add), onChange: e => setPackagingformat(e.target.value), value: packagingformat },
     ];

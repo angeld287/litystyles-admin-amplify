@@ -9,9 +9,9 @@ const CustomModal = ({ fields, title, visible, onOk, onCancel, inputs, loading }
 
     useEffect(() => {
         if (!visible) {
-            const keys = Object.keys(fields);
-            keys.forEach(e => {
-                fields[e](null);
+            fields.forEach(e => {
+                const state = Object.keys(e);
+                e[state[1]](null);
             });
         }
     }, [visible]);
@@ -34,7 +34,7 @@ const CustomModal = ({ fields, title, visible, onOk, onCancel, inputs, loading }
                             if (_.type === 'text' || _.type === 'number')
                                 return <div key={"div_" + _k} className="field-modal-1"><CustomInput key={_k} label={_.label} type={_.type} readOnly={_.readOnly} onChange={_.onChange} value={_.value}></CustomInput></div>
                             if (_.type === 'select')
-                                return <div key={"div_" + _k} className="field-modal-1"><CustomSelect key={_k} className="slc-1" items={_.items} readOnly={_.readOnly} onChange={_.onChange} getItemsNextToken={_.getItemsNextToken} placeHolder={_.label} /></div>
+                                return <div key={"div_" + _k} className="field-modal-1"><CustomSelect key={_k} defaultValue={_.defaultValue} className="slc-1" items={_.items} readOnly={_.readOnly} onChange={_.onChange} getItemsNextToken={_.getItemsNextToken} placeHolder={_.label} /></div>
                             if (_.type === 'file')
                                 return <div key={"div_" + _k} className="field-modal-1"><CustomInputFile key={_k} label={_.label} type={_.type} className="slc-1" onChange={_.onChange} readOnly={_.readOnly} /></div>
                         })}
@@ -54,7 +54,7 @@ CustomModal.propTypes = {
     onCancel: PropTypes.func,
     inputs: PropTypes.array,
     loading: PropTypes.bool,
-    fields: PropTypes.object
+    fields: PropTypes.array
 }
 
 export default CustomModal;

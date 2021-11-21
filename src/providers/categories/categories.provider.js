@@ -4,7 +4,7 @@ import {
     getItems,
     utilAddItem, utilRemoveItem
 } from '../../utils/Items/Utils'
-import { getList, createItem } from "../../services/AppSync";
+import { getList, createUpdateItem } from "../../services/AppSync";
 import { listCategorys } from "../../graphql/queries";
 import { createCategory } from "../../graphql/mutations";
 
@@ -28,8 +28,8 @@ const CategorieProvider = ({ children }) => {
 
     const addItem = async item => {
         //const productObject = { packagingformat: packagingformat.current.value, name: name.current.value, cost: cost.current.value, image: _image.key };
-        //const product = await createItem('createProduct', createProduct, { productSubCategoryProductId: "", productSubCategorySubcategoryId: item.subcategory })
-        await createItem('createCategory', createCategory, { productCategoryProductId: 'p.data.createProduct.id', productCategoryCategoryId: 'category.current.value' });
+        //const product = await createUpdateItem('createProduct', createProduct, { productSubCategoryProductId: "", productSubCategorySubcategoryId: item.subcategory })
+        await createUpdateItem('createCategory', createCategory, { productCategoryProductId: 'p.data.createProduct.id', productCategoryCategoryId: 'category.current.value' });
 
         setItems(utilAddItem(items, item))
     };

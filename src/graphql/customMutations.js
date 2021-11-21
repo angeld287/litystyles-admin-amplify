@@ -1,145 +1,71 @@
-export const updateRequest = /* GraphQL */ `
-  mutation UpdateRequest(
-    $input: UpdateRequestInput!
-    $condition: ModelRequestConditionInput
-  ) {
-    updateRequest(input: $input, condition: $condition) {
-      id
-      companyId
-      resposible {
-        items {
-          id
-          createdAt
-        }
-        nextToken
-      }
-      product {
-        items {
-          id
-          cost
-          createdAt
-        }
-        nextToken
-      }
-      resposibleName
-      customerName
-      state
-      deleted
-      deletedAt
-      createdAt
-    }
-  }
-`;
+/*********************************
+*
+*   PRODUCTS CUSTOM MUTATIONS
+*
+**********************************/
 
-export const createEmployee = /* GraphQL */ `
-  mutation CreateEmployee(
-    $input: CreateEmployeeInput!
-    $condition: ModelEmployeeConditionInput
+export const createProduct = /* GraphQL */ `
+  mutation CreateProduct(
+    $input: CreateProductInput!
+    $condition: ModelProductConditionInput
   ) {
-    createEmployee(input: $input, condition: $condition) {
+    createProduct(input: $input, condition: $condition) {
       id
       name
-      username
-      officeId
-      services {
+      cost
+      category {
         items {
           id
-          service {
-            name
+          category {
             id
+            name
           }
         }
       }
-      request {
+      subcategory {
         items {
           id
-          createdAt
+          subcategory {
+            id
+            name
+          }
         }
-        nextToken
       }
-      deleted
-      deletedAt
-      createdAt
-      owner
+      categoryId
+      subCategoryId
+      image
+      packagingformat
     }
   }
 `;
 
-export const updateEmployee = /* GraphQL */ `
-  mutation UpdateEmployee(
-    $input: UpdateEmployeeInput!
-    $condition: ModelEmployeeConditionInput
+export const createProductCategory = /* GraphQL */ `
+  mutation CreateProductCategory(
+    $input: CreateProductCategoryInput!
+    $condition: ModelProductCategoryConditionInput
   ) {
-    updateEmployee(input: $input, condition: $condition) {
-      id
-      name
-      username
-      officeId
-      services {
-        items {
+      createProductCategory(input: $input, condition: $condition) {
+        id
+        category {
           id
-          service {
-            name
-            id
-          }
-        }
-        nextToken
+          name
       }
-      request {
-        items {
-          id
-          createdAt
-        }
-        nextToken
-      }
-      deleted
-      deletedAt
-      createdAt
-      owner
     }
   }
 `;
 
 
-export const updateRequestE = /* GraphQL */ `
-  mutation UpdateRequest(
-    $input: UpdateRequestInput!
-    $condition: ModelRequestConditionInput
+export const createProductSubCategory = /* GraphQL */ `
+  mutation CreateProductSubCategory(
+    $input: CreateProductSubCategoryInput!
+    $condition: ModelProductSubCategoryConditionInput
   ) {
-    updateRequest(input: $input, condition: $condition) {
-      id
-      companyId
-      resposible {
-        nextToken
+      createProductSubCategory(input: $input, condition: $condition) {
+        id
+        subcategory {
+          id
+          name
       }
-      service {
-        items {
-          service {
-            name
-          }
-        }
-      }
-      product {
-        nextToken
-      }
-      customer {
-        items {
-          customer {
-            name
-            phoneid
-            id
-          }
-        }
-      }
-      resposibleName
-      customerName
-      notified
-      state
-      paymentType
-      deleted
-      deletedAt
-      date
-      createdAt
     }
   }
 `;

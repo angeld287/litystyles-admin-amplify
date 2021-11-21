@@ -35,11 +35,7 @@ export const getItems = items =>
 
 export const setModuleStates = (stateFields, itemFields) => {
     const itemsf = Object.keys(itemFields);
-    const statesf = Object.keys(stateFields);
-    itemsf.forEach(_ => {
-        const ss = statesf.find(x => x.toLowerCase().includes(_.toLowerCase()));
-        if (ss !== undefined) {
-            stateFields[ss](itemFields[_])
-        }
+    stateFields.forEach(state => {
+        state[Object.keys(state)[1]](itemFields[itemsf.find(_ => _ === Object.keys(state)[0].toLowerCase())])
     });
 }
