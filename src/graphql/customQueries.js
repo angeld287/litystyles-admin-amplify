@@ -21,6 +21,7 @@ export const listProducts = /* GraphQL */ `
         packagingformat
         category {
           items {
+            id
             category {
               id
               name
@@ -29,6 +30,7 @@ export const listProducts = /* GraphQL */ `
         }
         subcategory {
           items {
+            id
             subcategory {
               id
               name

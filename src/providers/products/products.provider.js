@@ -28,24 +28,27 @@ const ProductProvider = ({ children }) => {
     const [itemsLoading, setItemsLoading] = useState(false);
 
     const addItem = async item => {
-        const images = await transformAndUploadImages("PRODUCTOS", item.name, item.image);
-        const object = { packagingformat: item.packagingformat, name: item.name, cost: item.cost, image: images.key_ori.key, categoryId: item.category, subCategoryId: item.subcategory };
-        const product = await createUpdateItem('createProduct', createProduct, object);
-        object.id = product.id;
+        let object = {};
+        try {
+            const images = await transformAndUploadImages("PRODUCTOS", item.name, item.image);
+            const input = { packagingformat: item.packagingformat, name: item.name, cost: item.cost, image: images.key_ori.key, categoryId: item.category, subCategoryId: item.subcategory };
+            object = await createUpdateItem('createProduct', createProduct, input);
 
-        const category = await createUpdateItem('createProductCategory', createProductCategory, { productCategoryProductId: product.id, productCategoryCategoryId: item.category });
-        object.category = category.id;
-        product.category.items.push(category)
+            const category = await createUpdateItem('createProductCategory', createProductCategory, { productCategoryProductId: object.id, productCategoryCategoryId: item.category });
+            object.category.items.push(category)
 
-        if (item.subcategory !== undefined && item.subcategory !== '') {
-            const subcategory = await createUpdateItem('createProductSubCategory', createProductSubCategory, { productSubCategoryProductId: product.id, productSubCategorySubcategoryId: item.subcategory });
-            object.subcategory = subcategory.id;
-            product.subcategory.items.push(subcategory)
+            if (item.subcategory !== undefined && item.subcategory !== '') {
+                const subcategory = await createUpdateItem('createProductSubCategory', createProductSubCategory, { productSubCategoryProductId: object.id, productSubCategorySubcategoryId: item.subcategory });
+                object.subcategory.items.push(subcategory)
+            }
+        } catch (e) {
+            console.log(e)
+            object = false
         }
 
-        console.log(product)
-
-        setItems(utilAddItem(items, object))
+        if (object !== false) {
+            setItems(utilAddItem(items, object))
+        }
 
         return object
     };

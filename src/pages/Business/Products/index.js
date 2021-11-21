@@ -1,4 +1,4 @@
-import React, { useState, useContext, useMemo, useEffect } from "react";
+import React, { useState, useContext, useMemo } from "react";
 import { Layout } from 'antd';
 import CustomButton from "../../../components/CustomButton";
 import CustomTable from '../../../components/CustomTable/CustomTable'
@@ -40,9 +40,10 @@ const Products = () => {
     ]
 
     const openItem = (e) => {
-        console.log(e)
+        //console.log(e)
         setModuleStates(fields, e)
         setEdit(true);
+        setAdd(false)
         setShow(true);
     }
 
@@ -73,18 +74,20 @@ const Products = () => {
 
         setLoading(true);
         try {
-            await addItem({ cost: cost, name: name, category: category, subCategory: subCategory, image: image, packagingformat: packagingformat });
+            if (add) {
+                await addItem({ cost: cost, name: name, category: category, subCategory: subCategory, image: image, packagingformat: packagingformat });
+            } else if (edit) {
+                console.log(edit)
+            }
         } catch (e) {
             Swal.fire('Error en Creacion', 'El proceso de creacion ha fallado, intentelo mas tarde', 'error');
         }
 
         setEdit(false);
-        setAdd(true);
+        setAdd(false);
         setLoading(false);
         setShow(false);
     }
-
-    useEffect(() => { })
 
     useMemo(() => {
         setProductItems(items.map(e => ({
@@ -110,7 +113,7 @@ const Products = () => {
     return (
         <Content>
             <h3 className="ttl-1" >Productos</h3>
-            <CustomButton className="btn-1" style="blue" intent="Primary" onClick={(e) => { e.preventDefault(); setAdd(true); setShow(true); }} Icon={PlusCircleOutlined}></CustomButton>
+            <CustomButton className="btn-1" style="blue" intent="Primary" onClick={(e) => { e.preventDefault(); setAdd(true); setEdit(false); setShow(true); }} Icon={PlusCircleOutlined}></CustomButton>
             <CustomTable headers={['Nombre', 'Costo', 'Acciones']} items={productItems} itemsLoading={itemsLoading} getItemsNextToken={getItemsNextToken} />
             {/* Modal para editar y ver detalle de productos */}
             <CustomModal fields={fields} loading={loading} title={edit ? 'Editar Producto' : add ? 'Agregar Producto' : 'Ver Producto'} visible={show} onOk={setProduct} onCancel={handleClose} inputs={inputs} />

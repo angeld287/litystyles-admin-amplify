@@ -15,8 +15,14 @@ const CustomSelect = ({ items, onChange, defaultValue, getItemsNextToken, placeH
         }
     }
 
-    const _dvalue = typeof defaultValue === "string" ? defaultValue : "";
-    console.log(defaultValue, placeHolder)
+    const _dvalue = typeof defaultValue === "string" ? defaultValue : () => {
+        if (typeof defaultValue === "object" && defaultValue !== null && defaultValue.items.length > 0) {
+            const obj = defaultValue.items[0];
+            return obj[Object.keys(obj).find(_ => obj[_].id !== undefined)].id;
+        } else {
+            return null;
+        }
+    };
 
     return <Select
         loading={loading}
