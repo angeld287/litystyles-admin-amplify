@@ -31,19 +31,25 @@ const ProductProvider = ({ children }) => {
     const addItem = async item => {
         let object = {};
         try {
+            const input = { packagingformat: item.packagingformat, name: item.name, cost: item.cost, categoryId: item.category, subCategoryId: item.subCategory };
+
             const images = await transformAndUploadImages("PRODUCTOS", item.name, item.image);
-            const input = { packagingformat: item.packagingformat, name: item.name, cost: item.cost, image: images.key_ori.key, categoryId: item.category, subCategoryId: item.subCategory };
+            if (images.key_ori !== false) {
+                input.image = images.key_ori.key;
+            }
+
             object = await createUpdateItem('createProduct', createProduct, input);
+            if (object !== false) {
+                const category = await createUpdateItem('createProductCategory', createProductCategory, { productCategoryProductId: object.id, productCategoryCategoryId: item.category });
+                object.category.items.push(category)
 
-            const category = await createUpdateItem('createProductCategory', createProductCategory, { productCategoryProductId: object.id, productCategoryCategoryId: item.category });
-            object.category.items.push(category)
-
-            if (item.subCategory !== undefined && item.subCategory !== '') {
-                const subcategory = await createUpdateItem('createProductSubCategory', createProductSubCategory, { productSubCategoryProductId: object.id, productSubCategorySubcategoryId: item.subCategory });
-                object.subCategory.items.push(subcategory)
+                if (item.subCategory !== undefined && item.subCategory !== '') {
+                    const subcategory = await createUpdateItem('createProductSubCategory', createProductSubCategory, { productSubCategoryProductId: object.id, productSubCategorySubcategoryId: item.subCategory });
+                    object.subcategory.items.push(subcategory)
+                }
             }
         } catch (e) {
-            console.log(e)
+            console.log("Error al crear un Producto: ", e)
             object = false
         }
 

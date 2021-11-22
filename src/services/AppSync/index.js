@@ -32,7 +32,7 @@ export const createUpdateItem = async (queryId, query, _input) => {
         const create = await API.graphql(graphqlOperation(query, { input: _input }));
         createObject = create.data[queryId];
     } catch (e) {
-        console.log(e);
+        console.log("Error en el metodo 'createUpdateItem' de AppSync: ", e);
         createObject = false;
     }
     return createObject

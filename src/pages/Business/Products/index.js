@@ -50,7 +50,7 @@ const Products = () => {
     }
 
     const setProduct = async () => {
-        console.log('sss')
+        let result = false;
         if (name === "") {
             Swal.fire('Campo Obligatorio', 'Favor completar el campo Nombre', 'error');
             return;
@@ -78,19 +78,24 @@ const Products = () => {
         setLoading(true);
         try {
             if (add) {
-                await addItem({ cost: cost, name: name, category: category, subCategory: subCategory, image: image, packagingformat: packagingformat });
+                result = await addItem({ cost: cost, name: name, category: category, subCategory: subCategory, image: image, packagingformat: packagingformat });
             } else if (edit) {
-                console.log('test');
-                await editItem({ id: id, cost: cost, name: name, category: category, subCategory: subCategory, image: image, packagingformat: packagingformat });
+                result = await editItem({ id: id, cost: cost, name: name, category: category, subCategory: subCategory, image: image, packagingformat: packagingformat });
             }
         } catch (e) {
-            Swal.fire('Error en Creacion', 'El proceso de creacion ha fallado, intentelo mas tarde', 'error');
+            Swal.fire('Creacion de Producto', 'El proceso de creacion ha fallado, intentelo mas tarde', 'error');
         }
 
         setEdit(false);
         setAdd(false);
         setLoading(false);
         setShow(false);
+
+        if (result !== false) {
+            Swal.fire('Creacion de Producto', 'El registro se ha creado correctamente', 'success');
+        } else {
+            Swal.fire('Creacion de Producto', 'El proceso de creacion ha fallado, intentelo mas tarde', 'error');
+        }
     }
 
     useMemo(() => {
