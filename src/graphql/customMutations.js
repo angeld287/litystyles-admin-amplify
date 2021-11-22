@@ -69,3 +69,68 @@ export const createProductSubCategory = /* GraphQL */ `
     }
   }
 `;
+
+export const updateProduct = /* GraphQL */ `
+  mutation UpdateProduct(
+    $input: UpdateProductInput!
+    $condition: ModelProductConditionInput
+  ) {
+    updateProduct(input: $input, condition: $condition) {
+      id
+      name
+      cost
+      category {
+        items {
+          id
+          category {
+            id
+            name
+          }
+        }
+      }
+      subcategory {
+        items {
+          id
+          subcategory {
+            id
+            name
+          }
+        }
+      }
+      categoryId
+      subCategoryId
+      image
+      packagingformat
+    }
+  }
+`;
+
+export const updateProductCategory = /* GraphQL */ `
+  mutation UpdateProductCategory(
+    $input: UpdateProductCategoryInput!
+    $condition: ModelProductCategoryConditionInput
+  ) {
+    updateProductCategory(input: $input, condition: $condition) {
+      id
+        category {
+          id
+          name
+      }
+    }
+  }
+`;
+
+export const updateProductSubCategory = /* GraphQL */ `
+  mutation UpdateProductSubCategory(
+    $input: UpdateProductSubCategoryInput!
+    $condition: ModelProductSubCategoryConditionInput
+  ) {
+    updateProductSubCategory(input: $input, condition: $condition) {
+      id
+      subcategory {
+        id
+        name
+      }
+    }
+  }
+`;

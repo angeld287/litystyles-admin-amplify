@@ -13,6 +13,7 @@ const Products = () => {
     const [edit, setEdit] = useState(false);
     const [add, setAdd] = useState(false);
 
+    const [id, setId] = useState('');
     const [cost, setCost] = useState('');
     const [name, setName] = useState('');
     const [packagingformat, setPackagingformat] = useState('');
@@ -26,7 +27,7 @@ const Products = () => {
 
     const handleClose = () => setShow(false);
 
-    const { items, addItem, getItemsNextToken, itemsLoading } = useContext(ProductContext);
+    const { items, addItem, editItem, getItemsNextToken, itemsLoading } = useContext(ProductContext);
     const categoryContext = useContext(CategoriesContext);
     const subCategoryContext = useContext(SubCategoriesContext);
 
@@ -41,6 +42,7 @@ const Products = () => {
 
     const openItem = (e) => {
         //console.log(e)
+        setId(e.id);
         setModuleStates(fields, e)
         setEdit(true);
         setAdd(false)
@@ -48,6 +50,7 @@ const Products = () => {
     }
 
     const setProduct = async () => {
+        console.log('sss')
         if (name === "") {
             Swal.fire('Campo Obligatorio', 'Favor completar el campo Nombre', 'error');
             return;
@@ -77,7 +80,8 @@ const Products = () => {
             if (add) {
                 await addItem({ cost: cost, name: name, category: category, subCategory: subCategory, image: image, packagingformat: packagingformat });
             } else if (edit) {
-                console.log(edit)
+                console.log('test');
+                await editItem({ id: id, cost: cost, name: name, category: category, subCategory: subCategory, image: image, packagingformat: packagingformat });
             }
         } catch (e) {
             Swal.fire('Error en Creacion', 'El proceso de creacion ha fallado, intentelo mas tarde', 'error');
