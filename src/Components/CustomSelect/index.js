@@ -18,7 +18,8 @@ const CustomSelect = ({ items, onChange, defaultValue, getItemsNextToken, placeH
     const _dvalue = typeof defaultValue === "string" ? defaultValue : () => {
         if (typeof defaultValue === "object" && defaultValue !== null && defaultValue.items.length > 0) {
             const obj = defaultValue.items[0];
-            return obj[Object.keys(obj).find(_ => obj[_].id !== undefined)].id;
+            const field = Object.keys(obj).find(_ => obj[_] !== null && obj[_].id !== undefined);
+            return field !== undefined ? obj[field].id : null
         } else {
             return null;
         }

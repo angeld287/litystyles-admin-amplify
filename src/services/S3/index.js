@@ -56,12 +56,22 @@ export const transformAndUploadImages = async (module, name, file) => {
 }
 
 export const deleteImages = async (key) => {
-    const arrayKey = key.split(".")
+    let key_1024_768, key_320_240, key_480_320, key_ori;
 
-    const key_320_240 = await removeImageFromStorage(arrayKey[0] + IMAGES.SIZE_320_240.name + arrayKey[1]);
-    const key_480_320 = await removeImageFromStorage(arrayKey[0] + IMAGES.SIZE_480_320.name + arrayKey[1]);
-    const key_1024_768 = await removeImageFromStorage(arrayKey[0] + IMAGES.SIZE_1024_768.name + arrayKey[1]);
-    const key_ori = await removeImageFromStorage(key);
+    try {
+        const arrayKey = key.split(".")
+
+        key_320_240 = await removeImageFromStorage(arrayKey[0] + IMAGES.SIZE_320_240.name + arrayKey[1]);
+        key_480_320 = await removeImageFromStorage(arrayKey[0] + IMAGES.SIZE_480_320.name + arrayKey[1]);
+        key_1024_768 = await removeImageFromStorage(arrayKey[0] + IMAGES.SIZE_1024_768.name + arrayKey[1]);
+        key_ori = await removeImageFromStorage(key);
+
+    } catch (e) {
+        key_320_240 = false;
+        key_480_320 = false;
+        key_1024_768 = false;
+        key_ori = false;
+    }
 
     return { key_320_240, key_480_320, key_1024_768, key_ori }
 }

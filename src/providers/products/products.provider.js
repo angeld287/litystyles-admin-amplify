@@ -31,7 +31,7 @@ const ProductProvider = ({ children }) => {
     const addItem = async item => {
         let object = {};
         try {
-            const input = { packagingformat: item.packagingformat, name: item.name, cost: item.cost, categoryId: item.category, subCategoryId: item.subCategory };
+            const input = { packagingformat: item.packagingformat, name: item.name, cost: item.cost, categoryId: item.category, subCategoryId: item.subcategory };
 
             const images = await transformAndUploadImages("PRODUCTOS", item.name, item.image);
             if (images.key_ori !== false) {
@@ -43,8 +43,8 @@ const ProductProvider = ({ children }) => {
                 const category = await createUpdateItem('createProductCategory', createProductCategory, { productCategoryProductId: object.id, productCategoryCategoryId: item.category });
                 object.category.items.push(category)
 
-                if (item.subCategory !== undefined && item.subCategory !== '') {
-                    const subcategory = await createUpdateItem('createProductSubCategory', createProductSubCategory, { productSubCategoryProductId: object.id, productSubCategorySubcategoryId: item.subCategory });
+                if (item.subcategory !== undefined && item.subcategory !== '') {
+                    const subcategory = await createUpdateItem('createProductSubCategory', createProductSubCategory, { productSubCategoryProductId: object.id, productSubCategorySubcategoryId: item.subcategory });
                     object.subcategory.items.push(subcategory)
                 }
             }
@@ -61,43 +61,50 @@ const ProductProvider = ({ children }) => {
     };
 
     const editItem = async item => {
-        let object = {};
+        let object, category, subcategory;
         let bedit = {}
 
         try {
-            const input = { id: item.id, packagingformat: item.packagingformat, name: item.name, cost: item.cost, image: item.image, categoryId: item.category, subCategoryId: item.subCategory };
+            const input = { id: item.id, packagingformat: item.packagingformat, name: item.name, cost: item.cost, image: item.image, categoryId: item.category, subCategoryId: item.subcategory };
             bedit = items.find(_ => _.id === input.id);
 
             if (bedit.image !== input.image) {
-                await deleteImages(input.image);
-                const images = await transformAndUploadImages("PRODUCTOS", item.name, item.image);
-                input.image = images.key_ori.key;
+                if (bedit.image !== null) await deleteImages(input.image);
+
+                const deleteResult = await deleteImages(input.image);
+                if (deleteResult.key_ori !== false) {
+                    const images = await transformAndUploadImages("PRODUCTOS", item.name, item.image);
+                    input.image = images.key_ori.key;
+                }
             }
 
             object = await createUpdateItem('updateProduct', updateProduct, input);
+            if (object !== false) {
+                if (bedit.category.items.length === 0) {
+                    category = await createUpdateItem('createProductCategory', createProductCategory, { productCategoryProductId: object.id, productCategoryCategoryId: item.category });
+                } else if (bedit.category.items[0].category.id !== item.category) {
+                    category = await createUpdateItem('updateProductCategory', updateProductCategory, { id: object.category.items[0].id, productCategoryCategoryId: item.category });
+                    if (category !== false) object.category.items.splice(0, 1);
+                }
 
-            if (item.category.items.length === 0) {
-                const category = await createUpdateItem('createProductCategory', createProductCategory, { productCategoryProductId: object.id, productCategoryCategoryId: item.category });
-                object.category.items.push(category)
-            } else if (bedit.category.items[0].id !== item.category.items[0].id) {
-                const category = await createUpdateItem('updateProductCategory', updateProductCategory, { id: object.category.items[0].id, productCategoryProductId: object.id, productCategoryCategoryId: item.category });
-                object.category.items.splice(0, 1);
-                object.category.items.push(category)
+                if (bedit.subcategory.items.length === 0) {
+                    subcategory = await createUpdateItem('createProductSubCategory', createProductSubCategory, { productSubCategoryProductId: object.id, productSubCategorySubcategoryId: item.subcategory });
+                } else if (bedit.subcategory.items[0].subcategory.id !== item.subcategory) {
+                    subcategory = await createUpdateItem('updateProductSubCategory', updateProductSubCategory, { id: object.subcategory.items[0].id, productSubCategorySubcategoryId: item.subcategory });
+                    if (subcategory !== false) object.subcategory.items.splice(0, 1);
+                }
             }
 
-            if (item.subCategory.items.length === 0) {
-                const subCategory = await createUpdateItem('createProductSubCategory', createProductSubCategory, { productSubCategoryProductId: object.id, productSubCategorySubcategoryId: item.subCategory });
-                object.subcategory.items.push(subCategory)
-            } else if (bedit.subCategory.items[0].id !== item.subCategory.items[0].id) {
-                const subCategory = await createUpdateItem('updateProductSubCategory', updateProductSubCategory, { id: object.subcategory.items[0].id, productSubCategoryProductId: object.id, productSubCategorySubcategoryId: item.subCategory });
-                object.subcategory.items.splice(0, 1);
-                object.subcategory.items.push(subCategory)
-            }
+            if (category !== false) object.category.items.push(category);
+            if (subcategory !== false) object.subcategory.items.push(subcategory);
+
+            if (category === false || subcategory === false) object = false;
 
         } catch (e) {
             console.log(e)
             object = false
         }
+        console.log(object);
 
         if (object !== false) {
             setItems(utilRemoveItem(items, bedit))

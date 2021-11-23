@@ -19,7 +19,7 @@ const Products = () => {
     const [packagingformat, setPackagingformat] = useState('');
     const [productItems, setProductItems] = useState([]);
     const [category, setCategory] = useState('');
-    const [subCategory, setSubCategory] = useState('');
+    const [subcategory, setSubcategory] = useState('');
     const [image, setImage] = useState(null);
     const [loading, setLoading] = useState(false);
 
@@ -32,7 +32,7 @@ const Products = () => {
     const subCategoryContext = useContext(SubCategoriesContext);
 
     const fields = [
-        { subCategory, setSubCategory },
+        { subcategory, setSubcategory },
         { category, setCategory },
         { cost, setCost },
         { image, setImage },
@@ -78,9 +78,9 @@ const Products = () => {
         setLoading(true);
         try {
             if (add) {
-                result = await addItem({ cost: cost, name: name, category: category, subCategory: subCategory, image: image, packagingformat: packagingformat });
+                result = await addItem({ cost: cost, name: name, category: category, subcategory: subcategory, image: image, packagingformat: packagingformat });
             } else if (edit) {
-                result = await editItem({ id: id, cost: cost, name: name, category: category, subCategory: subCategory, image: image, packagingformat: packagingformat });
+                result = await editItem({ id: id, cost: cost, name: name, category: category, subcategory: subcategory, image: image, packagingformat: packagingformat });
             }
         } catch (e) {
             Swal.fire('Creacion de Producto', 'El proceso de creacion ha fallado, intentelo mas tarde', 'error');
@@ -99,6 +99,7 @@ const Products = () => {
     }
 
     useMemo(() => {
+        console.log(items)
         setProductItems(items.map(e => ({
             nombre: e.name,
             costo: e.cost,
@@ -114,7 +115,7 @@ const Products = () => {
         { label: "Nombre", type: "text", readOnly: (!edit && !add), onChange: e => setName(e.target.value), value: name },
         { label: "Costo", type: "number", readOnly: (!edit && !add), onChange: e => setCost(e.target.value), value: cost },
         { label: "Categoria", defaultValue: category, items: categoryContext.items, type: "select", readOnly: (!edit && !add), onChange: _ => setCategory(_), getItemsNextToken: categoryContext.getItemsNextToken },
-        { label: "Sub Categoria", defaultValue: subCategory, items: subCategoryContext.items, type: "select", readOnly: (!edit && !add), onChange: _ => setSubCategory(_), getItemsNextToken: subCategoryContext.getItemsNextToken },
+        { label: "Sub Categoria", defaultValue: subcategory, items: subCategoryContext.items, type: "select", readOnly: (!edit && !add), onChange: _ => setSubcategory(_), getItemsNextToken: subCategoryContext.getItemsNextToken },
         { label: "Imagen", type: "file", readOnly: (!edit && !add), onChange: _ => { setImage(_.target.files[0]) } },
         { label: "Formato de Envace", type: "text", readOnly: (!edit && !add), onChange: e => setPackagingformat(e.target.value), value: packagingformat },
     ];
