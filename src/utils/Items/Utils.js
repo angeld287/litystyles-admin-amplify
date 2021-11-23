@@ -27,11 +27,7 @@ export const utilRemoveItem = (items, itemToRemove) => {
 export const filterItem = (items, item) =>
     items.filter(_item => _item.id !== item.id);
 
-export const getItems = items =>
-    items.reduce(
-        (accumalatedQuantity, items) => accumalatedQuantity + items.quantity,
-        0
-    );
+export const getItems = items => items.reduce((accumalatedQuantity, items) => accumalatedQuantity + items.quantity, 0);
 
 export const setModuleStates = (stateFields, itemFields) => {
     const itemsf = Object.keys(itemFields);

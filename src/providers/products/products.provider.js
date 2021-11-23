@@ -8,6 +8,7 @@ import { getList, createUpdateItem } from "../../services/AppSync";
 import { listProducts } from "../../graphql/customQueries";
 import { createProduct, createProductCategory, createProductSubCategory, updateProduct, updateProductCategory, updateProductSubCategory } from '../../graphql/customMutations'
 import { deleteImages, transformAndUploadImages } from "../../services/S3";
+import moment from "moment";
 
 export const ProductContext = createContext({
     hidden: true,
@@ -16,7 +17,7 @@ export const ProductContext = createContext({
     itemsLoading: false,
     addItem: () => { },
     editItem: () => { },
-    removeItem: () => { },
+    updateDeleteItem: () => { },
     itemsCount: 0,
     getItemsNextToken: () => { },
 });
@@ -65,7 +66,7 @@ const ProductProvider = ({ children }) => {
         let bedit = {}
 
         try {
-            const input = { id: item.id, packagingformat: item.packagingformat, name: item.name, cost: item.cost, image: item.image, categoryId: item.category, subCategoryId: item.subcategory };
+            const input = { id: item.id, packagingformat: item.packagingformat, name: item.name, cost: item.cost, image: item.image };
             bedit = items.find(_ => _.id === input.id);
 
             if (bedit.image !== input.image) {
@@ -81,17 +82,20 @@ const ProductProvider = ({ children }) => {
             object = await createUpdateItem('updateProduct', updateProduct, input);
             if (object !== false) {
                 if (bedit.category.items.length === 0) {
-                    category = await createUpdateItem('createProductCategory', createProductCategory, { productCategoryProductId: object.id, productCategoryCategoryId: item.category });
+                    category = await createUpdateItem('createProductCategory', createProductCategory, { productCategoryProductId: object.id, productCategoryCategoryId: item.category.items[0].category.id });
                 } else if (bedit.category.items[0].category.id !== item.category) {
-                    category = await createUpdateItem('updateProductCategory', updateProductCategory, { id: object.category.items[0].id, productCategoryCategoryId: item.category });
+                    category = await createUpdateItem('updateProductCategory', updateProductCategory, { id: object.category.items[0].id, productCategoryCategoryId: item.category.items[0].category.id });
                     if (category !== false) object.category.items.splice(0, 1);
                 }
 
-                if (bedit.subcategory.items.length === 0) {
-                    subcategory = await createUpdateItem('createProductSubCategory', createProductSubCategory, { productSubCategoryProductId: object.id, productSubCategorySubcategoryId: item.subcategory });
-                } else if (bedit.subcategory.items[0].subcategory.id !== item.subcategory) {
-                    subcategory = await createUpdateItem('updateProductSubCategory', updateProductSubCategory, { id: object.subcategory.items[0].id, productSubCategorySubcategoryId: item.subcategory });
-                    if (subcategory !== false) object.subcategory.items.splice(0, 1);
+                if (category !== false) {
+                    console.log(item.subcategory);
+                    if (bedit.subcategory.items.length === 0) {
+                        subcategory = await createUpdateItem('createProductSubCategory', createProductSubCategory, { productSubCategoryProductId: object.id, productSubCategorySubcategoryId: item.subcategory.items[0].subcategory.id });
+                    } else if (bedit.subcategory.items[0].subcategory.id !== item.subcategory) {
+                        subcategory = await createUpdateItem('updateProductSubCategory', updateProductSubCategory, { id: object.subcategory.items[0].id, productSubCategorySubcategoryId: item.subcategory.items[0].subcategory.id });
+                        if (subcategory !== false) object.subcategory.items.splice(0, 1);
+                    }
                 }
             }
 
@@ -105,6 +109,7 @@ const ProductProvider = ({ children }) => {
             object = false
         }
         console.log(object);
+        console.log(items);
 
         if (object !== false) {
             setItems(utilRemoveItem(items, bedit))
@@ -114,7 +119,29 @@ const ProductProvider = ({ children }) => {
         return object
     };
 
-    const removeItem = item => setItems(utilRemoveItem(items, item));
+    const updateDeleteItem = async (id) => {
+        let object, bedit;
+
+        try {
+            const input = { id: id, deleted: true, deletedAt: moment(new Date()).format('YYYY-MM-DDTHH:mm:ss.SSS') + 'Z' };
+            bedit = items.find(_ => _.id === input.id);
+
+            if (typeof bedit.image === "string" && bedit.image !== "") await deleteImages(input.image);
+
+            object = await createUpdateItem('updateProduct', updateProduct, input);
+
+        } catch (e) {
+            console.log(e);
+            object = false
+        }
+
+        if (object !== false) {
+            setItems(utilRemoveItem(items, bedit));
+        }
+
+        return object;
+    }
+
     const toggleHidden = () => setHidden(!hidden);
 
     useEffect(() => {
@@ -170,7 +197,7 @@ const ProductProvider = ({ children }) => {
                 items,
                 addItem,
                 editItem,
-                removeItem,
+                updateDeleteItem,
                 itemsCount,
                 getItemsNextToken,
                 itemsLoading,

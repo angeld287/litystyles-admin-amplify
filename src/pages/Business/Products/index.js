@@ -22,12 +22,13 @@ const Products = () => {
     const [subcategory, setSubcategory] = useState('');
     const [image, setImage] = useState(null);
     const [loading, setLoading] = useState(false);
+    const [dlBtnLoading, setDlBtnLoading] = useState('');
 
     const { Content } = Layout;
 
     const handleClose = () => setShow(false);
 
-    const { items, addItem, editItem, getItemsNextToken, itemsLoading } = useContext(ProductContext);
+    const { items, addItem, editItem, updateDeleteItem, getItemsNextToken, itemsLoading } = useContext(ProductContext);
     const categoryContext = useContext(CategoriesContext);
     const subCategoryContext = useContext(SubCategoriesContext);
 
@@ -83,7 +84,7 @@ const Products = () => {
                 result = await editItem({ id: id, cost: cost, name: name, category: category, subcategory: subcategory, image: image, packagingformat: packagingformat });
             }
         } catch (e) {
-            Swal.fire('Creacion de Producto', 'El proceso de creacion ha fallado, intentelo mas tarde', 'error');
+            Swal.fire((add ? 'Creacion' : 'Edicion') + ' de Producto', 'El proceso de ' + (add ? 'creacion' : 'edicion') + ' ha fallado, intentelo mas tarde', 'error');
         }
 
         setEdit(false);
@@ -92,24 +93,55 @@ const Products = () => {
         setShow(false);
 
         if (result !== false) {
-            Swal.fire('Creacion de Producto', 'El registro se ha creado correctamente', 'success');
+            Swal.fire((add ? 'Creacion' : 'Edicion') + ' de Producto', 'El proceso ha finalizado correctamente', 'success');
         } else {
-            Swal.fire('Creacion de Producto', 'El proceso de creacion ha fallado, intentelo mas tarde', 'error');
+            Swal.fire((add ? 'Creacion' : 'Edicion') + ' de Producto', 'El proceso de ' + (add ? 'creacion' : 'edicion') + ' ha fallado, intentelo mas tarde', 'error');
         }
+    }
+
+    const alertDeleteItem = async (id) => {
+        console.log(id)
+        const result = await Swal.fire({ title: "Esta seguro que desea eliminar el producto?", icon: "warning", showCancelButton: true, dangerMode: true });
+        if (result.isConfirmed && !result.isDenied) {
+            await deleteItem(id);
+        }
+    }
+
+    const deleteItem = async (id) => {
+        let result = false;
+        setDlBtnLoading(id);
+
+        try {
+            await updateDeleteItem(id);
+            result = true;
+        } catch (error) {
+            result = false;
+        }
+
+        setDlBtnLoading('');
+
+        if (result === true) {
+            Swal.fire('Eliminacion de Producto', 'El proceso ha finalizado correctamente', 'success');
+        } else {
+            Swal.fire('Eliminacion de Producto', 'El proceso de eliminacion ha fallado, intentelo mas tarde', 'error');
+        }
+
     }
 
     useMemo(() => {
         console.log(items)
-        setProductItems(items.map(e => ({
-            nombre: e.name,
-            costo: e.cost,
-            acciones: [
-                { id: e.id, color: 'blue', icon: EditOutlined, onClicAction: () => { openItem(e) } },
-                { id: e.id, color: 'red', icon: DeleteOutlined, onClicAction: () => { console.log(e.id) } }
-            ],
-            id: e.id
-        })))
-    }, [items]);
+        if (items !== undefined) {
+            setProductItems(items.map(e => ({
+                nombre: e.name,
+                costo: e.cost,
+                acciones: [
+                    { id: e.id, color: 'blue', icon: EditOutlined, onClicAction: () => { openItem(e) } },
+                    { id: e.id, color: 'red', icon: DeleteOutlined, onClicAction: () => { alertDeleteItem(e.id) }, loading: dlBtnLoading === e.id }
+                ],
+                id: e.id
+            })))
+        }
+    }, [items, dlBtnLoading]);
 
     const inputs = [
         { label: "Nombre", type: "text", readOnly: (!edit && !add), onChange: e => setName(e.target.value), value: name },
