@@ -129,14 +129,15 @@ const ProductProvider = ({ children }) => {
             if (typeof bedit.image === "string" && bedit.image !== "") await deleteImages(input.image);
 
             object = await createUpdateItem('updateProduct', updateProduct, input);
-
+            console.log(object);
         } catch (e) {
             console.log(e);
             object = false
         }
 
         if (object !== false) {
-            setItems(utilRemoveItem(items, bedit));
+            //setItems(utilRemoveItem(items, bedit));
+            console.log('entro al if');
         }
 
         return object;
@@ -157,7 +158,7 @@ const ProductProvider = ({ children }) => {
             }
 
             if (!didCancel) {
-                setItems(result.items)
+                setItems(result.items.filter(_ => _.deleted === null || _.deleted === false))
                 setNextToken(result.nextToken);
                 setItemsLoading(false);
             }

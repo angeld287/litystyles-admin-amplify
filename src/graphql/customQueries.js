@@ -17,6 +17,7 @@ export const listProducts = /* GraphQL */ `
         subCategoryId
         name
         image
+        deleted
         id
         packagingformat
         category {

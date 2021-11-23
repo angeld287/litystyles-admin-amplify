@@ -34,6 +34,7 @@ export const createProduct = /* GraphQL */ `
       categoryId
       subCategoryId
       image
+      deleted
       packagingformat
     }
   }
@@ -100,6 +101,7 @@ export const updateProduct = /* GraphQL */ `
       categoryId
       subCategoryId
       image
+      deleted
       packagingformat
     }
   }
