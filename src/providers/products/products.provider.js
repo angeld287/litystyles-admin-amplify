@@ -152,7 +152,7 @@ const ProductProvider = ({ children }) => {
             try {
                 result = await getList('listProducts', listProducts, { filter: { deleted: { ne: true } } });
                 while (result.items.length < 10 && result.nextToken !== null) {
-                    result = await getList('listProducts', listProducts, { filter: { deleted: { ne: true } }, nextToken: nextToken });
+                    result = await getList('listProducts', listProducts, { filter: { deleted: { ne: true } }, nextToken: result.nextToken });
                 }
             } catch (e) {
                 console.log(e)
