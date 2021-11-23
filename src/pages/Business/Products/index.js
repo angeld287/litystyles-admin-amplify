@@ -100,7 +100,6 @@ const Products = () => {
     }
 
     const alertDeleteItem = async (id) => {
-        console.log(id)
         const result = await Swal.fire({ title: "Esta seguro que desea eliminar el producto?", icon: "warning", showCancelButton: true, dangerMode: true });
         if (result.isConfirmed && !result.isDenied) {
             await deleteItem(id);
@@ -129,7 +128,6 @@ const Products = () => {
     }
 
     useMemo(() => {
-        console.log(items)
         if (items !== undefined) {
             setProductItems(items.map(e => ({
                 nombre: e.name,

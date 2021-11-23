@@ -14,12 +14,10 @@ export const putImageOnStorage = async (module, name, file) => {
                 console.log('Solo se puede agregar un archivo tipo imagen.');
                 return false;
             }
-
         } else {
             console.log('No hay imagen seleccionada.');
             return false
         }
-
     } catch (e) {
         console.log(e);
         return false

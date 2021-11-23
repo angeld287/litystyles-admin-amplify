@@ -129,15 +129,13 @@ const ProductProvider = ({ children }) => {
             if (typeof bedit.image === "string" && bedit.image !== "") await deleteImages(input.image);
 
             object = await createUpdateItem('updateProduct', updateProduct, input);
-            console.log(object);
         } catch (e) {
             console.log(e);
             object = false
         }
 
         if (object !== false) {
-            //setItems(utilRemoveItem(items, bedit));
-            console.log('entro al if');
+            setItems(utilRemoveItem(items, bedit));
         }
 
         return object;
@@ -152,20 +150,21 @@ const ProductProvider = ({ children }) => {
             var result = [];
 
             try {
-                result = await getList('listProducts', listProducts);
+                result = await getList('listProducts', listProducts, { filter: { deleted: { ne: true } } });
+                while (result.items.length < 10 && result.nextToken !== null) {
+                    result = await getList('listProducts', listProducts, { filter: { deleted: { ne: true } }, nextToken: nextToken });
+                }
             } catch (e) {
                 console.log(e)
             }
-
             if (!didCancel) {
-                setItems(result.items.filter(_ => _.deleted === null || _.deleted === false))
+                console.log(result.items);
+                setItems(result.items)
                 setNextToken(result.nextToken);
                 setItemsLoading(false);
             }
         };
-
         fetch();
-
         return () => {
             didCancel = true;
             setItemsLoading(false);
@@ -181,7 +180,7 @@ const ProductProvider = ({ children }) => {
 
         if (nextToken !== null) {
             try {
-                result = await getList('listProducts', listProducts, { nextToken: nextToken });
+                result = await getList('listProducts', listProducts, { filter: { deleted: { ne: true } }, nextToken: nextToken });
                 setItems([...items, ...result.items.filter(_ => items.find(x => x.id === _.id) === undefined)])
                 setNextToken(result.nextToken);
             } catch (e) {
