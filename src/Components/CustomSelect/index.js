@@ -15,12 +15,22 @@ const CustomSelect = ({ items, onChange, defaultValue, getItemsNextToken, placeH
         }
     }
 
+    const _dvalue = typeof defaultValue === "string" ? defaultValue : () => {
+        if (typeof defaultValue === "object" && defaultValue !== null && defaultValue.items.length > 0) {
+            const obj = defaultValue.items[0];
+            const field = Object.keys(obj).find(_ => obj[_] !== null && obj[_].id !== undefined);
+            return field !== undefined ? obj[field].id : null
+        } else {
+            return null;
+        }
+    };
+
     return <Select
         loading={loading}
         showSearch
         style={{ width: '100%' }}
         placeholder={placeHolder !== undefined ? placeHolder : 'Nombre del Campo'}
-        defaultValue={defaultValue !== undefined ? defaultValue : null}
+        defaultValue={_dvalue !== undefined && _dvalue !== "" ? _dvalue : null}
         defaultActiveFirstOption={false}
         //showArrow={false}
         onChange={onChange}
@@ -39,7 +49,7 @@ const CustomSelect = ({ items, onChange, defaultValue, getItemsNextToken, placeH
 
 CustomSelect.propTypes = {
     items: PropTypes.array,
-    defaultValue: PropTypes.string,
+    defaultValue: PropTypes.any,
     onChange: PropTypes.func,
     placeHolder: PropTypes.string,
     loading: PropTypes.bool,

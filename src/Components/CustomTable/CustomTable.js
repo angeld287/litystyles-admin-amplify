@@ -18,7 +18,7 @@ const CustomTable = ({ headers, items, getItemsNextToken, itemsLoading }) => {
                 render: (btns) => (
                     <Space size="middle">
                         {
-                            btns.map(_ => <CustomButton color={_.color} Icon={_.icon} key={_.id + _.icon} onClick={_.onClicAction} />)
+                            btns.map(_ => <CustomButton color={_.color} Icon={_.icon} key={_.id + _.icon} onClick={_.onClicAction} loading={_.loading === undefined ? false : _.loading} />)
                         }
                     </Space>
                 ),
