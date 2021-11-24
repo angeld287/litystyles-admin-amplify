@@ -20,6 +20,7 @@ export const listProducts = /* GraphQL */ `
         deleted
         id
         packagingformat
+        createdAt
         category {
           items {
             id
@@ -38,6 +39,46 @@ export const listProducts = /* GraphQL */ `
             }
           }
         }
+      }
+      nextToken
+    }
+  }
+`;
+
+
+/*********************************
+*
+*   CATEGORIES CUSTOM QUERIES
+*
+**********************************/
+
+export const listCategorys = /* GraphQL */ `
+  query ListCategorys(
+    $filter: ModelCategoryFilterInput
+    $filterSub: ModelSubCategoryFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listCategorys(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        name
+        subcategories(filter: $filterSub) {
+          items {
+            name
+            code
+            deleted
+            categoryName
+            id
+          }
+          nextToken
+        }
+        typeName
+        code
+        deleted
+        deletedAt
+        createdAt
+        owner
       }
       nextToken
     }

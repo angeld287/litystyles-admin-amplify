@@ -1,9 +1,9 @@
-import React, { useState, useContext, useMemo } from "react";
+import React, { useState, useContext, useMemo, useEffect } from "react";
 import { Layout } from 'antd';
 import CustomButton from "../../../components/CustomButton";
 import CustomTable from '../../../components/CustomTable/CustomTable'
 import CustomModal from "../../../components/CustomModal";
-import { ProductContext, CategoriesContext, SubCategoriesContext } from "../../../providers";
+import { ProductContext, CategoriesContext } from "../../../providers";
 import { DeleteOutlined, EditOutlined, PlusCircleOutlined } from '@ant-design/icons';
 import Swal from "sweetalert2";
 import { setModuleStates } from "../../../utils/Items/Utils";
@@ -20,6 +20,7 @@ const Products = () => {
     const [productItems, setProductItems] = useState([]);
     const [category, setCategory] = useState('');
     const [subcategory, setSubcategory] = useState('');
+    const [subcategoryItems, setSubcategoryItems] = useState([]);
     const [image, setImage] = useState(null);
     const [loading, setLoading] = useState(false);
     const [dlBtnLoading, setDlBtnLoading] = useState('');
@@ -30,7 +31,6 @@ const Products = () => {
 
     const { items, addItem, editItem, updateDeleteItem, getItemsNextToken, itemsLoading } = useContext(ProductContext);
     const categoryContext = useContext(CategoriesContext);
-    const subCategoryContext = useContext(SubCategoriesContext);
 
     const fields = [
         { subcategory, setSubcategory },
@@ -42,7 +42,8 @@ const Products = () => {
     ]
 
     const openItem = (e) => {
-        //console.log(e)
+        //console.log(e, )
+        //setCategory(e.category.items[0].category.id)
         setId(e.id);
         setModuleStates(fields, e)
         setEdit(true);
@@ -141,11 +142,22 @@ const Products = () => {
         }
     }, [items, dlBtnLoading]);
 
+    useEffect(() => {
+        if (category !== '' && category !== null && category !== undefined) {
+            const cat = typeof category === "string" ? category : category.items[0].category.id;
+            const categoryObj = categoryContext.items.find(_ => _.id === cat);
+            setSubcategoryItems(categoryObj.subcategories.items)
+        } else {
+            setSubcategoryItems([])
+        }
+    }, [category]);
+
+
     const inputs = [
         { label: "Nombre", type: "text", readOnly: (!edit && !add), onChange: e => setName(e.target.value), value: name },
         { label: "Costo", type: "number", readOnly: (!edit && !add), onChange: e => setCost(e.target.value), value: cost },
-        { label: "Categoria", defaultValue: category, items: categoryContext.items, type: "select", readOnly: (!edit && !add), onChange: _ => setCategory(_), getItemsNextToken: categoryContext.getItemsNextToken },
-        { label: "Sub Categoria", defaultValue: subcategory, items: subCategoryContext.items, type: "select", readOnly: (!edit && !add), onChange: _ => setSubcategory(_), getItemsNextToken: subCategoryContext.getItemsNextToken },
+        { label: "Categoria", defaultValue: category, items: categoryContext.items.filter(_ => _.typeName === "Product"), type: "select", readOnly: (!edit && !add), onChange: _ => setCategory(_), getItemsNextToken: categoryContext.getItemsNextToken },
+        { label: "Sub Categoria", defaultValue: subcategory, items: subcategoryItems, type: "select", readOnly: (!edit && !add), onChange: _ => setSubcategory(_) },
         { label: "Imagen", type: "file", readOnly: (!edit && !add), onChange: _ => { setImage(_.target.files[0]) } },
         { label: "Formato de Envace", type: "text", readOnly: (!edit && !add), onChange: e => setPackagingformat(e.target.value), value: packagingformat },
     ];

@@ -2,7 +2,7 @@ import React, { createContext, useEffect, useState } from "react";
 import PropTypes from 'prop-types'
 import {
     getItems,
-    utilAddItem, utilRemoveItem
+    utilAddItem, utilRemoveItem, utilEditItem
 } from '../../utils/Items/Utils'
 import { getList, createUpdateItem } from "../../services/AppSync";
 import { listProducts } from "../../graphql/customQueries";
@@ -83,17 +83,16 @@ const ProductProvider = ({ children }) => {
             if (object !== false) {
                 if (bedit.category.items.length === 0) {
                     category = await createUpdateItem('createProductCategory', createProductCategory, { productCategoryProductId: object.id, productCategoryCategoryId: item.category.items[0].category.id });
-                } else if (bedit.category.items[0].category.id !== item.category) {
-                    category = await createUpdateItem('updateProductCategory', updateProductCategory, { id: object.category.items[0].id, productCategoryCategoryId: item.category.items[0].category.id });
+                } else if (typeof item.category === "string" && bedit.category.items[0].category.id !== item.category) {
+                    category = await createUpdateItem('updateProductCategory', updateProductCategory, { id: object.category.items[0].id, productCategoryCategoryId: item.category });
                     if (category !== false) object.category.items.splice(0, 1);
                 }
 
                 if (category !== false) {
-                    console.log(item.subcategory);
                     if (bedit.subcategory.items.length === 0) {
                         subcategory = await createUpdateItem('createProductSubCategory', createProductSubCategory, { productSubCategoryProductId: object.id, productSubCategorySubcategoryId: item.subcategory.items[0].subcategory.id });
-                    } else if (bedit.subcategory.items[0].subcategory.id !== item.subcategory) {
-                        subcategory = await createUpdateItem('updateProductSubCategory', updateProductSubCategory, { id: object.subcategory.items[0].id, productSubCategorySubcategoryId: item.subcategory.items[0].subcategory.id });
+                    } else if (typeof item.subcategory === "string" && bedit.subcategory.items[0].subcategory.id !== item.subcategory) {
+                        subcategory = await createUpdateItem('updateProductSubCategory', updateProductSubCategory, { id: object.subcategory.items[0].id, productSubCategorySubcategoryId: item.subcategory });
                         if (subcategory !== false) object.subcategory.items.splice(0, 1);
                     }
                 }
@@ -108,12 +107,9 @@ const ProductProvider = ({ children }) => {
             console.log(e)
             object = false
         }
-        console.log(object);
-        console.log(items);
 
         if (object !== false) {
-            setItems(utilRemoveItem(items, bedit))
-            setItems(utilAddItem(items, object))
+            setItems(utilEditItem(items, object))
         }
 
         return object
@@ -148,18 +144,21 @@ const ProductProvider = ({ children }) => {
         setItemsLoading(true);
         const fetch = async () => {
             var result = [];
+            var _items = [];
 
             try {
                 result = await getList('listProducts', listProducts, { filter: { deleted: { ne: true } } });
-                while (result.items.length < 10 && result.nextToken !== null) {
+                _items = result.items;
+                while (_items.length < 10 && result.nextToken !== null) {
                     result = await getList('listProducts', listProducts, { filter: { deleted: { ne: true } }, nextToken: result.nextToken });
+                    _items = [..._items, ...result.items];
                 }
             } catch (e) {
                 console.log(e)
             }
             if (!didCancel) {
-                console.log(result.items);
-                setItems(result.items)
+                //.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))
+                setItems(_items)
                 setNextToken(result.nextToken);
                 setItemsLoading(false);
             }

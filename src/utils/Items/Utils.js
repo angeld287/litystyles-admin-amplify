@@ -2,7 +2,6 @@ export const utilAddItem = (items, itemToAdd) => {
     const existingItem = items.find(
         _item => _item.id === itemToAdd.id
     );
-
     if (existingItem) {
         return items.map(_item =>
             _item.id === itemToAdd.id
@@ -11,7 +10,7 @@ export const utilAddItem = (items, itemToAdd) => {
         );
     }
 
-    return [...items, itemToAdd];
+    return [itemToAdd, ...items];
 };
 
 export const utilRemoveItem = (items, itemToRemove) => {
@@ -21,6 +20,20 @@ export const utilRemoveItem = (items, itemToRemove) => {
     if (existingItem !== -1) {
         return items.filter(_item => _item.id !== itemToRemove.id);
     }
+};
+
+export const utilEditItem = (items, itemToEdit) => {
+    var _items = []
+    const existingItem = items.findIndex(
+        _item => _item.id === itemToEdit.id
+    );
+    if (existingItem !== -1) {
+        _items = items.filter(_item => _item.id !== itemToEdit.id);
+    } else {
+        return [..._items, itemToEdit];
+    }
+
+    return [..._items.slice(0, existingItem), itemToEdit, ..._items.slice(existingItem)];
 };
 
 export const filterItem = (items, item) =>

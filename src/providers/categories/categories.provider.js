@@ -5,7 +5,7 @@ import {
     utilAddItem, utilRemoveItem
 } from '../../utils/Items/Utils'
 import { getList, createUpdateItem } from "../../services/AppSync";
-import { listCategorys } from "../../graphql/queries";
+import { listCategorys } from "../../graphql/customQueries";
 import { createCategory } from "../../graphql/mutations";
 
 export const CategoriesContext = createContext({
@@ -42,15 +42,15 @@ const CategorieProvider = ({ children }) => {
         setItemsLoading(true);
         const fetch = async () => {
             var result = [];
-
+            const nonDeleted = { deleted: { ne: true } };
             try {
-                result = await getList('listCategorys', listCategorys);
+                result = await getList('listCategorys', listCategorys, { filter: nonDeleted, filterSub: nonDeleted });
             } catch (e) {
                 console.log(e)
             }
 
             if (!didCancel) {
-                setItems(result.items.map(e => ({ code: e.code, name: e.name, typeName: e.typeName, id: e.id, deleted: e.deleted })))
+                setItems(result.items)
                 setNextToken(result.nextToken);
                 setItemsLoading(false);
             }
@@ -73,8 +73,8 @@ const CategorieProvider = ({ children }) => {
 
         if (nextToken !== null) {
             try {
-                result = await getList('listCategorys', listCategorys, { nextToken: nextToken });
-                setItems([...items, ...result.items.map(e => ({ code: e.code, name: e.name, typeName: e.typeName, id: e.id, deleted: e.deleted }))])
+                result = await getList('listCategorys', listCategorys, { filter: { deleted: { ne: true } }, nextToken: nextToken });
+                setItems([...items, ...result.items])
                 setNextToken(result.nextToken);
             } catch (e) {
                 console.log(e)

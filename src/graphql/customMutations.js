@@ -36,6 +36,7 @@ export const createProduct = /* GraphQL */ `
       image
       deleted
       packagingformat
+      createdAt
     }
   }
 `;
@@ -103,6 +104,7 @@ export const updateProduct = /* GraphQL */ `
       image
       deleted
       packagingformat
+      createdAt
     }
   }
 `;
