@@ -16,7 +16,7 @@ const Business = () => {
                         <div className="site-layout-content"><ErrorBoundary><Products /></ErrorBoundary></div>
                     </Col>
                     <Col span={12}>
-                        <div className="site-layout-content"><Services /></div>
+                        <div className="site-layout-content"><ErrorBoundary><Services /></ErrorBoundary></div>
                     </Col>
                 </Row>
             </Content>
