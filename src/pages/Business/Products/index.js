@@ -101,7 +101,7 @@ const Products = () => {
     }
 
     const alertDeleteItem = async (id) => {
-        const result = await Swal.fire({ title: "Esta seguro que desea eliminar el producto?", icon: "warning", showCancelButton: true, dangerMode: true });
+        const result = await Swal.fire({ title: "Esta seguro que desea eliminar el producto?", icon: "warning", showCancelButton: true });
         if (result.isConfirmed && !result.isDenied) {
             await deleteItem(id);
         }

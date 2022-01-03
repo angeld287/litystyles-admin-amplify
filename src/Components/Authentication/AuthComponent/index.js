@@ -4,7 +4,8 @@ import { AmplifyAuthenticator } from '@aws-amplify/ui-react';
 import { AuthState, onAuthUIStateChange } from '@aws-amplify/ui-components';
 import { Auth } from 'aws-amplify';
 
-import currentUser from '../../../context/currentUser/currentUser.Context';
+import { currentUser } from '../../../providers';
+
 import PropTypes from 'prop-types'
 
 export const LogOut = async () => {
@@ -23,24 +24,19 @@ const AuthComponent = ({ children }) => {
   React.useEffect(() => {
     return onAuthUIStateChange((nextAuthState, authData) => {
       setAuthState(nextAuthState);
-
       if (nextAuthState === AuthState.SignedIn) {
         userContext.onUserSignIn(authData);
       } else if (nextAuthState === AuthState.SignIn) {
         userContext.onUserLogOut();
       }
-
     });
   }, []);
 
   return authState === AuthState.SignedIn && userContext.user ? (
-    <div className="App">
+    (<div className="App">
       {children}
-    </div>
-  ) : (
-    <AmplifyAuthenticator />
-  );
-
+    </div>)
+  ) : (<AmplifyAuthenticator />)
 }
 
 AuthComponent.propTypes = {
