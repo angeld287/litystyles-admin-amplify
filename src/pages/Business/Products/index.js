@@ -42,13 +42,17 @@ const Products = () => {
     ]
 
     const openItem = (e) => {
-        //console.log(e, )
-        //setCategory(e.category.items[0].category.id)
-        setId(e.id);
-        setModuleStates(fields, e)
-        setEdit(true);
-        setAdd(false)
-        setShow(true);
+        try {
+            //console.log(e, )
+            //setCategory(e.category.items[0].category.id)
+            setId(e.id);
+            setModuleStates(fields, e)
+            setEdit(true);
+            setAdd(false)
+            setShow(true);
+        } catch (error) {
+            throw new Error('Products - 01: ', error)
+        }
     }
 
     const setProduct = async () => {
@@ -101,9 +105,13 @@ const Products = () => {
     }
 
     const alertDeleteItem = async (id) => {
-        const result = await Swal.fire({ title: "Esta seguro que desea eliminar el producto?", icon: "warning", showCancelButton: true });
-        if (result.isConfirmed && !result.isDenied) {
-            await deleteItem(id);
+        try {
+            const result = await Swal.fire({ title: "Esta seguro que desea eliminar el producto?", icon: "warning", showCancelButton: true });
+            if (result.isConfirmed && !result.isDenied) {
+                await deleteItem(id);
+            }
+        } catch (error) {
+            throw new Error('Products - 02: ', error)
         }
     }
 
@@ -125,31 +133,39 @@ const Products = () => {
         } else {
             Swal.fire('Eliminacion de Producto', 'El proceso de eliminacion ha fallado, intentelo mas tarde', 'error');
         }
-
     }
 
     useMemo(() => {
-        if (items !== undefined) {
-            setProductItems(items.map(e => ({
-                nombre: e.name,
-                costo: e.cost,
-                acciones: [
-                    { id: e.id, color: 'blue', icon: EditOutlined, onClicAction: () => { openItem(e) } },
-                    { id: e.id, color: 'red', icon: DeleteOutlined, onClicAction: () => { alertDeleteItem(e.id) }, loading: dlBtnLoading === e.id }
-                ],
-                id: e.id
-            })))
+        try {
+            if (items !== undefined) {
+                setProductItems(items.map(e => ({
+                    nombre: e.name,
+                    costo: e.cost,
+                    acciones: [
+                        { id: e.id, color: 'blue', icon: EditOutlined, onClicAction: () => { openItem(e) } },
+                        { id: e.id, color: 'red', icon: DeleteOutlined, onClicAction: () => { alertDeleteItem(e.id) }, loading: dlBtnLoading === e.id }
+                    ],
+                    id: e.id
+                })))
+            }
+        } catch (error) {
+            throw new Error('Products - 03: ', error)
         }
     }, [items, dlBtnLoading]);
 
     useEffect(() => {
-        if (category !== '' && category !== null && category !== undefined) {
-            const cat = typeof category === "string" ? category : category.items[0].category.id;
-            const categoryObj = categoryContext.items.find(_ => _.id === cat);
-            setSubcategoryItems(categoryObj.subcategories.items)
-        } else {
-            setSubcategoryItems([])
+        try {
+            if (category !== '' && category !== null && category !== undefined) {
+                const cat = typeof category === "string" ? category : category.items[0].category.id;
+                const categoryObj = categoryContext.items.find(_ => _.id === cat);
+                setSubcategoryItems(categoryObj.subcategories.items)
+            } else {
+                setSubcategoryItems([])
+            }
+        } catch (error) {
+            throw new Error('Products - 04', error)
         }
+
     }, [category]);
 
 
