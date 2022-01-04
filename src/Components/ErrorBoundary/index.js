@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from 'prop-types'
+import { BugFilled } from '@ant-design/icons'
 
 class ErrorBoundary extends React.Component {
     constructor(props) {
@@ -10,14 +11,19 @@ class ErrorBoundary extends React.Component {
     componentDidCatch(error, errorInfo) {
         // También puedes registrar el error en un servicio de reporte de errores
         //logErrorToMyService(error, errorInfo);
-        console.log(error, errorInfo);
+        console.log('componentDidCatch', error, errorInfo);
         this.setState({ hasError: true })
     }
 
     render() {
         if (this.state.hasError) {
             // Puedes renderizar cualquier interfaz de repuesto
-            return <h1>Something went wrong.</h1>;
+            return (
+                <>
+                    <BugFilled style={{ fontSize: '50px', color: 'red' }} />;
+                    <h1>Something went wrong.</h1>
+                </>
+            );
         }
 
         return this.props.children;

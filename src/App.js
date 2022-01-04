@@ -1,5 +1,5 @@
-import React from 'react';
-import currentUser from './context/currentUser/currentUser.Context'
+import React, { useContext } from 'react';
+import CurrentUserProvider from './providers/currentUser/currentUser.provider'
 import communContext from './context/communContex/commun.context';
 
 import Amplify from 'aws-amplify';
@@ -9,41 +9,29 @@ import aws_exports from './aws-exports';
 import AuthComponent from './components/Authentication/AuthComponent';
 import AppRoutes from './Routes';
 import "./App.css"
-import { CategorieProvider, SubCategorieProvider, ProductProvider } from './providers/index';
+import { CategorieProvider, SubCategorieProvider, ProductProvider, currentUser } from './providers/index';
 
 Amplify.configure(aws_exports);
 
 const App = () => {
-  const [user, setUser] = React.useState(JSON.parse(sessionStorage.getItem('CURRENT_USER_SESSION')));
   const [error, setError] = React.useState(null);
 
-  const setLoggedUserInfo = (_currentUser) => {
-    sessionStorage.setItem('CURRENT_USER_SESSION', JSON.stringify(_currentUser));
-    const userFromStorage = JSON.parse(sessionStorage.getItem('CURRENT_USER_SESSION'))
-    setUser(userFromStorage);
-  }
-
-  const setUserToNull = () => {
-    sessionStorage.setItem('CURRENT_USER_SESSION', null);
-    setUser(null);
-  }
+  const userContext = useContext(currentUser);
 
   return (
-    <ProductProvider>
-      <CategorieProvider>
-        <SubCategorieProvider>
-          <currentUser.Provider value={{
-            user: user, onUserLogOut: setUserToNull, onUserSignIn: setLoggedUserInfo
-          }}>
-            <communContext.Provider value={{ error: error, setError: (_) => { setError(_) } }}>
-              <AuthComponent>
-                <AppRoutes user={user} />
-              </AuthComponent>
-            </communContext.Provider>
-          </currentUser.Provider>
-        </SubCategorieProvider>
-      </CategorieProvider>
-    </ProductProvider>
+    <CurrentUserProvider>
+      <AuthComponent>
+        <ProductProvider>
+          <CategorieProvider>
+            <SubCategorieProvider>
+              <communContext.Provider value={{ error: error, setError: (_) => { setError(_) } }}>
+                <AppRoutes user={userContext.user} />
+              </communContext.Provider>
+            </SubCategorieProvider>
+          </CategorieProvider>
+        </ProductProvider>
+      </AuthComponent>
+    </CurrentUserProvider>
   );
 };
 
