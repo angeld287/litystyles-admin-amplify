@@ -1,4 +1,4 @@
-import { render, screen, fireEvent, prettyDOM } from './utils/test-utils';
+import { render, screen, fireEvent, prettyDOM, waitFor, waitForElementToBeRemoved } from './utils/test-utils';
 import { act } from 'react-dom/test-utils';
 import Business from './pages/Business';
 import { ProductContext, CategoriesContext } from "../src/providers";
@@ -80,30 +80,61 @@ const categoryList = [
   }
 ];
 
+// test('Open and Close Product Modal', () => {
+//   render(<Business />);
+//   const addBtn = screen.getByText(/Agregar Producto/i);
+//   fireEvent.click(addBtn);
+//   const cancelBtn = screen.getByText(/Cancelar/i);
+//   fireEvent.click(cancelBtn);
+// });
+
+// test('Read Product List', () => {
+//   render(
+//     <ProductContext.Provider value={{ items: producList }}>
+//       <Business />
+//     </ProductContext.Provider>
+//   )
+
+//   const editBtns = screen.getAllByText(/Editar/i);
+//   expect(editBtns.length).toEqual(1);
+// });
+
 const addItem = jest.fn(product => {
-  console.log(product);
-});
+  const item = {
+    cost: product.cost,
+    categoryId: 2,
+    subCategoryId: 2,
+    name: product.name,
+    image: product.image,
+    deleted: false,
+    id: 2,
+    packagingformat: product.packagingformat,
+    createdAt: '2/30/22',
+    category: {
+      items: {
+        id: 1,
+        category: {
+          id: 2,
+          name: "catt"
+        }
+      }
+    },
+    subcategory: {
+      items: {
+        id: 3,
+        subcategory: {
+          id: 4,
+          name: "subtest"
+        }
+      }
+    }
+  };
 
-test('Open and Close Product Modal', () => {
-  render(<Business />);
-  const addBtn = screen.getByText(/Agregar Producto/i);
-  fireEvent.click(addBtn);
-  const cancelBtn = screen.getByText(/Cancelar/i);
-  fireEvent.click(cancelBtn);
-});
-
-test('Read Product List', () => {
-  render(
-    <ProductContext.Provider value={{ items: producList }}>
-      <Business />
-    </ProductContext.Provider>
-  )
-
-  const editBtns = screen.getAllByText(/Editar/i);
-  expect(editBtns.length).toEqual(1);
+  producList.push(item);
 });
 
 test('Add Product to the List', async () => {
+
   const { getAllByClass, getByType } = render(
     <ProductContext.Provider value={{ items: producList, addItem }}>
       <CategoriesContext.Provider value={{ items: categoryList }}>
@@ -124,26 +155,41 @@ test('Add Product to the List', async () => {
 
   //completar el campo nombre
   const name = screen.getByPlaceholderText(/Nombre/i);
-  name.value = 'Toalla';
+  fireEvent.change(name, {
+    target: { value: 'Toalla' }
+  });
   expect(name.value).toBe('Toalla');
 
 
   //completar el campo costo
   const cost = screen.getByPlaceholderText(/Costo/i);
-  cost.value = '100';
+  fireEvent.change(cost, {
+    target: { value: '100' }
+  });
   expect(cost.value).toBe('100');
+
+
 
   //buscar los Ant Selects
   const antSelects = getAllByClass(/ant-select-selection-search-input/i);
 
   //completar el campo categoria
   const category = antSelects[0];
-  category.value = 1;
+  await waitFor(() => {
+    fireEvent.change(category, {
+      target: { value: '1' }
+    });
+  })
   expect(category.value).toBe("1");
 
   //completar el campo subcategoria
   const subcategory = antSelects[1];
-  subcategory.value = 1
+  await waitFor(() => {
+    fireEvent.change(subcategory, {
+      target: { value: '1' }
+    });
+  })
+
   expect(subcategory.value).toBe("1");
 
   //completar el campo imagen
@@ -151,23 +197,35 @@ test('Add Product to the List', async () => {
   expect(image.files.length).toBe(0);
 
   //agregar la imagen
-  await fireEvent.change(image, {
-    target: { files: [file] },
+  await waitFor(() => {
+    fireEvent.change(image, {
+      target: { files: [file] },
+    })
   });
 
   image = getByType(/file/i);
-  expect(image.files.length).toBe(1);
+  //expect(image.files.length).toBe(1);
 
   //completar el campo formato de envace
   const packagingformat = screen.getByPlaceholderText(/Formato de Envace/i);
-  packagingformat.value = 'N/a';
+  fireEvent.change(packagingformat, {
+    target: { value: 'N/a' }
+  });
   expect(packagingformat.value).toBe('N/a');
 
 
   //hacer clic en el boton Guardar
   const saveBtn = screen.getByText(/Guardar/i);
+  fireEvent.click(saveBtn);
 
-  act(() => {
-    saveBtn.dispatchEvent(new MouseEvent('click', { bubbles: true }));
-  });
+  expect(screen.getByText("Guardar")).toBeInTheDocument();
+
+  setTimeout(() => {
+    expect(screen.getByText("Guardar")).not.toBeInTheDocument();
+  }, 5000)
+
+  //verficar que la lista tenga dos items
+  const editBtns1 = screen.getAllByText(/Editar/i);
+  expect(editBtns1.length).toEqual(1);
+
 });
