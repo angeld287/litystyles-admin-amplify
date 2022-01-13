@@ -13,7 +13,12 @@ const Business = () => {
             <Content style={{ padding: '0 50px' }}>
                 <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }}>
                     <Col span={12}>
-                        <div className="site-layout-content"><ErrorBoundary><Products /></ErrorBoundary></div>
+                        <div className="site-layout-content">
+                            <h3 className="ttl-1" >Productos</h3>
+                            <ErrorBoundary>
+                                <Products />
+                            </ErrorBoundary>
+                        </div>
                     </Col>
                     <Col span={12}>
                         <div className="site-layout-content"><ErrorBoundary><Services /></ErrorBoundary></div>

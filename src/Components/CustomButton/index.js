@@ -26,4 +26,4 @@ CustomButton.propTypes = {
     className: PropTypes.string,
 }
 
-export default CustomButton;
+export default React.memo(CustomButton);
