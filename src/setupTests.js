@@ -11,3 +11,5 @@ global.matchMedia = global.matchMedia || function () {
     };
 };
 
+const noop = () => { };
+Object.defineProperty(window, 'scrollTo', { value: noop, writable: true });

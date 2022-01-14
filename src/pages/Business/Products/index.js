@@ -55,17 +55,17 @@ const Products = () => {
 
     const setProduct = async () => {
         let result = false;
-        if (name === "") {
+        if (name === "" || name === null) {
             Swal.fire('Campo Obligatorio', 'Favor completar el campo Nombre', 'error');
             return;
         }
 
-        if (cost === "") {
+        if (cost === "" || cost === null) {
             Swal.fire('Campo Obligatorio', 'Favor completar el campo Costo', 'error');
             return;
         }
 
-        if (category === "") {
+        if (category === "" || category === null) {
             Swal.fire('Campo Obligatorio', 'Favor completar el campo Categoria', 'error');
             return;
         }
@@ -74,7 +74,7 @@ const Products = () => {
             return;
         }
 
-        if (packagingformat === "") {
+        if (packagingformat === "" || packagingformat === null) {
             Swal.fire('Campo Obligatorio', 'Favor completar el campo Formato de Envace', 'error');
             return;
         }
@@ -175,7 +175,7 @@ const Products = () => {
         { label: "Sub Categoria", defaultValue: subcategory, items: subcategoryItems, type: "select", readOnly: (!edit && !add), onChange: _ => setSubcategory(_) },
         { label: "Imagen", type: "file", readOnly: (!edit && !add), onChange: _ => { setImage(_.target.files[0]) } },
         { label: "Formato de Envace", type: "text", readOnly: (!edit && !add), onChange: e => setPackagingformat(e.target.value), value: packagingformat },
-    ], [name, cost, packagingformat, category, subcategory]);
+    ], [show, add, edit, name, cost, packagingformat, category, subcategory]);
 
     const _headers = useMemo(() => ['Nombre', 'Costo', 'Acciones'], []);
     const _productItems = useMemo(() => productItems, [productItems]);

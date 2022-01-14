@@ -1,20 +1,12 @@
 import { render, screen, fireEvent, prettyDOM, waitFor, waitForElementToBeRemoved } from './utils/test-utils';
 import { act } from 'react-dom/test-utils';
-import Business from './pages/Business';
+import Products from './pages/Business/Products';
 import { ProductContext, CategoriesContext } from "../src/providers";
+import { ConsoleLogger } from '@aws-amplify/core';
+import { useState } from 'react';
 let container;
 let file;
 
-beforeEach(() => {
-  container = document.createElement('div');
-  document.body.appendChild(container);
-  file = new File(['(⌐□_□)'], 'test.png', { type: 'image/png' });
-});
-
-afterEach(() => {
-  document.body.removeChild(container);
-  container = null;
-});
 
 
 const producList = [{
@@ -48,9 +40,65 @@ const producList = [{
 }
 ];
 
+
+const MockProductProvider = ({ children }) => {
+  const [items, setItems] = useState(producList);
+
+  const addItem = jest.fn(product => {
+    const _i = items;
+    _i.push({
+      cost: product.cost,
+      categoryId: 2,
+      subCategoryId: 2,
+      name: product.name,
+      image: product.image,
+      deleted: false,
+      id: 3,
+      packagingformat: product.packagingformat,
+      createdAt: '2/30/22',
+      category: {
+        items: {
+          id: 1,
+          category: {
+            id: 2,
+            name: "catt"
+          }
+        }
+      },
+      subcategory: {
+        items: {
+          id: 3,
+          subcategory: {
+            id: 4,
+            name: "subtest"
+          }
+        }
+      }
+    })
+    setItems(_i);
+
+    return true;
+  })
+
+  return (<ProductContext.Provider value={{ items, addItem }}>
+    {children}
+  </ProductContext.Provider>);
+}
+
+beforeEach(() => {
+  container = document.createElement('div');
+  document.body.appendChild(container);
+  file = new File(['(⌐□_□)'], 'test.png', { type: 'image/png' });
+});
+
+afterEach(() => {
+  document.body.removeChild(container);
+  container = null;
+});
+
 const categoryList = [
   {
-    id: 1,
+    id: "1",
     name: "Herramientas de Barbero",
     subcategories: {
       items: [
@@ -59,19 +107,19 @@ const categoryList = [
           code: "01",
           deleted: false,
           categoryName: "Herramientas de Barbero",
-          id: 1,
+          id: '1',
         },
         {
           name: "Tijeras",
           code: "02",
           deleted: false,
           categoryName: "Herramientas de Barbero",
-          id: 2,
+          id: '2',
         },
       ],
       nextToken: null
     },
-    typeName: "OFI",
+    typeName: "Product",
     code: "01",
     deleted: false,
     deletedAt: '2/30/22',
@@ -80,74 +128,20 @@ const categoryList = [
   }
 ];
 
-// test('Open and Close Product Modal', () => {
-//   render(<Business />);
-//   const addBtn = screen.getByText(/Agregar Producto/i);
-//   fireEvent.click(addBtn);
-//   const cancelBtn = screen.getByText(/Cancelar/i);
-//   fireEvent.click(cancelBtn);
-// });
 
-// test('Read Product List', () => {
-//   render(
-//     <ProductContext.Provider value={{ items: producList }}>
-//       <Business />
-//     </ProductContext.Provider>
-//   )
-
-//   const editBtns = screen.getAllByText(/Editar/i);
-//   expect(editBtns.length).toEqual(1);
-// });
-
-const addItem = jest.fn(product => {
-  const item = {
-    cost: product.cost,
-    categoryId: 2,
-    subCategoryId: 2,
-    name: product.name,
-    image: product.image,
-    deleted: false,
-    id: 2,
-    packagingformat: product.packagingformat,
-    createdAt: '2/30/22',
-    category: {
-      items: {
-        id: 1,
-        category: {
-          id: 2,
-          name: "catt"
-        }
-      }
-    },
-    subcategory: {
-      items: {
-        id: 3,
-        subcategory: {
-          id: 4,
-          name: "subtest"
-        }
-      }
-    }
-  };
-
-  producList.push(item);
-});
 
 test('Add Product to the List', async () => {
 
-  const { getAllByClass, getByType } = render(
-    <ProductContext.Provider value={{ items: producList, addItem }}>
+  const { rerender, getAllByClass, getByType, getByClass } = render(
+    <MockProductProvider>
       <CategoriesContext.Provider value={{ items: categoryList }}>
-        <Business />
+        <Products />
       </CategoriesContext.Provider>
-    </ProductContext.Provider>
+    </MockProductProvider>
   )
-  //console.log(prettyDOM(test.container.firstChild))
-
 
   //verficar que en la lista exista un unico item
-  const editBtns = screen.getAllByText(/Editar/i);
-  expect(editBtns.length).toEqual(1);
+  let tableRows = getAllByClass(/ant-table-row/i);
 
   //hacer clic en el boton agregar producto
   const addBtn = screen.getByText(/Agregar Producto/i);
@@ -155,11 +149,11 @@ test('Add Product to the List', async () => {
 
   //completar el campo nombre
   const name = screen.getByPlaceholderText(/Nombre/i);
+
   fireEvent.change(name, {
-    target: { value: 'Toalla' }
+    target: { value: "Toalla" }
   });
   expect(name.value).toBe('Toalla');
-
 
   //completar el campo costo
   const cost = screen.getByPlaceholderText(/Costo/i);
@@ -168,29 +162,28 @@ test('Add Product to the List', async () => {
   });
   expect(cost.value).toBe('100');
 
+  //completar el campo formato de envace
+  const packagingformat = screen.getByPlaceholderText(/Formato de Envace/i);
+  fireEvent.change(packagingformat, {
+    target: { value: 'N/a' }
+  });
+  expect(packagingformat.value).toBe('N/a');
 
 
   //buscar los Ant Selects
-  const antSelects = getAllByClass(/ant-select-selection-search-input/i);
+  let antSelects = getAllByClass(/ant-select-selection-search-input/i);
 
   //completar el campo categoria
   const category = antSelects[0];
+  // Abrir el dropdown de categoria
   await waitFor(() => {
-    fireEvent.change(category, {
-      target: { value: '1' }
-    });
-  })
-  expect(category.value).toBe("1");
+    fireEvent.mouseDown(category);
+  });
 
-  //completar el campo subcategoria
-  const subcategory = antSelects[1];
-  await waitFor(() => {
-    fireEvent.change(subcategory, {
-      target: { value: '1' }
-    });
-  })
-
-  expect(subcategory.value).toBe("1");
+  //Seleccionar la opcion "Herramientas de Barbero"
+  fireEvent.click(screen.getByText('Herramientas de Barbero'));
+  // Cerrar dropdown
+  fireEvent.click(getByClass(/ant-modal-title/i));
 
   //completar el campo imagen
   let image = getByType(/file/i);
@@ -206,26 +199,27 @@ test('Add Product to the List', async () => {
   image = getByType(/file/i);
   //expect(image.files.length).toBe(1);
 
-  //completar el campo formato de envace
-  const packagingformat = screen.getByPlaceholderText(/Formato de Envace/i);
-  fireEvent.change(packagingformat, {
-    target: { value: 'N/a' }
-  });
-  expect(packagingformat.value).toBe('N/a');
-
 
   //hacer clic en el boton Guardar
   const saveBtn = screen.getByText(/Guardar/i);
   fireEvent.click(saveBtn);
 
-  expect(screen.getByText("Guardar")).toBeInTheDocument();
+  await waitFor(() => {
+    //expect(screen.getByText("Guardar")).toBeInTheDocument();
+    //expect(screen.getByText("Campo Obligatorio")).toBeInTheDocument();
 
-  setTimeout(() => {
-    expect(screen.getByText("Guardar")).not.toBeInTheDocument();
-  }, 5000)
+    const okBtns = getAllByClass(/swal2-confirm/i);
+    fireEvent.click(okBtns[0])
+  });
+
+  rerender(
+    <MockProductProvider>
+      <Products />
+    </MockProductProvider>
+  );
 
   //verficar que la lista tenga dos items
-  const editBtns1 = screen.getAllByText(/Editar/i);
-  expect(editBtns1.length).toEqual(1);
+  let tableRowsAfterInsert = getAllByClass(/ant-table-row/i)
+  expect(tableRowsAfterInsert.length).toBeGreaterThan(tableRows.length);
 
 });
