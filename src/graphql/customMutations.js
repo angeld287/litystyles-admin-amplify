@@ -138,3 +138,145 @@ export const updateProductSubCategory = /* GraphQL */ `
     }
   }
 `;
+
+
+/*********************************
+*
+*   SERVICES CUSTOM MUTATIONS
+*
+**********************************/
+
+
+export const createService = /* GraphQL */ `
+  mutation CreateService(
+    $input: CreateServiceInput!
+    $condition: ModelServiceConditionInput
+  ) {
+    createService(input: $input, condition: $condition) {
+      id
+      name
+      cost
+      category {
+        items {
+          id
+          category {
+            id
+            name
+          }
+        }
+      }
+      subcategory {
+        items {
+          id
+          subcategory {
+            id
+            name
+          }
+        }
+      }
+      categoryId
+      subCategoryId
+      deleted
+      deletedAt
+      createdAt
+      owner
+    }
+  }
+`;
+
+export const createServiceCategory = /* GraphQL */ `
+  mutation CreateServiceCategory(
+    $input: CreateServiceCategoryInput!
+    $condition: ModelServiceCategoryConditionInput
+  ) {
+    createServiceCategory(input: $input, condition: $condition) {
+      id
+      category {
+        id
+        name
+      }
+    }
+  }
+`;
+
+export const createServiceSubCategory = /* GraphQL */ `
+  mutation CreateServiceSubCategory(
+    $input: CreateServiceSubCategoryInput!
+    $condition: ModelServiceSubCategoryConditionInput
+  ) {
+    createServiceSubCategory(input: $input, condition: $condition) {
+      id
+      subcategory {
+        id
+        name
+      }
+    }
+  }
+`;
+
+export const updateService = /* GraphQL */ `
+  mutation UpdateService(
+    $input: UpdateServiceInput!
+    $condition: ModelServiceConditionInput
+  ) {
+    updateService(input: $input, condition: $condition) {
+      id
+      name
+      cost
+      category {
+        items {
+          id
+          category {
+            id
+            name
+          }
+        }
+      }
+      subcategory {
+        items {
+          id
+          subcategory {
+            id
+            name
+          }
+        }
+      }
+      categoryId
+      subCategoryId
+      deleted
+      deletedAt
+      createdAt
+      owner
+    }
+  }
+`;
+
+export const updateServiceCategory = /* GraphQL */ `
+  mutation UpdateServiceCategory(
+    $input: UpdateServiceCategoryInput!
+    $condition: ModelServiceCategoryConditionInput
+  ) {
+    updateServiceCategory(input: $input, condition: $condition) {
+      id
+      category {
+        id
+        name
+      }
+    }
+  }
+`;
+
+export const updateServiceSubCategory = /* GraphQL */ `
+  mutation UpdateServiceSubCategory(
+    $input: UpdateServiceSubCategoryInput!
+    $condition: ModelServiceSubCategoryConditionInput
+  ) {
+    updateServiceSubCategory(input: $input, condition: $condition) {
+      id
+      subcategory {
+        id
+        name
+      }
+    }
+  }
+`;

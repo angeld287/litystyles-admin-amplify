@@ -45,6 +45,35 @@ export const listProducts = /* GraphQL */ `
   }
 `;
 
+/*********************************
+*
+*   SERVICES CUSTOM QUERIES
+*
+**********************************/
+
+export const listServices = /* GraphQL */ `
+  query ListServices(
+    $filter: ModelServiceFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listServices(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        name
+        cost
+        categoryId
+        subCategoryId
+        deleted
+        deletedAt
+        createdAt
+        owner
+      }
+      nextToken
+    }
+  }
+`;
+
 
 /*********************************
 *
