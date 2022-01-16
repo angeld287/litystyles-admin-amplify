@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Verify correct renderization of ErrorBoundary Component 1`] = `
+<DocumentFragment>
+  <h1>
+    testing Error Boundary
+  </h1>
+</DocumentFragment>
+`;

@@ -1,4 +1,4 @@
-import React, { useState, useContext, useMemo, useEffect } from "react";
+import React, { useState, useContext, useEffect, useMemo } from "react";
 import { Layout } from 'antd';
 import CustomButton from "../../../components/CustomButton";
 import CustomTable from '../../../components/CustomTable/CustomTable'
@@ -32,19 +32,17 @@ const Products = () => {
     const { items, addItem, editItem, updateDeleteItem, getItemsNextToken, itemsLoading } = useContext(ProductContext);
     const categoryContext = useContext(CategoriesContext);
 
-    const fields = [
+    const fields = useMemo(() => [
         { subcategory, setSubcategory },
         { category, setCategory },
         { cost, setCost },
         { image, setImage },
         { packagingformat, setPackagingformat },
         { name, setName }
-    ]
+    ], []);
 
     const openItem = (e) => {
         try {
-            //console.log(e, )
-            //setCategory(e.category.items[0].category.id)
             setId(e.id);
             setModuleStates(fields, e)
             setEdit(true);
@@ -57,17 +55,17 @@ const Products = () => {
 
     const setProduct = async () => {
         let result = false;
-        if (name === "") {
+        if (name === "" || name === null) {
             Swal.fire('Campo Obligatorio', 'Favor completar el campo Nombre', 'error');
             return;
         }
 
-        if (cost === "") {
+        if (cost === "" || cost === null) {
             Swal.fire('Campo Obligatorio', 'Favor completar el campo Costo', 'error');
             return;
         }
 
-        if (category === "") {
+        if (category === "" || category === null) {
             Swal.fire('Campo Obligatorio', 'Favor completar el campo Categoria', 'error');
             return;
         }
@@ -76,7 +74,7 @@ const Products = () => {
             return;
         }
 
-        if (packagingformat === "") {
+        if (packagingformat === "" || packagingformat === null) {
             Swal.fire('Campo Obligatorio', 'Favor completar el campo Formato de Envace', 'error');
             return;
         }
@@ -135,7 +133,8 @@ const Products = () => {
         }
     }
 
-    useMemo(() => {
+    //update the item list when a crud event occurs
+    useEffect(() => {
         try {
             if (items !== undefined) {
                 setProductItems(items.map(e => ({
@@ -153,6 +152,7 @@ const Products = () => {
         }
     }, [items, dlBtnLoading]);
 
+    //set the subcategory list when the category is selected
     useEffect(() => {
         try {
             if (category !== '' && category !== null && category !== undefined) {
@@ -168,21 +168,22 @@ const Products = () => {
 
     }, [category]);
 
-
-    const inputs = [
+    const inputs = useMemo(() => [
         { label: "Nombre", type: "text", readOnly: (!edit && !add), onChange: e => setName(e.target.value), value: name },
         { label: "Costo", type: "number", readOnly: (!edit && !add), onChange: e => setCost(e.target.value), value: cost },
         { label: "Categoria", defaultValue: category, items: categoryContext.items.filter(_ => _.typeName === "Product"), type: "select", readOnly: (!edit && !add), onChange: _ => setCategory(_), getItemsNextToken: categoryContext.getItemsNextToken },
         { label: "Sub Categoria", defaultValue: subcategory, items: subcategoryItems, type: "select", readOnly: (!edit && !add), onChange: _ => setSubcategory(_) },
         { label: "Imagen", type: "file", readOnly: (!edit && !add), onChange: _ => { setImage(_.target.files[0]) } },
         { label: "Formato de Envace", type: "text", readOnly: (!edit && !add), onChange: e => setPackagingformat(e.target.value), value: packagingformat },
-    ];
+    ], [show, add, edit, name, cost, packagingformat, category, subcategory]);
+
+    const _headers = useMemo(() => ['Nombre', 'Costo', 'Acciones'], []);
+    const _productItems = useMemo(() => productItems, [productItems]);
 
     return (
         <Content>
-            <h3 className="ttl-1" >Productos</h3>
             <CustomButton id="productAddBtn" className="btn-1 product" style="blue" intent="Primary" onClick={(e) => { e.preventDefault(); setAdd(true); setEdit(false); setShow(true); }} Icon={PlusCircleOutlined}>Agregar Producto</CustomButton>
-            <CustomTable headers={['Nombre', 'Costo', 'Acciones']} items={productItems} itemsLoading={itemsLoading} getItemsNextToken={getItemsNextToken} />
+            <CustomTable headers={_headers} items={_productItems} itemsLoading={itemsLoading} getItemsNextToken={getItemsNextToken} />
             {/* Modal para editar y ver detalle de productos */}
             <CustomModal fields={fields} loading={loading} title={edit ? 'Editar Producto' : add ? 'Agregar Producto' : 'Ver Producto'} visible={show} onOk={setProduct} onCancel={handleClose} inputs={inputs} />
         </Content>

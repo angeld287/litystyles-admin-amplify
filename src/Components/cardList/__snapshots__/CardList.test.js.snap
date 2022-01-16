@@ -1,0 +1,234 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Verify correct renderization of CardsList Component 1`] = `
+<DocumentFragment>
+  <div
+    class="card-container"
+  >
+    <div
+      class="card"
+    >
+      <header
+        class="card-header header-img"
+      >
+        <p
+          class="header-title"
+        >
+          $224,900
+        </p>
+      </header>
+      <div
+        class="card-body"
+      >
+        3 Rooms, 2 Baths - House for sale
+      </div>
+      <div
+        class="card-footer"
+      >
+        <button
+          class="btn"
+        >
+          Buy
+        </button>
+        <button
+          class="btn"
+        >
+          More info
+        </button>
+      </div>
+    </div>
+    <div
+      class="card"
+    >
+      <header
+        class="card-header header-img"
+      >
+        <p
+          class="header-title"
+        >
+          $224,900
+        </p>
+      </header>
+      <div
+        class="card-body"
+      >
+        3 Rooms, 2 Baths - House for sale
+      </div>
+      <div
+        class="card-footer"
+      >
+        <button
+          class="btn"
+        >
+          Buy
+        </button>
+        <button
+          class="btn"
+        >
+          More info
+        </button>
+      </div>
+    </div>
+    <div
+      class="card"
+    >
+      <header
+        class="card-header header-img"
+      >
+        <p
+          class="header-title"
+        >
+          $224,900
+        </p>
+      </header>
+      <div
+        class="card-body"
+      >
+        3 Rooms, 2 Baths - House for sale
+      </div>
+      <div
+        class="card-footer"
+      >
+        <button
+          class="btn"
+        >
+          Buy
+        </button>
+        <button
+          class="btn"
+        >
+          More info
+        </button>
+      </div>
+    </div>
+    <div
+      class="card"
+    >
+      <header
+        class="card-header header-img"
+      >
+        <p
+          class="header-title"
+        >
+          $224,900
+        </p>
+      </header>
+      <div
+        class="card-body"
+      >
+        3 Rooms, 2 Baths - House for sale
+      </div>
+      <div
+        class="card-footer"
+      >
+        <button
+          class="btn"
+        >
+          Buy
+        </button>
+        <button
+          class="btn"
+        >
+          More info
+        </button>
+      </div>
+    </div>
+    <div
+      class="card"
+    >
+      <header
+        class="card-header header-img"
+      >
+        <p
+          class="header-title"
+        >
+          $224,900
+        </p>
+      </header>
+      <div
+        class="card-body"
+      >
+        3 Rooms, 2 Baths - House for sale
+      </div>
+      <div
+        class="card-footer"
+      >
+        <button
+          class="btn"
+        >
+          Buy
+        </button>
+        <button
+          class="btn"
+        >
+          More info
+        </button>
+      </div>
+    </div>
+    <div
+      class="card"
+    >
+      <header
+        class="card-header header-img"
+      >
+        <p
+          class="header-title"
+        >
+          $224,900
+        </p>
+      </header>
+      <div
+        class="card-body"
+      >
+        3 Rooms, 2 Baths - House for sale
+      </div>
+      <div
+        class="card-footer"
+      >
+        <button
+          class="btn"
+        >
+          Buy
+        </button>
+        <button
+          class="btn"
+        >
+          More info
+        </button>
+      </div>
+    </div>
+    <div
+      class="card"
+    >
+      <header
+        class="card-header header-img"
+      >
+        <p
+          class="header-title"
+        >
+          $224,900
+        </p>
+      </header>
+      <div
+        class="card-body"
+      >
+        3 Rooms, 2 Baths - House for sale
+      </div>
+      <div
+        class="card-footer"
+      >
+        <button
+          class="btn"
+        >
+          Buy
+        </button>
+        <button
+          class="btn"
+        >
+          More info
+        </button>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;

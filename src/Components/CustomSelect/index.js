@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import PropTypes from "prop-types";
 import { Select } from "antd";
 
-const CustomSelect = ({ items, onChange, defaultValue, getItemsNextToken, placeHolder }) => {
+const CustomSelect = ({ dataTestId, items, onChange, defaultValue, getItemsNextToken, placeHolder }) => {
     const [loading, setLoading] = useState(false);
     const options = items !== undefined ? items.map(_ => { return <Select.Option key={_.id}>{_.name}</Select.Option> }) : [];
 
@@ -26,6 +26,7 @@ const CustomSelect = ({ items, onChange, defaultValue, getItemsNextToken, placeH
     };
 
     return <Select
+        data-testid={dataTestId}
         loading={loading}
         showSearch
         style={{ width: '100%' }}
@@ -48,6 +49,7 @@ const CustomSelect = ({ items, onChange, defaultValue, getItemsNextToken, placeH
 };
 
 CustomSelect.propTypes = {
+    dataTestId: PropTypes.string,
     items: PropTypes.array,
     defaultValue: PropTypes.any,
     onChange: PropTypes.func,

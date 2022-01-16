@@ -20,6 +20,7 @@ const AppRoutes = ({ user }) => {
 			<Routes>
 				<Route exact path="/" element={<Home />} />
 				<Route exact path="/business" element={<Business />} />
+				<Route exact path="/clasifications" element={<Business />} />
 			</Routes>
 		</Router>)
 };
