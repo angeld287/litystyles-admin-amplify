@@ -1,0 +1,10 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Verify correct renderization of CustomButton Component 1`] = `
+<DocumentFragment>
+  <button
+    class="ant-btn"
+    type="button"
+  />
+</DocumentFragment>
+`;

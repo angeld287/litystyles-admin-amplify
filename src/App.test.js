@@ -1,8 +1,6 @@
 import { render, screen, fireEvent, prettyDOM, waitFor, waitForElementToBeRemoved } from './utils/test-utils';
-import { act } from 'react-dom/test-utils';
 import Products from './pages/Business/Products';
 import { ProductContext, CategoriesContext } from "../src/providers";
-import { ConsoleLogger } from '@aws-amplify/core';
 import { useState } from 'react';
 let container;
 let file;

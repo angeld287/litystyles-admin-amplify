@@ -1,0 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Verify correct renderization of CardsList Component 1`] = `<DocumentFragment />`;
+
+exports[`Verify correct renderization of CustomModal Component 1`] = `<DocumentFragment />`;

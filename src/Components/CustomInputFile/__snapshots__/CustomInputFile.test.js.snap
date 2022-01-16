@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Verify correct renderization of CustomInputFile Component 1`] = `
+<DocumentFragment>
+  <input
+    accept="image/*"
+    autocomplete="off"
+    class="ant-input ant-input-lg inpt-1"
+    type="text"
+    value=""
+  />
+</DocumentFragment>
+`;

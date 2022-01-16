@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Verify correct renderization of CustomInput Component 1`] = `
+<DocumentFragment>
+  <input
+    class="ant-input ant-input-lg inpt-1"
+    type="text"
+    value=""
+  />
+</DocumentFragment>
+`;
