@@ -1,8 +1,8 @@
 import React, { useState, useContext, useEffect, useMemo } from "react";
 import { Layout } from 'antd';
-import CustomButton from "../../../components/CustomButton";
-import CustomTable from '../../../components/CustomTable/CustomTable'
-import CustomModal from "../../../components/CustomModal";
+import CustomButton from "../../../Components/CustomButton";
+import CustomTable from '../../../Components/CustomTable/CustomTable'
+import CustomModal from "../../../Components/CustomModal";
 import { ServiceContext, CategoriesContext } from "../../../providers";
 import { DeleteOutlined, EditOutlined, PlusCircleOutlined } from '@ant-design/icons';
 import Swal from "sweetalert2";

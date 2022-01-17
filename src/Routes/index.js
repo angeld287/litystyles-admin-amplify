@@ -6,9 +6,9 @@ import {
 
 import Home from '../pages/Home'
 import Business from '../pages/Business'
-import HeaderLinks from '../components/HeaderLinks';
+import HeaderLinks from '../Components/HeaderLinks';
 import PropsTypes from 'prop-types';
-import CustomSpinner from '../components/CustomSpinner';
+import CustomSpinner from '../Components/CustomSpinner';
 
 const AppRoutes = ({ user }) => {
 

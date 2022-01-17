@@ -3,7 +3,7 @@ import { Layout, Row, Col } from 'antd';
 
 import Products from "./Products";
 import Services from "./Services";
-import ErrorBoundary from "../../components/ErrorBoundary";
+import ErrorBoundary from "../../Components/ErrorBoundary";
 
 const Business = () => {
     const { Content } = Layout;

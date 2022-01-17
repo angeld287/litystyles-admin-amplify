@@ -1,12 +1,12 @@
 import React, { useContext } from 'react';
 import CurrentUserProvider from './providers/currentUser/currentUser.provider'
-import communContext from './context/communContex/commun.context';
+import communContext from './context/communContex/commun.Context';
 
 import Amplify from 'aws-amplify';
 import aws_exports from './aws-exports';
 // import aws_exports_prod from './aws-exports-prod';
 
-import AuthComponent from './components/Authentication/AuthComponent';
+import AuthComponent from './Components/Authentication/AuthComponent';
 import AppRoutes from './Routes';
 import "./App.css"
 import { CategorieProvider, SubCategorieProvider, ProductProvider, currentUser, ServiceProvider } from './providers/index';
