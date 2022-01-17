@@ -2,6 +2,7 @@ import React from "react";
 import { Layout, Row, Col } from 'antd';
 
 import Categories from "./Categories";
+import SubCategories from "./SubCategories";
 import ErrorBoundary from "../../Components/ErrorBoundary";
 
 const Classifications = () => {
@@ -23,7 +24,7 @@ const Classifications = () => {
                         <div className="site-layout-content">
                             <h3 className="ttl-1" >Sub-Categorias</h3>
                             <ErrorBoundary>
-                                <Categories />
+                                <SubCategories />
                             </ErrorBoundary>
                         </div>
                     </Col>

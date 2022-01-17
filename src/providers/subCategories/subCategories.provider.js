@@ -31,7 +31,7 @@ const SubCategorieProvider = ({ children }) => {
     const addItem = async item => {
         let object = {};
         try {
-            const input = { name: item.name, code: '', categorySubcategoriesId: item.cost, categoryName: item.category };
+            const input = { name: item.name, code: item.code, categorySubcategoriesId: item.category, categoryName: item.categoryName };
 
             object = await createUpdateItem('createSubCategory', createSubCategory, input);
 
@@ -51,7 +51,7 @@ const SubCategorieProvider = ({ children }) => {
         let object;
 
         try {
-            const input = { id: item.id, name: item.name, code: '', categorySubcategoriesId: item.cost, categoryName: item.category };
+            const input = { id: item.id, name: item.name, code: item.code, categorySubcategoriesId: item.category, categoryName: item.categoryName };
 
             object = await createUpdateItem('updateSubCategory', updateSubCategory, input);
 

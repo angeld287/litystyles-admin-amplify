@@ -9,7 +9,14 @@ import aws_exports from './aws-exports';
 import AuthComponent from './Components/Authentication/AuthComponent';
 import AppRoutes from './Routes';
 import "./App.css"
-import { CategorieProvider, SubCategorieProvider, ProductProvider, currentUser, ServiceProvider } from './providers/index';
+import {
+  CategorieProvider,
+  SubCategorieProvider,
+  TypesProvider,
+  ProductProvider,
+  currentUser,
+  ServiceProvider,
+} from './providers/index';
 
 Amplify.configure(aws_exports);
 
@@ -25,9 +32,11 @@ const App = () => {
           <ProductProvider>
             <CategorieProvider>
               <SubCategorieProvider>
-                <communContext.Provider value={{ error: error, setError: (_) => { setError(_) } }}>
-                  <AppRoutes user={userContext.user} />
-                </communContext.Provider>
+                <TypesProvider>
+                  <communContext.Provider value={{ error: error, setError: (_) => { setError(_) } }}>
+                    <AppRoutes user={userContext.user} />
+                  </communContext.Provider>
+                </TypesProvider>
               </SubCategorieProvider>
             </CategorieProvider>
           </ProductProvider>
