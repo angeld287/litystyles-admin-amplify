@@ -280,3 +280,153 @@ export const updateServiceSubCategory = /* GraphQL */ `
     }
   }
 `;
+
+/*********************************
+*
+*   CATEGORIES CUSTOM MUTATIONS
+*
+**********************************/
+
+export const createCategory = /* GraphQL */ `
+  mutation CreateCategory(
+    $input: CreateCategoryInput!
+    $condition: ModelCategoryConditionInput
+  ) {
+    createCategory(input: $input, condition: $condition) {
+      id
+      name
+      subcategories {
+        items {
+          id
+          name
+          code
+          categoryName
+          deleted
+          deletedAt
+          createdAt
+          owner
+        }
+      }
+      typeName
+      code
+      deleted
+      deletedAt
+      createdAt
+      owner
+    }
+  }
+`;
+
+export const updateCategory = /* GraphQL */ `
+  mutation UpdateCategory(
+    $input: UpdateCategoryInput!
+    $condition: ModelCategoryConditionInput
+  ) {
+    updateCategory(input: $input, condition: $condition) {
+      id
+      name
+      subcategories {
+        items {
+          id
+          name
+          code
+          categoryName
+          deleted
+          deletedAt
+          createdAt
+          owner
+        }
+      }
+      typeName
+      code
+      deleted
+      deletedAt
+      createdAt
+      owner
+    }
+  }
+`;
+
+
+
+/*********************************
+*
+*   SUBCATEGORIES CUSTOM MUTATIONS
+*
+**********************************/
+
+export const createSubCategory = /* GraphQL */ `
+  mutation CreateSubCategory(
+    $input: CreateSubCategoryInput!
+    $condition: ModelSubCategoryConditionInput
+  ) {
+    createSubCategory(input: $input, condition: $condition) {
+      id
+      name
+      code
+      categoryName
+      deleted
+      deletedAt
+      createdAt
+      owner
+    }
+  }
+`;
+
+export const updateSubCategory = /* GraphQL */ `
+  mutation UpdateSubCategory(
+    $input: UpdateSubCategoryInput!
+    $condition: ModelSubCategoryConditionInput
+  ) {
+    updateSubCategory(input: $input, condition: $condition) {
+      id
+      name
+      code
+      categoryName
+      deleted
+      deletedAt
+      createdAt
+      owner
+    }
+  }
+`;
+
+/*********************************
+*
+*   TYPES CUSTOM MUTATIONS
+*
+**********************************/
+
+export const createType = /* GraphQL */ `
+  mutation CreateType(
+    $input: CreateTypeInput!
+    $condition: ModelTypeConditionInput
+  ) {
+    createType(input: $input, condition: $condition) {
+      id
+      name
+      code
+      deleted
+      deletedAt
+      createdAt
+      owner
+    }
+  }
+`;
+export const updateType = /* GraphQL */ `
+  mutation UpdateType(
+    $input: UpdateTypeInput!
+    $condition: ModelTypeConditionInput
+  ) {
+    updateType(input: $input, condition: $condition) {
+      id
+      name
+      code
+      deleted
+      deletedAt
+      createdAt
+      owner
+    }
+  }
+`;
+

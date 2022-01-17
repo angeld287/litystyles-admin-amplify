@@ -113,3 +113,59 @@ export const listCategorys = /* GraphQL */ `
     }
   }
 `;
+
+/*********************************
+*
+*   SUBCATEGORIES CUSTOM QUERIES
+*
+**********************************/
+
+export const listSubCategorys = /* GraphQL */ `
+  query ListSubCategorys(
+    $filter: ModelSubCategoryFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listSubCategorys(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        name
+        code
+        categoryName
+        deleted
+        deletedAt
+        createdAt
+        owner
+      }
+      nextToken
+    }
+  }
+`;
+
+
+/*********************************
+*
+*   TYPES CUSTOM QUERIES
+*
+**********************************/
+
+export const listTypes = /* GraphQL */ `
+  query ListTypes(
+    $filter: ModelTypeFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listTypes(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        name
+        code
+        deleted
+        deletedAt
+        createdAt
+        owner
+      }
+      nextToken
+    }
+  }
+`;

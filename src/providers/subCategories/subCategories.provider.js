@@ -2,11 +2,12 @@ import React, { createContext, useEffect, useState } from "react";
 import PropTypes from 'prop-types'
 import {
     getItems,
-    utilAddItem, utilRemoveItem
+    utilAddItem, utilRemoveItem, utilEditItem
 } from '../../utils/Items/Utils'
 import { getList, createUpdateItem } from "../../services/AppSync";
-import { listSubCategorys } from "../../graphql/queries";
-import { createSubCategory } from "../../graphql/mutations";
+import { listSubCategorys } from "../../graphql/customQueries";
+import { createSubCategory, updateSubCategory } from '../../graphql/customMutations'
+import moment from "moment";
 
 export const SubCategoriesContext = createContext({
     hidden: true,
@@ -14,7 +15,8 @@ export const SubCategoriesContext = createContext({
     items: [],
     itemsLoading: false,
     addItem: () => { },
-    removeItem: () => { },
+    editItem: () => { },
+    updateDeleteItem: () => { },
     itemsCount: 0,
     getItemsNextToken: () => { },
 });
@@ -27,14 +29,64 @@ const SubCategorieProvider = ({ children }) => {
     const [itemsLoading, setItemsLoading] = useState(false);
 
     const addItem = async item => {
-        //const productObject = { packagingformat: packagingformat.current.value, name: name.current.value, cost: cost.current.value, image: _image.key };
-        //const product = await createUpdateItem('createProduct', createProduct, { productSubCategoryProductId: "", productSubCategorySubcategoryId: item.subcategory })
-        await createUpdateItem('createSubCategory', createSubCategory, { productCategoryProductId: 'p.data.createProduct.id', productCategoryCategoryId: 'category.current.value' });
+        let object = {};
+        try {
+            const input = { name: item.name, code: '', categorySubcategoriesId: item.cost, categoryName: item.category };
 
-        setItems(utilAddItem(items, item))
+            object = await createUpdateItem('createSubCategory', createSubCategory, input);
+
+        } catch (e) {
+            console.log("Error al crear una Sub-Categoria: ", e)
+            object = false
+        }
+
+        if (object !== false) {
+            setItems(utilAddItem(items, object))
+        }
+
+        return object
     };
 
-    const removeItem = item => setItems(utilRemoveItem(items, item));
+    const editItem = async item => {
+        let object;
+
+        try {
+            const input = { id: item.id, name: item.name, code: '', categorySubcategoriesId: item.cost, categoryName: item.category };
+
+            object = await createUpdateItem('updateSubCategory', updateSubCategory, input);
+
+        } catch (e) {
+            console.log(e)
+            object = false
+        }
+
+        if (object !== false) {
+            setItems(utilEditItem(items, object))
+        }
+
+        return object
+    };
+
+    const updateDeleteItem = async (id) => {
+        let object, bedit;
+
+        try {
+            const input = { id: id, deleted: true, deletedAt: moment(new Date()).format('YYYY-MM-DDTHH:mm:ss.SSS') + 'Z' };
+            bedit = items.find(_ => _.id === input.id);
+
+            object = await createUpdateItem('updateSubCategory', updateSubCategory, input);
+        } catch (e) {
+            console.log(e);
+            object = false
+        }
+
+        if (object !== false) {
+            setItems(utilRemoveItem(items, bedit));
+        }
+
+        return object;
+    }
+
     const toggleHidden = () => setHidden(!hidden);
 
     useEffect(() => {
@@ -42,22 +94,26 @@ const SubCategorieProvider = ({ children }) => {
         setItemsLoading(true);
         const fetch = async () => {
             var result = [];
+            var _items = [];
 
             try {
-                result = await getList('listSubCategorys', listSubCategorys);
+                result = await getList('listSubCategorys', listSubCategorys, { filter: { deleted: { ne: true } } });
+                _items = result.items;
+                while (_items.length < 10 && result.nextToken !== null) {
+                    result = await getList('listSubCategorys', listSubCategorys, { filter: { deleted: { ne: true } }, nextToken: result.nextToken });
+                    _items = [..._items, ...result.items];
+                }
             } catch (e) {
                 console.log(e)
             }
-
             if (!didCancel) {
-                setItems(result.items.map(e => ({ code: e.code, name: e.name, id: e.id, deleted: e.deleted })))
+                //.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))
+                setItems(_items)
                 setNextToken(result.nextToken);
                 setItemsLoading(false);
             }
         };
-
         fetch();
-
         return () => {
             didCancel = true;
             setItemsLoading(false);
@@ -73,8 +129,8 @@ const SubCategorieProvider = ({ children }) => {
 
         if (nextToken !== null) {
             try {
-                result = await getList('listSubCategorys', listSubCategorys, { nextToken: nextToken });
-                setItems([...items, ...result.items.map(e => ({ code: e.code, name: e.name, id: e.id, deleted: e.deleted }))])
+                result = await getList('listSubCategorys', listSubCategorys, { filter: { deleted: { ne: true } }, nextToken: nextToken });
+                setItems([...items, ...result.items.filter(_ => items.find(x => x.id === _.id) === undefined)])
                 setNextToken(result.nextToken);
             } catch (e) {
                 console.log(e)
@@ -89,7 +145,8 @@ const SubCategorieProvider = ({ children }) => {
                 toggleHidden,
                 items,
                 addItem,
-                removeItem,
+                editItem,
+                updateDeleteItem,
                 itemsCount,
                 getItemsNextToken,
                 itemsLoading,

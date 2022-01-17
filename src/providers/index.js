@@ -3,6 +3,7 @@ import CategorieProvider, { CategoriesContext } from './categories/categories.pr
 import SubCategorieProvider, { SubCategoriesContext } from './subCategories/subCategories.provider';
 import CurrentUserProvider, { currentUser } from './currentUser/currentUser.provider'
 import ServiceProvider, { ServiceContext } from './services/services.provider';
+import TypesProvider, { TypesContext } from './types/types.provider';
 
 export {
     SubCategorieProvider,
@@ -14,5 +15,7 @@ export {
     SubCategoriesContext,
     currentUser,
     ServiceProvider,
-    ServiceContext
+    ServiceContext,
+    TypesProvider,
+    TypesContext
 }
