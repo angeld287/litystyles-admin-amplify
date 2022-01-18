@@ -36,6 +36,9 @@ const SubCategories = () => {
 
     const openItem = (e) => {
         try {
+            const _category = categoryContext.items.find(_ => _.name === e.categoryName)
+            e.category = _category.id;
+
             setId(e.id);
             setModuleStates(fields, e)
             setEdit(true);
@@ -66,7 +69,6 @@ const SubCategories = () => {
         setLoading(true);
         try {
             const _category = categoryContext.items.find(_ => _.id === category);
-            console.log(_category);
 
             if (add) {
                 result = await addItem({ name: name, code: code, category: category, categoryName: _category.name });
