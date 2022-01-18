@@ -32,7 +32,7 @@ const TypesProvider = ({ children }) => {
     const addItem = async item => {
         let object = {};
         try {
-            const input = { name: item.name, code: '' };
+            const input = { name: item.name, code: item.code };
 
             object = await createUpdateItem('createType', createType, input);
 
@@ -52,7 +52,7 @@ const TypesProvider = ({ children }) => {
         let object;
 
         try {
-            const input = { id: item.id, name: item.name, code: '' };
+            const input = { id: item.id, name: item.name, code: item.code };
 
             object = await createUpdateItem('updateType', updateType, input);
 

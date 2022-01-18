@@ -3,12 +3,12 @@ import { Layout } from 'antd';
 import CustomButton from "../../../Components/CustomButton";
 import CustomTable from '../../../Components/CustomTable/CustomTable'
 import CustomModal from "../../../Components/CustomModal";
-import { CategoriesContext, TypesContext } from "../../../providers";
+import { TypesContext } from "../../../providers";
 import { DeleteOutlined, EditOutlined, PlusCircleOutlined } from '@ant-design/icons';
 import Swal from "sweetalert2";
 import { setModuleStates } from "../../../utils/Items/Utils";
 
-const Categories = () => {
+const Types = () => {
     const [show, setShow] = useState(false);
     const [edit, setEdit] = useState(false);
     const [add, setAdd] = useState(false);
@@ -16,8 +16,7 @@ const Categories = () => {
     const [id, setId] = useState('');
     const [name, setName] = useState('');
     const [code, setCode] = useState('');
-    const [type, setType] = useState('');
-    const [categoryItems, setCategoryItems] = useState([]);
+    const [typeItems, setTypeItems] = useState([]);
     const [loading, setLoading] = useState(false);
     const [dlBtnLoading, setDlBtnLoading] = useState('');
 
@@ -25,58 +24,46 @@ const Categories = () => {
 
     const handleClose = () => setShow(false);
 
-    const { items, addItem, editItem, updateDeleteItem, getItemsNextToken, itemsLoading } = useContext(CategoriesContext);
-    const typesContext = useContext(TypesContext);
+    const { items, addItem, editItem, updateDeleteItem, getItemsNextToken, itemsLoading } = useContext(TypesContext);
 
     const fields = useMemo(() => [
-        { type, setType },
         { code, setCode },
         { name, setName }
     ], []);
 
     const openItem = (e) => {
         try {
-            const _type = typesContext.items.find(_ => _.name === e.typeName)
-            e.type = _type.id;
-
             setId(e.id);
             setModuleStates(fields, e)
             setEdit(true);
             setAdd(false)
             setShow(true);
         } catch (error) {
-            throw new Error('Category - 01: ', error)
+            throw new Error('Type - 01: ', error)
         }
     }
 
-    const setCategory = async () => {
+    const setType = async () => {
         let result = false;
-        if (name === "" || name === null || name === undefined) {
+        if (name === "" || name === null) {
             Swal.fire('Campo Obligatorio', 'Favor completar el campo Nombre', 'error');
             return;
         }
 
-        if (code === "" || code === null || code === undefined) {
+        if (code === "" || code === null) {
             Swal.fire('Campo Obligatorio', 'Favor completar el campo Codigo', 'error');
-            return;
-        }
-
-        if (type === "" || type === null || type === undefined) {
-            Swal.fire('Campo Obligatorio', 'Favor completar el campo Tipo', 'error');
             return;
         }
 
         setLoading(true);
         try {
-            const _type = typesContext.items.find(_ => _.id === type);
-
             if (add) {
-                result = await addItem({ name: name, code: code, typeId: type, typeName: _type.name });
+                result = await addItem({ name: name, code: code });
             } else if (edit) {
-                result = await editItem({ id: id, name: name, code: code, typeId: type, typeName: _type.name });
+                result = await editItem({ id: id, name: name, code: code });
             }
         } catch (e) {
-            Swal.fire((add ? 'Creacion' : 'Edicion') + ' de Categoria', 'El proceso de ' + (add ? 'creacion' : 'edicion') + ' ha fallado, intentelo mas tarde', 'error');
+            Swal.fire((add ? 'Creacion' : 'Edicion') + ' de Tipo', 'El proceso de ' + (add ? 'creacion' : 'edicion') + ' ha fallado, intentelo mas tarde', 'error');
         }
 
         setEdit(false);
@@ -85,20 +72,20 @@ const Categories = () => {
         setShow(false);
 
         if (result !== false) {
-            Swal.fire((add ? 'Creacion' : 'Edicion') + ' de Categoria', 'El proceso ha finalizado correctamente', 'success');
+            Swal.fire((add ? 'Creacion' : 'Edicion') + ' de Tipo', 'El proceso ha finalizado correctamente', 'success');
         } else {
-            Swal.fire((add ? 'Creacion' : 'Edicion') + ' de Categoria', 'El proceso de ' + (add ? 'creacion' : 'edicion') + ' ha fallado, intentelo mas tarde', 'error');
+            Swal.fire((add ? 'Creacion' : 'Edicion') + ' de Tipo', 'El proceso de ' + (add ? 'creacion' : 'edicion') + ' ha fallado, intentelo mas tarde', 'error');
         }
     }
 
     const alertDeleteItem = async (id) => {
         try {
-            const result = await Swal.fire({ title: "Esta seguro que desea eliminar el Categoria?", icon: "warning", showCancelButton: true });
+            const result = await Swal.fire({ title: "Esta seguro que desea eliminar el Tipo?", icon: "warning", showCancelButton: true });
             if (result.isConfirmed && !result.isDenied) {
                 await deleteItem(id);
             }
         } catch (error) {
-            throw new Error('Category - 02: ', error)
+            throw new Error('Type - 02: ', error)
         }
     }
 
@@ -116,9 +103,9 @@ const Categories = () => {
         setDlBtnLoading('');
 
         if (result === true) {
-            Swal.fire('Eliminacion de Categoria', 'El proceso ha finalizado correctamente', 'success');
+            Swal.fire('Eliminacion de Tipo', 'El proceso ha finalizado correctamente', 'success');
         } else {
-            Swal.fire('Eliminacion de Categoria', 'El proceso de eliminacion ha fallado, intentelo mas tarde', 'error');
+            Swal.fire('Eliminacion de Tipo', 'El proceso de eliminacion ha fallado, intentelo mas tarde', 'error');
         }
     }
 
@@ -126,9 +113,9 @@ const Categories = () => {
     useEffect(() => {
         try {
             if (items !== undefined) {
-                setCategoryItems(items.map(e => ({
+                setTypeItems(items.map(e => ({
                     nombre: e.name,
-                    tipo: e.typeName,
+                    codigo: e.code,
                     acciones: [
                         { id: e.id, color: 'blue', icon: EditOutlined, onClicAction: () => { openItem(e) }, text: "Editar" },
                         { id: e.id, color: 'red', icon: DeleteOutlined, onClicAction: () => { alertDeleteItem(e.id) }, loading: dlBtnLoading === e.id, text: "Remover" }
@@ -137,27 +124,26 @@ const Categories = () => {
                 })))
             }
         } catch (error) {
-            throw new Error('Category - 03: ', error)
+            throw new Error('Type - 03: ', error)
         }
     }, [items, dlBtnLoading]);
 
     const inputs = useMemo(() => [
         { label: "Nombre", type: "text", readOnly: (!edit && !add), onChange: e => setName(e.target.value), value: name },
         { label: "Codigo", type: "text", readOnly: (!edit && !add), onChange: e => setCode(e.target.value), value: code },
-        { label: "Tipo", defaultValue: type, items: typesContext.items, type: "select", readOnly: (!edit && !add), onChange: _ => setType(_), getItemsNextToken: typesContext.getItemsNextToken },
-    ], [show, add, edit, name, code, type]);
+    ], [show, add, edit, name, code]);
 
-    const _headers = useMemo(() => ['Nombre', 'Tipo', 'Acciones'], []);
-    const _categoryItems = useMemo(() => categoryItems, [categoryItems]);
+    const _headers = useMemo(() => ['Nombre', 'Codigo', 'Acciones'], []);
+    const _TypeItems = useMemo(() => typeItems, [typeItems]);
 
     return (
         <Content>
-            <CustomButton id="categoryAddBtn" className="btn-1" style="blue" intent="Primary" onClick={(e) => { e.preventDefault(); setAdd(true); setEdit(false); setShow(true); }} Icon={PlusCircleOutlined}>Agregar Categoria</CustomButton>
-            <CustomTable headers={_headers} items={_categoryItems} itemsLoading={itemsLoading} getItemsNextToken={getItemsNextToken} />
-            {/* Modal para editar y ver detalle de Categoria */}
-            <CustomModal fields={fields} loading={loading} title={edit ? 'Editar Categoria' : add ? 'Agregar Categoria' : 'Ver Categoria'} visible={show} onOk={setCategory} onCancel={handleClose} inputs={inputs} />
+            <CustomButton id="typeAddBtn" className="btn-1" style="blue" intent="Primary" onClick={(e) => { e.preventDefault(); setAdd(true); setEdit(false); setShow(true); }} Icon={PlusCircleOutlined}>Agregar Tipo</CustomButton>
+            <CustomTable headers={_headers} items={_TypeItems} itemsLoading={itemsLoading} getItemsNextToken={getItemsNextToken} />
+            {/* Modal para editar y ver detalle de Tipo */}
+            <CustomModal fields={fields} loading={loading} title={edit ? 'Editar Tipo' : add ? 'Agregar Tipo' : 'Ver Tipo'} visible={show} onOk={setType} onCancel={handleClose} inputs={inputs} />
         </Content>
     )
 }
 
-export default Categories;
+export default Types;

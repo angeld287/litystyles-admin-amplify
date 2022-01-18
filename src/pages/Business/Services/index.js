@@ -146,7 +146,7 @@ const Services = () => {
             if (category !== '' && category !== null && category !== undefined) {
                 const cat = typeof category === "string" ? category : category.items[0].category.id;
                 const categoryObj = categoryContext.items.find(_ => _.id === cat);
-
+                console.log(categoryObj);
                 //check if the category does not exist in the list of categories
                 if (categoryObj === undefined && categoryContext.nextToken === null) {
                     //this is incomplete: here we have to make some validations to identify if the category really does not exist.

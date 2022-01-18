@@ -4,6 +4,8 @@ import { Layout, Row, Col } from 'antd';
 import Categories from "./Categories";
 import SubCategories from "./SubCategories";
 import ErrorBoundary from "../../Components/ErrorBoundary";
+import Types from './Types'
+
 
 const Classifications = () => {
     const { Content } = Layout;
@@ -34,7 +36,7 @@ const Classifications = () => {
                         <div className="site-layout-content">
                             <h3 className="ttl-1" >Tipos</h3>
                             <ErrorBoundary>
-                                <Categories />
+                                <Types />
                             </ErrorBoundary>
                         </div>
                     </Col>
