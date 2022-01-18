@@ -19,6 +19,7 @@ export const TypesContext = createContext({
     updateDeleteItem: () => { },
     itemsCount: 0,
     getItemsNextToken: () => { },
+    nextToken: null,
 });
 
 const TypesProvider = ({ children }) => {
@@ -150,6 +151,7 @@ const TypesProvider = ({ children }) => {
                 itemsCount,
                 getItemsNextToken,
                 itemsLoading,
+                nextToken,
             }}
         >
             {children}

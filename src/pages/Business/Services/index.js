@@ -141,16 +141,26 @@ const Services = () => {
 
     //set the subcategory list when the category is selected
     useEffect(() => {
+        let errorMessage = 'no message';
         try {
             if (category !== '' && category !== null && category !== undefined) {
                 const cat = typeof category === "string" ? category : category.items[0].category.id;
                 const categoryObj = categoryContext.items.find(_ => _.id === cat);
+
+                //check if the category does not exist in the list of categories
+                if (categoryObj === undefined && categoryContext.nextToken === null) {
+                    //this is incomplete: here we have to make some validations to identify if the category really does not exist.
+                    errorMessage = 'La categoria asociada no existe';
+                    throw new Error()
+                }
+
                 setSubcategoryItems(categoryObj.subcategories.items)
             } else {
                 setSubcategoryItems([])
             }
         } catch (error) {
-            throw new Error('Services - 04', error)
+            console.log(error)
+            throw new Error('Services - 04: ' + errorMessage)
         }
 
     }, [category]);
@@ -169,7 +179,6 @@ const Services = () => {
         <Content>
             <CustomButton id="serviceAddBtn" className="btn-1" style="blue" intent="Primary" onClick={(e) => { e.preventDefault(); setAdd(true); setEdit(false); setShow(true); }} Icon={PlusCircleOutlined}>Agregar Servicio</CustomButton>
             <CustomTable headers={_headers} items={_serviceItems} itemsLoading={itemsLoading} getItemsNextToken={getItemsNextToken} />
-            {/* Modal para editar y ver detalle de servicios */}
             <CustomModal fields={fields} loading={loading} title={edit ? 'Editar Servicio' : add ? 'Agregar Servicio' : 'Ver Servicio'} visible={show} onOk={setService} onCancel={handleClose} inputs={inputs} />
         </Content>
     )

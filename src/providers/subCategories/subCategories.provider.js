@@ -19,6 +19,7 @@ export const SubCategoriesContext = createContext({
     updateDeleteItem: () => { },
     itemsCount: 0,
     getItemsNextToken: () => { },
+    nextToken: null,
 });
 
 const SubCategorieProvider = ({ children }) => {
@@ -150,6 +151,7 @@ const SubCategorieProvider = ({ children }) => {
                 itemsCount,
                 getItemsNextToken,
                 itemsLoading,
+                nextToken
             }}
         >
             {children}

@@ -68,6 +68,24 @@ export const listServices = /* GraphQL */ `
         deletedAt
         createdAt
         owner
+        category {
+          items {
+            id
+            category {
+              id
+              name
+            }
+          }
+        }
+        subcategory {
+          items {
+            id
+            subcategory {
+              id
+              name
+            }
+          }
+        }
       }
       nextToken
     }

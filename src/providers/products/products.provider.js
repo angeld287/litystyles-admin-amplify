@@ -20,6 +20,7 @@ export const ProductContext = createContext({
     updateDeleteItem: () => { },
     itemsCount: 0,
     getItemsNextToken: () => { },
+    nextToken: null,
 });
 
 const ProductProvider = ({ children }) => {
@@ -81,25 +82,28 @@ const ProductProvider = ({ children }) => {
 
             object = await createUpdateItem('updateProduct', updateProduct, input);
             if (object !== false) {
-                if (bedit.category.items.length === 0) {
-                    category = await createUpdateItem('createProductCategory', createProductCategory, { productCategoryProductId: object.id, productCategoryCategoryId: item.category.items[0].category.id });
-                } else if (typeof item.category === "string" && bedit.category.items[0].category.id !== item.category) {
+                if (typeof item.category === "string" && bedit.category.items[0].category.id !== item.category) {
                     category = await createUpdateItem('updateProductCategory', updateProductCategory, { id: object.category.items[0].id, productCategoryCategoryId: item.category });
-                    if (category !== false) object.category.items.splice(0, 1);
+                    if (category !== false) {
+                        object.category.items.splice(0, 1);
+                        object.category.items.push(category);
+                    }
                 }
 
                 if (category !== false) {
                     if (bedit.subcategory.items.length === 0) {
-                        subcategory = await createUpdateItem('createProductSubCategory', createProductSubCategory, { productSubCategoryProductId: object.id, productSubCategorySubcategoryId: item.subcategory.items[0].subcategory.id });
+                        if (typeof item.subcategory === "string") {
+                            subcategory = await createUpdateItem('createProductSubCategory', createProductSubCategory, { productSubCategoryProductId: object.id, productSubCategorySubcategoryId: item.subcategory });
+                        }
                     } else if (typeof item.subcategory === "string" && bedit.subcategory.items[0].subcategory.id !== item.subcategory) {
                         subcategory = await createUpdateItem('updateProductSubCategory', updateProductSubCategory, { id: object.subcategory.items[0].id, productSubCategorySubcategoryId: item.subcategory });
-                        if (subcategory !== false) object.subcategory.items.splice(0, 1);
+                        if (subcategory !== false) {
+                            object.subcategory.items.splice(0, 1);
+                            object.subcategory.items.push(subcategory);
+                        }
                     }
                 }
             }
-
-            if (category !== false) object.category.items.push(category);
-            if (subcategory !== false) object.subcategory.items.push(subcategory);
 
             if (category === false || subcategory === false) object = false;
 
@@ -200,6 +204,7 @@ const ProductProvider = ({ children }) => {
                 itemsCount,
                 getItemsNextToken,
                 itemsLoading,
+                nextToken
             }}
         >
             {children}
