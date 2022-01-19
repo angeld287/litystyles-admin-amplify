@@ -1,12 +1,16 @@
 import { render, screen, fireEvent, prettyDOM, waitFor } from '../../../utils/test-utils';
 import Types from './index';
 import MockTypesProvider from './__mocks__/TypesProvider.js';
+import MockCategoriesProvider from '../Categories/__mocks__/CategoriesProvider.js';
+
 let component;
 
 beforeEach(() => {
     component = render(
         <MockTypesProvider>
-            <Types />
+            <MockCategoriesProvider>
+                <Types />
+            </MockCategoriesProvider>
         </MockTypesProvider>
     )
 });
@@ -85,8 +89,8 @@ test('Add Types to the List', async () => {
     });
 
     //rerender the componet to reflect the new item added to the table
-    rerender(<MockTypesProvider><Types /></MockTypesProvider>
-    );
+    rerender(<MockTypesProvider><Types /></MockTypesProvider>);
+
 
     //Verify that the item has been created and inserted in the table
     expect(getAllByClass(/ant-table-row/i).length).toBeGreaterThan(tableRows.length);

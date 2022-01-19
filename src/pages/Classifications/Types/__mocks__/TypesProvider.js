@@ -4,7 +4,7 @@ import { useState } from 'react';
 const TypesList = [{
     id: '34',
     name: 'Servicio',
-    code: 23,
+    code: '23',
     deleted: false,
     deletedAt: '2/30/22',
     createdAt: '2/30/22',
