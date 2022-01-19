@@ -22,20 +22,28 @@ const HeaderLinks = () => {
 		redirect('/signin');
 	}
 
+	const rightStyle = { position: 'absolute', top: 0, right: 0 }
+
+	const _user = user.user !== null ? user.user : JSON.parse(sessionStorage.getItem('CURRENT_USER_SESSION'))
+
 	return (
-		<Menu selectedKeys={[1]} mode="horizontal">
-			{PAGE_OPTIONS.map(_ => <Menu.Item onClick={handleClick} link={_.link} key={_.id} >{_.title}</Menu.Item>)}
-			{user.user !== null && user.user.signInUserSession !== null
-				?
-				<Menu.Item key="logoutbtn" style={{ float: 'right' }} onClick={logOut}>
-					{user.user.signInUserSession.idToken.payload.email} - Logout
-				</Menu.Item>
-				:
-				<Menu.Item key="loginbtn" style={{ float: 'right' }} onClick={logIn}>
-					Login
-				</Menu.Item>
-			}
-		</Menu>
+		<>
+			<Menu selectedKeys={[1]} mode="horizontal">
+				{PAGE_OPTIONS.map(_ => <Menu.Item onClick={handleClick} link={_.link} key={_.id} >{_.title}</Menu.Item>)}
+			</Menu>
+			<Menu mode="horizontal" style={rightStyle}>
+				{_user !== null && _user.signInUserSession !== null
+					?
+					<Menu.Item key="logoutbtn" onClick={logOut}>
+						{_user.signInUserSession.idToken.payload.email} - Logout
+					</Menu.Item>
+					:
+					<Menu.Item key="loginbtn" onClick={logIn}>
+						Login
+					</Menu.Item>
+				}
+			</Menu>
+		</>
 	);
 }
 
