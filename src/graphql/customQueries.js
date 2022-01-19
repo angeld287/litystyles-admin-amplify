@@ -45,6 +45,53 @@ export const listProducts = /* GraphQL */ `
   }
 `;
 
+/*********************************
+*
+*   SERVICES CUSTOM QUERIES
+*
+**********************************/
+
+export const listServices = /* GraphQL */ `
+  query ListServices(
+    $filter: ModelServiceFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listServices(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        name
+        cost
+        categoryId
+        subCategoryId
+        deleted
+        deletedAt
+        createdAt
+        owner
+        category {
+          items {
+            id
+            category {
+              id
+              name
+            }
+          }
+        }
+        subcategory {
+          items {
+            id
+            subcategory {
+              id
+              name
+            }
+          }
+        }
+      }
+      nextToken
+    }
+  }
+`;
+
 
 /*********************************
 *
@@ -74,6 +121,62 @@ export const listCategorys = /* GraphQL */ `
           nextToken
         }
         typeName
+        code
+        deleted
+        deletedAt
+        createdAt
+        owner
+      }
+      nextToken
+    }
+  }
+`;
+
+/*********************************
+*
+*   SUBCATEGORIES CUSTOM QUERIES
+*
+**********************************/
+
+export const listSubCategorys = /* GraphQL */ `
+  query ListSubCategorys(
+    $filter: ModelSubCategoryFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listSubCategorys(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        name
+        code
+        categoryName
+        deleted
+        deletedAt
+        createdAt
+        owner
+      }
+      nextToken
+    }
+  }
+`;
+
+
+/*********************************
+*
+*   TYPES CUSTOM QUERIES
+*
+**********************************/
+
+export const listTypes = /* GraphQL */ `
+  query ListTypes(
+    $filter: ModelTypeFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listTypes(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        name
         code
         deleted
         deletedAt

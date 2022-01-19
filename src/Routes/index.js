@@ -6,9 +6,10 @@ import {
 
 import Home from '../pages/Home'
 import Business from '../pages/Business'
-import HeaderLinks from '../components/HeaderLinks';
+import Classifications from '../pages/Classifications'
+import HeaderLinks from '../Components/HeaderLinks';
 import PropsTypes from 'prop-types';
-import CustomSpinner from '../components/CustomSpinner';
+import CustomSpinner from '../Components/CustomSpinner';
 
 const AppRoutes = ({ user }) => {
 
@@ -20,7 +21,7 @@ const AppRoutes = ({ user }) => {
 			<Routes>
 				<Route exact path="/" element={<Home />} />
 				<Route exact path="/business" element={<Business />} />
-				<Route exact path="/clasifications" element={<Business />} />
+				<Route exact path="/clasifications" element={<Classifications />} />
 			</Routes>
 		</Router>)
 };

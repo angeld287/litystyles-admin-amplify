@@ -1,5 +1,5 @@
 import React from 'react'
-import CardsList from '../../components/CardList';
+import CardsList from '../../Components/cardList';
 import { PAGE_OPTIONS } from '../../context/communContex/commun.data';
 
 const Home = () => {

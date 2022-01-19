@@ -5,14 +5,18 @@ import { BugFilled } from '@ant-design/icons'
 class ErrorBoundary extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { hasError: false };
+        this.state = {
+            hasError: false,
+            error: null,
+            errorInfo: null,
+        };
     }
 
     componentDidCatch(error, errorInfo) {
         // También puedes registrar el error en un servicio de reporte de errores
         //logErrorToMyService(error, errorInfo);
-        console.log('componentDidCatch', error, errorInfo);
-        this.setState({ hasError: true })
+        //console.log('componentDidCatch', error, errorInfo);
+        this.setState({ hasError: true, error, errorInfo })
     }
 
     render() {

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import PropTypes from "prop-types";
 import { Select } from "antd";
 
@@ -15,7 +15,7 @@ const CustomSelect = ({ dataTestId, items, onChange, defaultValue, getItemsNextT
         }
     }
 
-    const _dvalue = typeof defaultValue === "string" ? defaultValue : () => {
+    const _dvalue = useMemo(() => typeof defaultValue === "string" ? defaultValue : () => {
         if (typeof defaultValue === "object" && defaultValue !== null && defaultValue.items.length > 0) {
             const obj = defaultValue.items[0];
             const field = Object.keys(obj).find(_ => obj[_] !== null && obj[_].id !== undefined);
@@ -23,7 +23,7 @@ const CustomSelect = ({ dataTestId, items, onChange, defaultValue, getItemsNextT
         } else {
             return null;
         }
-    };
+    }, [defaultValue]);
 
     return <Select
         data-testid={dataTestId}

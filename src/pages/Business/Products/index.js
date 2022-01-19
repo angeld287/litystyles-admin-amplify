@@ -1,8 +1,8 @@
 import React, { useState, useContext, useEffect, useMemo } from "react";
 import { Layout } from 'antd';
-import CustomButton from "../../../components/CustomButton";
-import CustomTable from '../../../components/CustomTable/CustomTable'
-import CustomModal from "../../../components/CustomModal";
+import CustomButton from "../../../Components/CustomButton";
+import CustomTable from '../../../Components/CustomTable/CustomTable.js'
+import CustomModal from "../../../Components/CustomModal";
 import { ProductContext, CategoriesContext } from "../../../providers";
 import { DeleteOutlined, EditOutlined, PlusCircleOutlined } from '@ant-design/icons';
 import Swal from "sweetalert2";
@@ -154,16 +154,26 @@ const Products = () => {
 
     //set the subcategory list when the category is selected
     useEffect(() => {
+        let errorMessage = 'no message';
         try {
             if (category !== '' && category !== null && category !== undefined) {
                 const cat = typeof category === "string" ? category : category.items[0].category.id;
                 const categoryObj = categoryContext.items.find(_ => _.id === cat);
+
+                //check if the category does not exist in the list of categories
+                if (categoryObj === undefined && categoryContext.nextToken === null) {
+                    //this is incomplete: here we have to make some validations to identify if the category really does not exist.
+                    errorMessage = 'La categoria asociada no existe';
+                    throw new Error()
+                }
+
                 setSubcategoryItems(categoryObj.subcategories.items)
             } else {
                 setSubcategoryItems([])
             }
         } catch (error) {
-            throw new Error('Products - 04', error)
+            console.log(error)
+            throw new Error('Services - 04: ' + errorMessage)
         }
 
     }, [category]);
@@ -175,7 +185,7 @@ const Products = () => {
         { label: "Sub Categoria", defaultValue: subcategory, items: subcategoryItems, type: "select", readOnly: (!edit && !add), onChange: _ => setSubcategory(_) },
         { label: "Imagen", type: "file", readOnly: (!edit && !add), onChange: _ => { setImage(_.target.files[0]) } },
         { label: "Formato de Envace", type: "text", readOnly: (!edit && !add), onChange: e => setPackagingformat(e.target.value), value: packagingformat },
-    ], [show, add, edit, name, cost, packagingformat, category, subcategory]);
+    ], [show, add, edit, name, cost, packagingformat, category, subcategory, subcategoryItems]);
 
     const _headers = useMemo(() => ['Nombre', 'Costo', 'Acciones'], []);
     const _productItems = useMemo(() => productItems, [productItems]);
