@@ -42,10 +42,8 @@ const MockServiceProvider = ({ children }) => {
             categoryId: 2,
             subCategoryId: 2,
             name: item.name,
-            image: item.image,
             deleted: false,
             id: 3,
-            packagingformat: item.packagingformat,
             createdAt: '2/30/22',
             category: {
                 items: {

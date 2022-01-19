@@ -1,4 +1,5 @@
 import { CategoriesContext } from "../../../../providers";
+import { useState } from 'react';
 
 const categoryList = [
     {
@@ -62,8 +63,28 @@ const categoryList = [
 ];
 
 const MockCategoriesProvider = ({ children }) => {
+    const [items, setItems] = useState(categoryList);
 
-    return (<CategoriesContext.Provider value={{ items: categoryList }}>
+    const addItem = jest.fn(item => {
+        const _i = items;
+        _i.push({
+            id: "3",
+            name: item.name,
+            typeName: item.typeName,
+            code: item.code,
+            deleted: false,
+            deletedAt: '2/30/22',
+            createdAt: '2/30/22',
+            owner: 'aa'
+        })
+
+        setItems(_i);
+
+        return true;
+    })
+
+
+    return (<CategoriesContext.Provider value={{ items, addItem }}>
         {children}
     </CategoriesContext.Provider>);
 }
