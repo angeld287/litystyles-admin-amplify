@@ -1,7 +1,7 @@
 import { render, screen, fireEvent, prettyDOM, waitFor } from '../../../utils/test-utils';
 import Products from './index';
 import MockProductProvider from './__mocks__/ProductProvider.js';
-import MockCategoriesProvider from './__mocks__/CategoriesProvider.js';
+import MockCategoriesProvider from '../../Classifications/Categories/__mocks__/CategoriesProvider.js';
 let file;
 let component;
 
