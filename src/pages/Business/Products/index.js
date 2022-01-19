@@ -185,7 +185,7 @@ const Products = () => {
         { label: "Sub Categoria", defaultValue: subcategory, items: subcategoryItems, type: "select", readOnly: (!edit && !add), onChange: _ => setSubcategory(_) },
         { label: "Imagen", type: "file", readOnly: (!edit && !add), onChange: _ => { setImage(_.target.files[0]) } },
         { label: "Formato de Envace", type: "text", readOnly: (!edit && !add), onChange: e => setPackagingformat(e.target.value), value: packagingformat },
-    ], [show, add, edit, name, cost, packagingformat, category, subcategory]);
+    ], [show, add, edit, name, cost, packagingformat, category, subcategory, subcategoryItems]);
 
     const _headers = useMemo(() => ['Nombre', 'Costo', 'Acciones'], []);
     const _productItems = useMemo(() => productItems, [productItems]);
