@@ -1,0 +1,16 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Verify correct renderization of DropDown Component 1`] = `
+<DocumentFragment>
+  <ul
+    class="ant-menu ant-menu-root ant-menu-vertical ant-menu-light"
+    data-menu-list="true"
+    role="menu"
+    tabindex="0"
+  />
+  <div
+    aria-hidden="true"
+    style="display: none;"
+  />
+</DocumentFragment>
+`;
