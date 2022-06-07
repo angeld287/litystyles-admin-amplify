@@ -1,11 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-
-import "@blueprintjs/core/lib/css/blueprint.css";
-import "@blueprintjs/icons/lib/css/blueprint-icons.css";
-import 'bootstrap/dist/css/bootstrap.css';
-import "@blueprintjs/datetime/lib/css/blueprint-datetime.css";
+import 'antd/dist/antd.css';
 
 import App from './App';
 //import reportWebVitals from './reportWebVitals';

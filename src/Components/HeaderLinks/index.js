@@ -1,62 +1,50 @@
-import React, { Component } from 'react';
-import { Auth } from 'aws-amplify';
+import React from 'react';
+import currentUserContext from '../../context/currentUser/currentUser.Context';
+import { LogOut } from '../Authentication/AuthComponent';
+import { Menu } from 'antd';
 
-import {
-    Alignment,
-    Button,
-    Navbar,
-    Popover,
-    Menu,
-    MenuItem,
-    Position,
-} from "@blueprintjs/core";
+import { redirect } from '../../context/communContex/commun.util';
+import { PAGE_OPTIONS } from '../../context/communContex/commun.data';
 
-export default class HeaderLinks extends Component {
-	handlesignOut = () => {
-		Auth.signOut().then((d) => {
-			window.location.reload();
-			//this.props.childProps.onUserLogOut();
-		});
-	};
+const HeaderLinks = () => {
+	const user = React.useContext(currentUserContext);
 
-	redirectSignIn = () => {
-		window.location.href = '/signin';
-	};
-
-	redirect = (path) => {
-        window.location.href = path;
-	};
-
-	render() {
-		const username = this.props.childProps.state.username !== '' ? this.props.childProps.state.username : 'Ingresar';
-
-		const userMenu = (
-            <Menu>
-                <MenuItem text={username} />
-                <MenuItem icon="log-out" text="LogOut" onClick={ (e) => { e.preventDefault(); this.handlesignOut();}} />
-            </Menu>
-        );
-
-		return (
-
-			<Navbar>
-				<Navbar.Group align={Alignment.LEFT}>
-					<Navbar.Heading>Litty Style</Navbar.Heading>
-					<Navbar.Divider />
-					{/* this.redirect('/') */}
-					{this.props.childProps.state.user_roll.indexOf('admin') !== -1 && <Button className="bp3-minimal" onClick={(e) => {e.preventDefault(); this.redirect('/categories')}} text="Categorias"/>}
-					{this.props.childProps.state.user_roll.indexOf('admin') !== -1 && <Button className="bp3-minimal" onClick={(e) => {e.preventDefault(); this.redirect('/subcategories')}} text="SubCategorias"/>}
-					{this.props.childProps.state.user_roll.indexOf('admin') !== -1 && <Button className="bp3-minimal" onClick={(e) => {e.preventDefault(); this.redirect('/types')}} text="Tipos"/>}
-					{this.props.childProps.state.user_roll.indexOf('admin') !== -1 && <Button className="bp3-minimal" onClick={(e) => {e.preventDefault(); this.redirect('/products')}} text="Productos"/>}
-					{this.props.childProps.state.user_roll.indexOf('admin') !== -1 && <Button className="bp3-minimal" onClick={(e) => {e.preventDefault(); this.redirect('/services')}} text="Servicios"/>}
-				</Navbar.Group>
-				<Navbar.Group align={Alignment.RIGHT}>
-					<Navbar.Divider />
-					<Popover content={userMenu} position={Position.BOTTOM}>
-						<Button icon="user" text=""/>
-					</Popover>
-				</Navbar.Group>
-			</Navbar>
-		);
+	const handleClick = (e) => {
+		redirect(e.item.props.link);
 	}
+
+	const logOut = () => {
+		LogOut();
+		user.onUserLogOut();
+	}
+
+	const logIn = () => {
+		redirect('/signin');
+	}
+
+	const rightStyle = { position: 'absolute', top: 0, right: 0 }
+
+	const _user = user.user !== null ? user.user : JSON.parse(sessionStorage.getItem('CURRENT_USER_SESSION'))
+
+	return (
+		<>
+			<Menu selectedKeys={[1]} mode="horizontal">
+				{PAGE_OPTIONS.map(_ => <Menu.Item onClick={handleClick} link={_.link} key={_.id} >{_.title}</Menu.Item>)}
+			</Menu>
+			<Menu mode="horizontal" style={rightStyle}>
+				{_user !== null && _user.signInUserSession !== null
+					?
+					<Menu.Item key="logoutbtn" onClick={logOut}>
+						{_user.signInUserSession.idToken.payload.email} - Logout
+					</Menu.Item>
+					:
+					<Menu.Item key="loginbtn" onClick={logIn}>
+						Login
+					</Menu.Item>
+				}
+			</Menu>
+		</>
+	);
 }
+
+export default HeaderLinks;

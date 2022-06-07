@@ -1,39 +1,46 @@
-import React, { Component } from 'react';
+import React, { useContext } from 'react';
 
+import { AmplifyAuthenticator } from '@aws-amplify/ui-react';
+import { AuthState, onAuthUIStateChange } from '@aws-amplify/ui-components';
+import { Auth } from 'aws-amplify';
 
-import { Authenticator} from 'aws-amplify-react';
+import { currentUser } from '../../../providers';
 
-import queryString from 'query-string';
+import PropTypes from 'prop-types'
 
+export const LogOut = async () => {
+  await Auth.signOut();
 
-export default class AuthComponent extends Component {
-  
-  
-  handleStateChange = state => {
-    const values = queryString.parse(this.props.location.search)
-    if (state === 'signedIn') {
-      this.props.onUserSignIn();
-      if(this.props.location.search !== null && this.props.location.search !== ''){
-        this.props.history.push(values.redirect);
-      }else{
-        this.props.history.push('/events');
-      }
-    }else if (state === 'signIn') {
-      this.props.onUserLogOut();
-    }
-  };
-
-  render() {
-    return (
-      <div>
-        <Authenticator 
-          authState="signIn" 
-          hideDefault={false}
-          onStateChange={this.handleStateChange}
-        >
-           
-        </Authenticator>
-      </div>
-    );
-  }
 }
+
+export const getCurrentUser = async () => {
+  return await Auth.currentSession();
+}
+
+const AuthComponent = ({ children }) => {
+  const [authState, setAuthState] = React.useState();
+  const userContext = useContext(currentUser);
+
+  React.useEffect(() => {
+    return onAuthUIStateChange((nextAuthState, authData) => {
+      setAuthState(nextAuthState);
+      if (nextAuthState === AuthState.SignedIn) {
+        userContext.onUserSignIn(authData);
+      } else if (nextAuthState === AuthState.SignIn) {
+        userContext.onUserLogOut();
+      }
+    });
+  }, []);
+
+  return authState === AuthState.SignedIn && userContext.user ? (
+    (<div className="App">
+      {children}
+    </div>)
+  ) : (<AmplifyAuthenticator />)
+}
+
+AuthComponent.propTypes = {
+  children: PropTypes.any
+}
+
+export default AuthComponent;
