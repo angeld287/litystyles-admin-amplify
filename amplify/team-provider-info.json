@@ -1,0 +1,15 @@
+{
+    "prod": {
+        "awscloudformation": {
+            "AuthRoleName": "amplify-litystylesadmin-prod-214044-authRole",
+            "UnauthRoleArn": "arn:aws:iam::239210452034:role/amplify-litystylesadmin-prod-214044-unauthRole",
+            "AuthRoleArn": "arn:aws:iam::239210452034:role/amplify-litystylesadmin-prod-214044-authRole",
+            "Region": "us-east-1",
+            "DeploymentBucketName": "amplify-litystylesadmin-prod-214044-deployment",
+            "UnauthRoleName": "amplify-litystylesadmin-prod-214044-unauthRole",
+            "StackName": "amplify-litystylesadmin-prod-214044",
+            "StackId": "arn:aws:cloudformation:us-east-1:239210452034:stack/amplify-litystylesadmin-prod-214044/c9784fe0-19df-11ed-b916-0afd817acd8d",
+            "AmplifyAppId": "d2dh0fjk3yoh4u"
+        }
+    }
+}
